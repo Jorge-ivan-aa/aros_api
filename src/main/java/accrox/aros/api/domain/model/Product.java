@@ -2,6 +2,8 @@ package accrox.aros.api.domain.model;
 
 import java.util.Collection;
 
+import io.jsonwebtoken.lang.Collections;
+
 public class Product {
     private Long id;
 
@@ -19,6 +21,10 @@ public class Product {
 
     private Collection<Category> categories;
 
+    private Integer quantity;
+
+    private String observations;
+
     public Product() {
     }
 
@@ -30,7 +36,9 @@ public class Product {
         Area preparationArea,
         Integer preparationTime,
         Boolean active,
-        Collection<Category> categories
+        Collection<Category> categories,
+        Integer quantity,
+        String observations
     ) {
         this.id = id;
         this.name = name;
@@ -40,6 +48,29 @@ public class Product {
         this.preparationTime = preparationTime;
         this.active = active;
         this.categories = categories;
+        this.quantity = quantity;
+        this.observations = observations;
+    }
+
+    public Product(
+        Long id,
+        String name,
+        String description,
+        Float price,
+        Integer quantity
+    ) {
+        this(
+            id,
+            name,
+            description,
+            price,
+            null,
+            quantity,
+            true,
+            Collections.emptyList(),
+            quantity,
+            description
+        );
     }
 
     public Long getId() {
@@ -104,5 +135,21 @@ public class Product {
 
     public void setCategories(Collection<Category> categories) {
         this.categories = categories;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
     }
 }

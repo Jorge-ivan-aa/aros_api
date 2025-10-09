@@ -11,9 +11,12 @@ public class ClientOrder {
 
     private OrderStatus status;
 
-    private Collection<OrderDetail> details;
+    private Collection<Product> details;
 
-    public ClientOrder(Long id, Order order, OrderStatus status, Collection<OrderDetail> details) {
+    public ClientOrder() {
+    }
+
+    public ClientOrder(Long id, Order order, OrderStatus status, Collection<Product> details) {
         this.id = id;
         this.order = order;
         this.status = status;
@@ -44,11 +47,11 @@ public class ClientOrder {
         this.status = status;
     }
 
-    public Collection<OrderDetail> getDetails() {
+    public Collection<Product> getDetails() {
         return details;
     }
 
-    public void setDetails(Collection<OrderDetail> details) {
+    public void setDetails(Collection<Product> details) {
         this.details = details;
     }
 }
