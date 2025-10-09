@@ -12,7 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "client_order")
+@Table(name = "client_orders")
 public class ClientOrderEntity {
     @Id
     private Long id;

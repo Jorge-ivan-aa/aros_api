@@ -11,7 +11,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(
-    name = "category_position",
+    name = "category_positions",
     uniqueConstraints = @UniqueConstraint(columnNames = { "id_daymenu", "id_category" })
 )
 public class CategoryPositionEntity {
