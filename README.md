@@ -1,4 +1,4 @@
-# Accrox Aros: Restaurant orders system (API repository)
+# Accrox Aros: Restaurant ordering system (API repository)
 
 AROS es un sistema de gestion de pedidos para los restaurantes del siglo XXI. Su objetivo es optimizar tiempos de entrega, reducir costos operativos y aumentar la productividad del personal.
 
