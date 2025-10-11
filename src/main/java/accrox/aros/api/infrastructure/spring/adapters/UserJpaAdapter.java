@@ -20,4 +20,10 @@ public class UserJpaAdapter implements UserRepository {
     public Optional<User> findById(Long id) {
         return Optional.of(UserJpaMapper.toDomain(userRepositoryJpa.findById(id).get(), null, null));
     }
+
+    @Override
+    public Optional<User> findByEmail(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
+    }
 }
