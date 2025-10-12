@@ -5,6 +5,8 @@ import java.util.Collection;
 public class User {
     private Long id;
 
+    private String document;
+    
     private String name;
 
     private String email;
@@ -22,8 +24,9 @@ public class User {
     public User() {
     }
 
-    public User(
+     public User(
         Long id,
+        String document,
         String name,
         String email,
         String password,
@@ -33,6 +36,7 @@ public class User {
         Collection<RefreshToken> tokens
     ) {
         this.id = id;
+        this.document = document;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -48,6 +52,13 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+     public String getDocument() {
+        return document;
+    }
+    public void setDocument(String document) {
+        this.document = document;
     }
 
     public String getName() {
