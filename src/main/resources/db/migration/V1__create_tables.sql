@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS `users` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `document` VARCHAR(50) NOT NULL,
     `name` VARCHAR(80) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(60) NOT NULL,
@@ -7,7 +8,8 @@ CREATE TABLE IF NOT EXISTS `users` (
     `phone` VARCHAR(12),
 
     PRIMARY KEY (`id`),
-    UNIQUE INDEX unique_index_email (`email`)
+    UNIQUE INDEX unique_index_email (`email`),
+    UNIQUE INDEX unique_index_document (`document`)
 );
 
 CREATE TABLE IF NOT EXISTS `areas` (
