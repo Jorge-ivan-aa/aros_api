@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `users` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(80) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(60) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 );
 
 CREATE TABLE IF NOT EXISTS `areas` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
 
     PRIMARY KEY (`id`),
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `areas` (
 );
 
 CREATE TABLE IF NOT EXISTS `user_areas` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `id_user` BIGINT NOT NULL,
     `id_area` BIGINT NOT NULL,
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `user_areas` (
 );
 
 CREATE TABLE IF NOT EXISTS `products` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
     `description` TINYTEXT,
     `price` FLOAT,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `products` (
 );
 
 CREATE TABLE IF NOT EXISTS `daymenus` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `creation` DATE NOT NULL,
 
     PRIMARY KEY (`id`),
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `daymenus` (
 );
 
 CREATE TABLE IF NOT EXISTS `subproducts` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `id_daymenu` BIGINT NOT NULL,
     `id_subproduct` BIGINT NOT NULL,
 
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `subproducts` (
 );
 
 CREATE TABLE IF NOT EXISTS `categories` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
 
     PRIMARY KEY (`id`),
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 );
 
 CREATE TABLE IF NOT EXISTS `product_categories` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `id_product` BIGINT NOT NULL,
     `id_category` BIGINT NOT NULL,
 
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
 );
 
 CREATE TABLE IF NOT EXISTS `category_positions` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `id_daymenu` BIGINT NOT NULL,
     `id_category` BIGINT NOT NULL,
     `position` TINYINT NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `category_positions` (
 );
 
 CREATE TABLE IF NOT EXISTS `tables` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
 
     PRIMARY KEY (`id`),
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `tables` (
 );
 
 CREATE TABLE IF NOT EXISTS `orders` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `status` VARCHAR(255),
     `taked_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `id_table` BIGINT NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 );
 
 CREATE TABLE IF NOT EXISTS `client_orders` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `status` VARCHAR(255),
     `id_order` BIGINT NOT NULL,
     `total` FLOAT,
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `client_orders` (
 );
 
 CREATE TABLE IF NOT EXISTS `order_details` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `id_order` BIGINT NOT NULL,
     `id_product` BIGINT NOT NULL,
     `name` VARCHAR(255) NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `order_details` (
 );
 
 CREATE TABLE IF NOT EXISTS `order_detail_subproducts` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `id_detail` BIGINT NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `observations` TINYTEXT,
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `order_detail_subproducts` (
 );
 
 CREATE TABLE IF NOT EXISTS `refresh_tokens` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `hash` VARCHAR(255) NOT NULL,
     `revoked_at` DATETIME,
     `id_user` BIGINT,
