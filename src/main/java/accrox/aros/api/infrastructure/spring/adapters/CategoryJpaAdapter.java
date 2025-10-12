@@ -11,14 +11,19 @@ import accrox.aros.api.infrastructure.spring.mappers.CategoryJpaMapper;
 
 @Repository
 public class CategoryJpaAdapter implements CategoryRepository {
-
     @Autowired
     private CategoryRepositoryJpa categoryRepositoryJpa;
 
     @Override
-    public void create(Category category) {
+    public Category create(Category category) {
         CategoryEntity entity = CategoryJpaMapper.toEntity(category, null);
+        CategoryEntity saved = this.categoryRepositoryJpa.save(entity);
 
-        this.categoryRepositoryJpa.save(entity);
+        return CategoryJpaMapper.toDomain(saved, null);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return this.categoryRepositoryJpa.existsByName(name);
     }
 }
