@@ -20,8 +20,11 @@ import jakarta.persistence.UniqueConstraint;
 )
 public class UserEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String document;
+    
     private String name;
 
     private String email;
@@ -54,6 +57,14 @@ public class UserEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public void setDocument(String document) {
+        this.document = document;
     }
 
     public String getName() {
