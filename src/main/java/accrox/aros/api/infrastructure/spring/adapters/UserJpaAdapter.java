@@ -2,6 +2,7 @@ package accrox.aros.api.infrastructure.spring.adapters;
 
 import java.util.Optional;
 
+import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +21,18 @@ public class UserJpaAdapter implements UserRepository {
     public Optional<User> findById(Long id) {
         return Optional.of(UserJpaMapper.toDomain(userRepositoryJpa.findById(id).get(), null, null));
     }
+
+    @Override
+    public Optional<User> findByDocument(String document) {
+        return userRepositoryJpa.findByDocument(document)
+                .map(entity -> UserJpaMapper.toDomain(entity, null, null));
+    }
+
+    @Override
+    public void save(User user) {
+        UserEntity toSave = UserJpaMapper.toEntity(user, null, null);
+        this.userRepositoryJpa.save(toSave);
+    }
+
+
 }
