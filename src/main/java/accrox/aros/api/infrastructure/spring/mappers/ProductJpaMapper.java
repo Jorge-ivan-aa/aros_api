@@ -18,6 +18,10 @@ public class ProductJpaMapper {
         Area preparationArea,
         Collection<Category> categories
     ) {
+        if (source == null) {
+            return null;
+        }
+
         Product target = new Product();
 
         target.setId(source.getId());
@@ -40,6 +44,10 @@ public class ProductJpaMapper {
         AreaEntity preparationArea,
         Collection<CategoryEntity> categories
     ) {
+        if (source == null) {
+            return null;
+        }
+
         ProductEntity target = new ProductEntity();
 
         target.setId(source.getId());
