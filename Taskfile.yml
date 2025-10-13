@@ -1,0 +1,42 @@
+version: '3'
+
+vars:
+  MVN: ./scripts/mvnw
+
+tasks:
+  # -----------------------------
+  # Comandos principales
+  # -----------------------------
+  run:
+    desc: Run Spring Boot application
+    cmds:
+      - "{{.MVN}} spring-boot:run"
+
+  test:
+    desc: Run all tests
+    cmds:
+      - "{{.MVN}} test"
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - "{{.MVN}} clean"
+
+  # -----------------------------
+  # Docker & base de datos
+  # -----------------------------
+  up:
+    desc: Start Docker containers
+    cmds:
+      - docker compose up -d
+
+  down:
+    desc: Stop Docker containers
+    cmds:
+      - docker compose down
+
+  reset_db:
+    desc: Reset database containers and volumes
+    cmds:
+      - docker compose down -v
+      - docker compose up -d

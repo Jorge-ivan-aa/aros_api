@@ -15,10 +15,10 @@ Al ser un producto empresarial, buscamos plataformas estables, escalables y con 
 ### Notas:
 
 - El proyecto requiere las siguientes dependencias:
-    1. Maven
+    1. TaskFile (>=3.45)
     2. Docker (>=28.5.0)
-
-- Antes de iniciar, se debe aplicar el comando `docker compose up -d` y verificar que el contenedor este ejecutandose correctamente, con `docker ps`.
-
-- Para ejecutar el proyecto con el wraper, el comando a utilizar es `./mvnw spring-boot:run`
+    3. JDK 21
+- Antes de iniciar, se debe aplicar el comando `task up`.
+- Para ejecutar el proyecto, se debe usar `task run`
+- Despues de cualquier cambio en la base de datos, se recomienda usar el comando `task reset_db`.
 
