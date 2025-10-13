@@ -7,4 +7,8 @@ public interface UserRepository {
 
     Optional<User> findById(Long id);
 
+    Optional<User> findByDocument(String document);
+
+    void save(User user);
+
 }
