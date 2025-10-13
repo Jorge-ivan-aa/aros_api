@@ -2,16 +2,7 @@ package accrox.aros.api.infrastructure.spring.jpa.entity;
 
 import java.util.Collection;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 @Entity
 @Table(
@@ -20,8 +11,11 @@ import jakarta.persistence.UniqueConstraint;
 )
 public class UserEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String document;
+    
     private String name;
 
     private String email;
@@ -54,6 +48,14 @@ public class UserEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public void setDocument(String document) {
+        this.document = document;
     }
 
     public String getName() {
