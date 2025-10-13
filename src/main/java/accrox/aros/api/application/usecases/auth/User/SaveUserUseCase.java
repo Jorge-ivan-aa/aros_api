@@ -1,6 +1,6 @@
 package accrox.aros.api.application.usecases.auth.User;
 
-import accrox.aros.api.application.dto.auth.User.CreateUserDTO;
+import accrox.aros.api.application.dto.auth.User.CreateUserInput;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
 import jakarta.validation.ValidationException;
@@ -13,7 +13,7 @@ public class SaveUserUseCase {
         this.userRepository = userRepository;
     }
 
-    public void execute(CreateUserDTO dto) throws ValidationException {
+    public void execute(CreateUserInput dto) throws ValidationException {
 
         if (dto.document() != null && userRepository.findByDocument(dto.document()).isPresent()) {
             throw new ValidationException("A user with the provided document already exists");

@@ -1,8 +1,10 @@
-package accrox.aros.api.application.dto.auth.User;
+package accrox.aros.api.infrastructure.spring.controllers.auth.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-public record CreateUserDTO(
+public record CreateUserRequest (
 
         @NotBlank(message = "Name is required")
         @Size(max = 100, message = "Name must not exceed 100 characters")
@@ -25,6 +27,5 @@ public record CreateUserDTO(
         //@Pattern(regexp = "\\d{10}", message = "Phone number must contain exactly 10 digits")
         String phone
 
-)  {
-
+){
 }
