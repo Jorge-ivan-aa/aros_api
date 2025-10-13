@@ -15,10 +15,10 @@ Al ser un producto empresarial, buscamos plataformas estables, escalables y con 
 ### Notas:
 
 - El proyecto requiere las siguientes dependencias:
-    1. Make
+    1. TaskFile (>=3.45)
     2. Docker (>=28.5.0)
     3. JDK 21
-- Antes de iniciar, se debe aplicar el comando `make up` y verificar que el contenedor este ejecutandose correctamente, con `docker ps`.
-- Para ejecutar el proyecto, se debe usar `make run`
-- Despues de cualquier cambio en la base de datos, se recomienda usar el comando `make reset_db`.
+- Antes de iniciar, se debe aplicar el comando `task up`.
+- Para ejecutar el proyecto, se debe usar `task run`
+- Despues de cualquier cambio en la base de datos, se recomienda usar el comando `task reset_db`.
 
