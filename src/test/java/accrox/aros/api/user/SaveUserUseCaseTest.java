@@ -1,7 +1,6 @@
 package accrox.aros.api.user;
 
 import accrox.aros.api.application.dto.auth.User.CreateUserInput;
-import accrox.aros.api.application.dto.auth.User.CreateUserOutput;
 import accrox.aros.api.application.usecases.auth.User.SaveUserUseCase;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
