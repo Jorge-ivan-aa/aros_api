@@ -3,6 +3,7 @@ package accrox.aros.api.infrastructure.spring.adapters;
 import java.util.Optional;
 
 import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +33,12 @@ public class UserJpaAdapter implements UserRepository {
     public void save(User user) {
         UserEntity toSave = UserJpaMapper.toEntity(user, null, null);
         this.userRepositoryJpa.save(toSave);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserByDocument(String document) {
+        this.userRepositoryJpa.deleteByDocument(document);
     }
 
 

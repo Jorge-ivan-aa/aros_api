@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepositoryJpa extends CrudRepository<UserEntity, Long> {
+
     Optional<UserEntity> findByDocument(String document);
 
+    Optional<UserEntity> deleteByDocument(String document);
 
 }
 

@@ -11,4 +11,6 @@ public interface UserRepository {
 
     void save(User user);
 
+    void deleteUserByDocument(String document);
+
 }
