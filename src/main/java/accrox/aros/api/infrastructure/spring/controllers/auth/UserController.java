@@ -1,6 +1,7 @@
 package accrox.aros.api.infrastructure.spring.controllers.auth;
 
 import accrox.aros.api.application.dto.auth.User.CreateUserInput;
+import accrox.aros.api.infrastructure.spring.controllers.auth.dto.CreateUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class UserController {
     private SaveUserUseCase saveUserUseCase;
 
     @PostMapping("/save")
-    public ResponseEntity<Void> saveUser(@Valid @RequestBody CreateUserInput request) {
-        this.saveUserUseCase.execute(request);
+    public ResponseEntity<Void> saveUser(@Valid @RequestBody CreateUserRequest request) {
+        this.saveUserUseCase.execute(request.toInput());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

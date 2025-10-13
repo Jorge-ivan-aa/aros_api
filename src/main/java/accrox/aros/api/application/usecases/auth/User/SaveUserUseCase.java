@@ -3,14 +3,20 @@ package accrox.aros.api.application.usecases.auth.User;
 import accrox.aros.api.application.dto.auth.User.CreateUserInput;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
+import accrox.aros.api.domain.service.PasswordService;
+import io.jsonwebtoken.security.Password;
 import jakarta.validation.ValidationException;
 
 public class SaveUserUseCase {
 
     private final UserRepository userRepository;
 
-    public SaveUserUseCase(UserRepository userRepository) {
+    private final PasswordService passwordService;
+
+
+    public SaveUserUseCase(UserRepository userRepository, PasswordService passwordService) {
         this.userRepository = userRepository;
+        this.passwordService = passwordService;
     }
 
     public void execute(CreateUserInput dto) throws ValidationException {
@@ -27,7 +33,7 @@ public class SaveUserUseCase {
         user.setDocument(dto.document());
         user.setName(dto.name());
         user.setEmail(dto.email());
-        user.setPassword(dto.password());
+        user.setPassword(this.passwordService.encode(dto.password()));
         user.setAddress(dto.address());
         user.setPhone(dto.phone());
 
