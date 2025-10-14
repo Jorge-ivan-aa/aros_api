@@ -46,13 +46,6 @@ public class GlobalAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<Map<String, String>> handleNoResourceFound(NoResourceFoundException ex) {
-        Map<String, String> body = new HashMap<>();
-        body.put("message", "document is required");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
         logger.error("Unhandled exception", ex);
