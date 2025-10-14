@@ -2,6 +2,7 @@ package accrox.aros.api.infrastructure.spring.jpa.entity;
 
 import java.util.Collection;
 
+import accrox.aros.api.domain.model.Area;
 import jakarta.persistence.*;
 
 @Entity

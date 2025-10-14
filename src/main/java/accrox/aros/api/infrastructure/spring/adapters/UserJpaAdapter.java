@@ -1,7 +1,10 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
+import java.util.Collection;
 import java.util.Optional;
 
+import accrox.aros.api.domain.model.Area;
+import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,13 @@ public class UserJpaAdapter implements UserRepository {
     }
 
     @Override
+    public void updateUserArea(User user , Collection<AreaEntity> areas) {
+
+        this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, areas, null));
+
+    }
+
+    @Override
     @Transactional
     public void deleteUserByDocument(String document) {
         this.userRepositoryJpa.deleteByDocument(document);
@@ -44,6 +54,7 @@ public class UserJpaAdapter implements UserRepository {
     @Override
     @Transactional
     public void update(User user) {
+
         this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, null, null));
     }
 
