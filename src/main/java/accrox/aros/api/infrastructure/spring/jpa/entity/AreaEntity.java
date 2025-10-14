@@ -2,12 +2,7 @@ package accrox.aros.api.infrastructure.spring.jpa.entity;
 
 import java.util.Collection;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 @Entity
 @Table(
@@ -16,6 +11,7 @@ import jakarta.persistence.UniqueConstraint;
 )
 public class AreaEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
