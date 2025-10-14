@@ -3,4 +3,7 @@ package accrox.aros.api.infrastructure.spring.jpa.repository;
 import org.springframework.data.repository.CrudRepository;
 import accrox.aros.api.infrastructure.spring.jpa.entity.TableEntity;
 
-public interface TableRepositoryJpa extends CrudRepository<TableEntity, Long> {}
+public interface TableRepositoryJpa extends CrudRepository<TableEntity, Long> {
+    
+    public boolean existsByName(String name);
+}
