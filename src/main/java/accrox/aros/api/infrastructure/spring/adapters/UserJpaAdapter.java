@@ -41,5 +41,11 @@ public class UserJpaAdapter implements UserRepository {
         this.userRepositoryJpa.deleteByDocument(document);
     }
 
+    @Override
+    @Transactional
+    public void update(User user) {
+        this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, null, null));
+    }
+
 
 }

@@ -11,7 +11,7 @@ public interface UserRepositoryJpa extends CrudRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByDocument(String document);
 
-    Optional<UserEntity> deleteByDocument(String document);
+    void deleteByDocument(String document);
 
 }
 
