@@ -42,9 +42,7 @@ public class UserController {
 
     @PutMapping("/update-user")
     public ResponseEntity<Void> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest  ){
-        System.out.println("documente is   "+updateUserRequest.document());
         this.updateUserUseCase.execute(updateUserRequest.toInput());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        //return null;
     }
 }
