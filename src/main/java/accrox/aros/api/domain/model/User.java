@@ -1,8 +1,7 @@
 package accrox.aros.api.domain.model;
 
 import java.util.Collection;
-
-import accrox.aros.api.domain.service.PasswordHasher;
+import accrox.aros.api.domain.service.PasswordService;
 
 public class User {
     private Long id;
@@ -124,7 +123,7 @@ public class User {
         this.tokens = tokens;
     }
 
-    public boolean passwordMatches(String rawPassword, PasswordHasher hasher) {
+    public boolean passwordMatches(String rawPassword, PasswordService hasher) {
         return hasher.matches(rawPassword, this.password);
     }
 }

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import accrox.aros.api.application.dto.auth.AuthTokenReponseDto;
 import accrox.aros.api.application.exceptions.auth.InvalidTokenException;
 import accrox.aros.api.domain.model.RefreshToken;
-import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.RefreshTokenRepository;
 import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.domain.service.TokenService;

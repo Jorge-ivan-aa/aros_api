@@ -1,4 +1,4 @@
-package accrox.aros.api.infrastructure.spring.config;
+package accrox.aros.api.infrastructure.spring.security;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import accrox.aros.api.domain.service.TokenService;
 import accrox.aros.api.infrastructure.spring.filters.TokenFilter;
-import accrox.aros.api.infrastructure.spring.security.TokenAuthenticatorProvider;
 import accrox.aros.api.infrastructure.spring.security.entrypoint.TokenAuthenticationEntryPoint;
 
 @Configuration

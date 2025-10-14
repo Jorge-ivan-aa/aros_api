@@ -25,6 +25,7 @@ public class UserJpaMapper {
         User target = new User();
 
         target.setId(source.getId());
+        target.setDocument(source.getDocument());
         target.setName(source.getName());
         target.setEmail(source.getEmail());
         target.setPassword(source.getPassword());
@@ -51,6 +52,7 @@ public class UserJpaMapper {
         UserEntity target = new UserEntity();
 
         target.setId(source.getId());
+        target.setDocument(source.getDocument());
         target.setName(source.getName());
         target.setEmail(source.getEmail());
         target.setPassword(source.getPassword());

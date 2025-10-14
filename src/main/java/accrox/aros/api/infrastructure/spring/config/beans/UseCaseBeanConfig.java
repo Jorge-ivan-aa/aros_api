@@ -9,7 +9,7 @@ import accrox.aros.api.application.usecases.auth.RefreshTokenUseCase;
 import accrox.aros.api.domain.repository.RefreshTokenRepository;
 import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.domain.service.AdminAuthService;
-import accrox.aros.api.domain.service.PasswordHasher;
+import accrox.aros.api.domain.service.PasswordService;
 import accrox.aros.api.domain.service.TokenService;
 import jakarta.persistence.EntityManager;
 
@@ -20,7 +20,7 @@ public class UseCaseBeanConfig {
     public LoginTokenUseCase authUseCase(
             AdminAuthService adminAuthService,
             UserRepository userRepository,
-            PasswordHasher passwordHasher,
+            PasswordService passwordService,
             TokenService tokenService,
             RefreshTokenRepository tokenRepository,
             @Value("${security.token.lifetime}") Integer tokenLifeTime) {
@@ -29,7 +29,7 @@ public class UseCaseBeanConfig {
                 userRepository,
                 adminAuthService,
                 tokenRepository,
-                passwordHasher,
+                passwordService,
                 tokenLifeTime);
     }
 

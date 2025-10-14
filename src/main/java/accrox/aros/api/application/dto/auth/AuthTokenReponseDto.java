@@ -1,8 +1,9 @@
 package accrox.aros.api.application.dto.auth;
 
-public class AuthTokenReponseDto
-{
-    /**`
+// TODO: refactor to AuthOutput and create DTO in infraestructure
+public class AuthTokenReponseDto {
+    /**
+     * `
      * refresh token
      */
     private String refresh;
@@ -11,9 +12,8 @@ public class AuthTokenReponseDto
      * acess token
      */
     private String access;
-    
-    public AuthTokenReponseDto(String refresh, String access)
-    {
+
+    public AuthTokenReponseDto(String refresh, String access) {
         this.refresh = refresh;
         this.access = access;
     }

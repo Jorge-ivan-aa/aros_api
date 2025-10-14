@@ -1,5 +1,6 @@
 package accrox.aros.api.application.dto.auth;
 
+// TODO: refactor to AuthInput and create DTO in infraestructure
 public class AuthRequestDto {
     private String email;
     private String password;

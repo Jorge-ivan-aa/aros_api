@@ -11,7 +11,7 @@ import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.RefreshTokenRepository;
 import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.domain.service.AdminAuthService;
-import accrox.aros.api.domain.service.PasswordHasher;
+import accrox.aros.api.domain.service.PasswordService;
 import accrox.aros.api.domain.service.TokenService;
 
 public class LoginTokenUseCase {
@@ -23,20 +23,20 @@ public class LoginTokenUseCase {
 
     private RefreshTokenRepository tokenRepository;
 
-    private PasswordHasher passwordHasher;
+    private PasswordService passwordService;
 
     public LoginTokenUseCase(
             TokenService tokenService,
             UserRepository userRepository,
             AdminAuthService adminAuthService,
             RefreshTokenRepository tokenRepository,
-            PasswordHasher passwordHasher,
+            PasswordService passwordService,
             Integer refreshTokenDuration) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         this.adminAuthService = adminAuthService;
         this.tokenRepository = tokenRepository;
-        this.passwordHasher = passwordHasher;
+        this.passwordService = passwordService;
     }
 
     public AuthTokenReponseDto execute(AuthRequestDto request)
@@ -49,10 +49,10 @@ public class LoginTokenUseCase {
         } else {
             user = this.userRepository
                     .findByEmail(request.getEmail())
-                    .orElseThrow(() -> new InvalidCredentialsException("User email not found"));
+                    .orElseThrow(() -> new InvalidCredentialsException("User not found"));
         }
 
-        if (!user.passwordMatches(request.getPassword(), this.passwordHasher)) {
+        if (!user.passwordMatches(request.getPassword(), this.passwordService)) {
             throw new InvalidCredentialsException("Invalid password");
         }
 
