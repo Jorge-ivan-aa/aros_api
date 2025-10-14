@@ -1,21 +1,19 @@
 package accrox.aros.api.infrastructure.spring.jpa.entity;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = @UniqueConstraint(columnNames = "email")
-)
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String document;
-    
+
     private String name;
 
     private String email;
@@ -29,15 +27,12 @@ public class UserEntity {
     private String phone;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "user_areas",
-        joinColumns = @JoinColumn(name = "id_user"),
-        inverseJoinColumns = @JoinColumn(name = "id_area")
-    )
+    @JoinTable(name = "user_areas", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_area"))
     private Collection<AreaEntity> areas;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Collection<RefreshTokenEntity> tokens;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Collection<RefreshTokenEntity> tokens = new HashSet<>();
 
     public UserEntity() {
     }

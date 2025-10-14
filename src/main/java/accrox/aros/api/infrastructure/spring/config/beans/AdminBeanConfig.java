@@ -23,9 +23,15 @@ public class AdminBeanConfig {
 
     @PostConstruct
     public void validatePasswordSecurity() {
+
         if (password.isEmpty()) {
             throw new InsecurePasswordException();
         }
+
+        if (password.startsWith("'") && password.endsWith("'")) {
+            password = password.substring(1, password.length() - 1);
+        }
+
         if (!isPasswordHashed(password)) {
             String hashedPassword = encoder.encode(password);
             throw new InsecurePasswordException(email, hashedPassword);

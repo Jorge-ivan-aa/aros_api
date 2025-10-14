@@ -8,22 +8,18 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
-import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.service.TokenService;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.swagger.v3.core.util.Json;
 
 public class JwtService implements TokenService {
     private String accessTokenSecrect;
 
     public JwtService(
             String accessTokenSecrect) {
-        // this.refreshTokenSecrect = refreshTokenSecrect;
         this.accessTokenSecrect = accessTokenSecrect;
     }
 
@@ -31,20 +27,20 @@ public class JwtService implements TokenService {
      * {@inheritDoc}
      */
     @Override
-    public String generateAccessToken(User user) {
+    public String generateAccessToken(String userEmail) {
         SecretKey signKey = Keys.hmacShaKeyFor(
                 accessTokenSecrect.getBytes(StandardCharsets.UTF_8));
 
         JwtBuilder builder = Jwts
                 .builder()
-                .claim("user.data", user)
-                .subject(user.getEmail())
+                .claim("userEmail.data", userEmail)
+                .subject(userEmail)
                 .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 15))
                 .signWith(signKey)
         // .compact()
         ;
 
-        builder.claim("user.areas", Collections.EMPTY_SET);
+        builder.claim("userEmail.areas", Collections.EMPTY_SET);
 
         return builder.compact();
     }
@@ -53,7 +49,7 @@ public class JwtService implements TokenService {
      * {@inheritDoc}
      */
     @Override
-    public String generateRefreshToken(User user) {
+    public String generateRefreshToken(String userEmail) {
         SecureRandom secureRandom = new SecureRandom();
         byte[] bytes = new byte[32];
         secureRandom.nextBytes(bytes);
@@ -85,14 +81,8 @@ public class JwtService implements TokenService {
      * {@inheritDoc}
      */
     @Override
-    public String extractUsername(String token) {
+    public String extractUserEmail(String token) {
         return this.extractClaimsAccessToken(token).getSubject();
-    }
-
-    @Override
-    public User extractUserInfo(String token) {
-        Claims claims = this.extractClaimsAccessToken(token);
-        return Json.mapper().convertValue(claims.get("user.data"), User.class);
     }
 
     /**
@@ -113,8 +103,6 @@ public class JwtService implements TokenService {
                 .verifyWith(signKey)
                 .build()
                 .parseSignedClaims(token)
-                // .parseSignedClaims(token)
-                // .parse(token)
                 .getPayload();
     }
 

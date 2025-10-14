@@ -42,28 +42,28 @@ public class LoginTokenUseCase {
     public AuthTokenReponseDto execute(AuthRequestDto request)
             throws InvalidCredentialsException, InsecurePasswordException {
 
-        if (adminAuthService.isAdminCredentials(request.getUsername(), request.getPassword())) {
-            User adminUser = new User(request.getUsername());
-            String accessToken = tokenService.generateAccessToken(adminUser);
-            return new AuthTokenReponseDto(null, accessToken);
-        }
+        User user;
+        if (adminAuthService.isAdminCredentials(request.getEmail())) {
+            user = adminAuthService.getUser();
 
-        User user = this.userRepository
-                .findByEmail(request.getUsername())
-                .orElseThrow(() -> new InvalidCredentialsException());
+        } else {
+            user = this.userRepository
+                    .findByEmail(request.getEmail())
+                    .orElseThrow(() -> new InvalidCredentialsException("User email not found"));
+        }
 
         if (!user.passwordMatches(request.getPassword(), this.passwordHasher)) {
-            throw new InvalidCredentialsException();
+            throw new InvalidCredentialsException("Invalid password");
         }
 
-        String refreshToken = this.tokenService.generateRefreshToken(user);
-        String accessToken = this.tokenService.generateAccessToken(user);
+        String refreshToken = this.tokenService.generateRefreshToken(user.getEmail());
+        String accessToken = this.tokenService.generateAccessToken(user.getEmail());
 
         this.tokenRepository.create(new RefreshToken(
                 null,
                 refreshToken,
                 LocalDateTime.now(),
-                user));
+                user.getEmail()));
 
         return new AuthTokenReponseDto(refreshToken, accessToken);
     }

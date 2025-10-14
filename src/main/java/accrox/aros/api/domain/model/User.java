@@ -47,8 +47,9 @@ public class User {
         this.tokens = tokens;
     }
 
-    public User(String email) {
+    public User(String email, String password) {
         this.email = email;
+        this.password = password;
     }
 
     public Long getId() {

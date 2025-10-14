@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 context.setAuthentication(new UsernamePasswordAuthenticationToken(
-                    tokenService.extractUsername(token),
+                    tokenService.extractUserEmail(token),
                     null,
                     Collections.emptyList()
                 ));

@@ -38,18 +38,18 @@ public class RefreshTokenUseCase {
 
         manager.clear();
 
-        User user = refreshToken.getUser();
+        String userEmail = refreshToken.getUserEmail();
 
         this.tokenRepository.revokeToken(refreshToken.getId());
 
-        String newRefreshToken = this.tokenService.generateRefreshToken(user);
-        String newAccessToken = this.tokenService.generateAccessToken(user);
+        String newRefreshToken = this.tokenService.generateRefreshToken(userEmail);
+        String newAccessToken = this.tokenService.generateAccessToken(userEmail);
 
         this.tokenRepository.create(new RefreshToken(
                 null,
                 newRefreshToken,
                 LocalDateTime.now(),
-                user));
+                userEmail));
 
         return new AuthTokenReponseDto(newRefreshToken, newAccessToken);
     }

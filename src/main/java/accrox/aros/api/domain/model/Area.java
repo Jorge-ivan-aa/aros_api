@@ -12,6 +12,10 @@ public class Area {
     public Area() {
     }
 
+    public Area(String name) {
+        this.name = name;
+    }
+
     public Area(Long id, String name, Collection<Product> products) {
         this.id = id;
         this.name = name;

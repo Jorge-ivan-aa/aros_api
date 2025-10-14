@@ -1,7 +1,9 @@
 package accrox.aros.api.infrastructure.spring.jpa.repository;
 
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
-
 import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 
-public interface UserRepositoryJpa extends CrudRepository<UserEntity, Long> {}
+public interface UserRepositoryJpa extends CrudRepository<UserEntity, Long> {
+    Optional<UserEntity> findByEmail(String email);
+}

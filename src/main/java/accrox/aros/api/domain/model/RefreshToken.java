@@ -9,16 +9,16 @@ public class RefreshToken {
 
     private LocalDateTime revokedAt;
 
-    private User user;
+    private String userEmail;
 
     public RefreshToken() {
     }
 
-    public RefreshToken(Long id, String hash, LocalDateTime revokedAt, User user) {
+    public RefreshToken(Long id, String hash, LocalDateTime revokedAt, String userEmail) {
         this.id = id;
         this.hash = hash;
         this.revokedAt = revokedAt;
-        this.user = user;
+        this.userEmail = userEmail;
     }
 
     public Long getId() {
@@ -45,11 +45,11 @@ public class RefreshToken {
         this.revokedAt = revokedAt;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }
