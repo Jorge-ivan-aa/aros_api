@@ -1,7 +1,9 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
+import java.util.Collection;
 import java.util.Optional;
 
+import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
@@ -24,9 +26,7 @@ public class UserJpaAdapter implements UserRepository {
 
     @Override
     public Optional<User> findById(Long id) {
-        logger.info("Validating user credentials for: {}", id);
-        return userRepositoryJpa.findById(id)
-                .map(entity -> UserJpaMapper.toDomain(entity, null, null));
+        return Optional.of(UserJpaMapper.toDomain(userRepositoryJpa.findById(id).get(), null, null));
     }
 
     @Override
@@ -44,8 +44,15 @@ public class UserJpaAdapter implements UserRepository {
     @Override
     public void save(User user) {
         UserEntity toSave = UserJpaMapper.toEntity(user, null, null);
-        
+
         this.userRepositoryJpa.save(toSave);
+    }
+
+    @Override
+    public void updateUserArea(User user , Collection<AreaEntity> areas) {
+
+        this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, areas, null));
+
     }
 
     @Override
@@ -57,6 +64,7 @@ public class UserJpaAdapter implements UserRepository {
     @Override
     @Transactional
     public void update(User user) {
+
         this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, null, null));
     }
 
