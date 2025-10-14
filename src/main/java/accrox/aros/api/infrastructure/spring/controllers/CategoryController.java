@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import accrox.aros.api.application.exceptions.category.CategoryAlreadyExistsException;
 import accrox.aros.api.application.usecases.category.CreateCategoryUseCase;
-import accrox.aros.api.infrastructure.spring.controllers.dto.CreateCategoryRequest;
+import accrox.aros.api.infrastructure.spring.dto.CreateCategoryRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -21,8 +21,7 @@ public class CategoryController {
 
     @PostMapping(path = "category")
     public ResponseEntity<?> create(
-        @Valid @RequestBody CreateCategoryRequest request
-    ) throws CategoryAlreadyExistsException {
+            @Valid @RequestBody CreateCategoryRequest request) throws CategoryAlreadyExistsException {
         this.createCategoryUseCase.execute(request.toInput());
 
         return new ResponseEntity<>(HttpStatus.CREATED);

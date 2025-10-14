@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import accrox.aros.api.application.exceptions.product.ProductAlreadyExistsException;
 import accrox.aros.api.application.usecases.product.CreateProductUseCase;
-import accrox.aros.api.infrastructure.spring.controllers.dto.CreateProductRequest;
+import accrox.aros.api.infrastructure.spring.dto.CreateProductRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -21,8 +21,7 @@ public class ProductController {
 
     @PostMapping(path = "")
     public ResponseEntity<?> create(
-        @Valid @RequestBody CreateProductRequest request
-    ) throws ProductAlreadyExistsException {
+            @Valid @RequestBody CreateProductRequest request) throws ProductAlreadyExistsException {
         this.createProductUseCase.execute(request.toInput());
 
         return new ResponseEntity<>(HttpStatus.CREATED);

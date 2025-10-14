@@ -14,8 +14,7 @@ import accrox.aros.api.application.exceptions.product.ProductAlreadyExistsExcept
 public class ProductAdvice {
     @ExceptionHandler(ProductAlreadyExistsException.class)
     public ResponseEntity<?> handleProductAlreadyExists(
-        ProductAlreadyExistsException ex
-    ) {
+            ProductAlreadyExistsException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("name", "a product with this name already exists");
 

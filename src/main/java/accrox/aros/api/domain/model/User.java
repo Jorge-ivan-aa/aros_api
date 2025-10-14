@@ -1,12 +1,13 @@
 package accrox.aros.api.domain.model;
 
 import java.util.Collection;
+import accrox.aros.api.domain.service.PasswordService;
 
 public class User {
     private Long id;
 
     private String document;
-    
+
     private String name;
 
     private String email;
@@ -24,17 +25,16 @@ public class User {
     public User() {
     }
 
-     public User(
-        Long id,
-        String document,
-        String name,
-        String email,
-        String password,
-        String address,
-        String phone,
-        Collection<Area> areas,
-        Collection<RefreshToken> tokens
-    ) {
+    public User(
+            Long id,
+            String document,
+            String name,
+            String email,
+            String password,
+            String address,
+            String phone,
+            Collection<Area> areas,
+            Collection<RefreshToken> tokens) {
         this.id = id;
         this.document = document;
         this.name = name;
@@ -46,6 +46,11 @@ public class User {
         this.tokens = tokens;
     }
 
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }
@@ -54,9 +59,10 @@ public class User {
         this.id = id;
     }
 
-     public String getDocument() {
+    public String getDocument() {
         return document;
     }
+
     public void setDocument(String document) {
         this.document = document;
     }
@@ -115,5 +121,9 @@ public class User {
 
     public void setTokens(Collection<RefreshToken> tokens) {
         this.tokens = tokens;
+    }
+
+    public boolean passwordMatches(String rawPassword, PasswordService hasher) {
+        return hasher.matches(rawPassword, this.password);
     }
 }

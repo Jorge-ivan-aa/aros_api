@@ -2,6 +2,8 @@
 .vscode/
 target/
 .env
+docs/api_request/
+
 
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

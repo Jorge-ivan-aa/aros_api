@@ -1,24 +1,21 @@
 package accrox.aros.api.infrastructure.spring.mappers;
 
 import accrox.aros.api.domain.model.RefreshToken;
-import accrox.aros.api.domain.model.User;
 import accrox.aros.api.infrastructure.spring.jpa.entity.RefreshTokenEntity;
-import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 
 public class RefreshTokenJpaMapper {
     /**
      * map {@link RefreshTokenEntity} to {@link RefreshToken}
      */
     public static RefreshToken toDomain(
-        RefreshTokenEntity source,
-        User user
-    ) {
+            RefreshTokenEntity source,
+            String userEmail) {
         RefreshToken target = new RefreshToken();
 
         target.setId(source.getId());
         target.setHash(source.getHash());
         target.setRevokedAt(source.getRevokedAt());
-        target.setUser(user);
+        target.setUserEmail(userEmail);
 
         return target;
     }
@@ -27,15 +24,14 @@ public class RefreshTokenJpaMapper {
      * map {@link RefreshToken} to {@link RefreshTokenEntity}
      */
     public static RefreshTokenEntity toEntity(
-        RefreshToken source,
-        UserEntity user
-    ) {
+            RefreshToken source,
+            String userEmail) {
         RefreshTokenEntity target = new RefreshTokenEntity();
 
         target.setId(source.getId());
         target.setHash(source.getHash());
         target.setRevokedAt(source.getRevokedAt());
-        target.setUser(user);
+        target.setUserEmail(userEmail);
 
         return target;
     }

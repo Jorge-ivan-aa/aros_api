@@ -1,10 +1,11 @@
 package accrox.aros.api.user;
 
-import accrox.aros.api.application.dto.auth.User.CreateUserInput;
-import accrox.aros.api.application.usecases.auth.User.SaveUserUseCase;
+import accrox.aros.api.application.dto.user.CreateUserInput;
+import accrox.aros.api.application.usecases.user.SaveUserUseCase;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
-import accrox.aros.api.infrastructure.spring.controllers.auth.dto.CreateUserRequest;
+import accrox.aros.api.infrastructure.spring.dto.CreateUserRequest;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -26,7 +27,6 @@ public class SaveUserUseCaseTest {
     @InjectMocks
     private SaveUserUseCase saveUserUseCase;
 
-    // Saved user
     @Test
     void whenValidDTO_thenSavesUserSuccessfully() {
 
@@ -36,8 +36,7 @@ public class SaveUserUseCaseTest {
                 "carlos@example.com",
                 "StrongPassword1",
                 "Calle Falsa 123",
-                "5551234567"
-        );
+                "5551234567");
 
         CreateUserInput dto = new CreateUserInput(
                 request.name(),
@@ -45,8 +44,7 @@ public class SaveUserUseCaseTest {
                 request.email(),
                 request.password(),
                 request.address(),
-                request.phone()
-        );
+                request.phone());
 
         when(userRepository.findByDocument(dto.document())).thenReturn(Optional.empty());
 

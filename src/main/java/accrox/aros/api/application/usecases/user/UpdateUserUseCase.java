@@ -14,7 +14,7 @@ public class UpdateUserUseCase {
 
     private final PasswordService passwordService;
 
-    public UpdateUserUseCase(UserRepository userRepository,PasswordService passwordService) {
+    public UpdateUserUseCase(UserRepository userRepository, PasswordService passwordService) {
         this.userRepository = userRepository;
         this.passwordService = passwordService;
     }
@@ -28,7 +28,7 @@ public class UpdateUserUseCase {
         if (userOpt.isEmpty()) {
             throw new ValidationException("No user found with the provided document");
         }
-        if(toUptate.name() != null && !toUptate.name().isBlank()){
+        if (toUptate.name() != null && !toUptate.name().isBlank()) {
             userOpt.get().setName(toUptate.name());
         }
         if (toUptate.email() != null && !toUptate.email().isBlank()) {

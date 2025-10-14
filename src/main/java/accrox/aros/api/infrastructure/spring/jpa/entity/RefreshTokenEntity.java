@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,12 +14,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(
-    name = "refresh_tokens",
-    uniqueConstraints = @UniqueConstraint(columnNames = "hash")
-)
+@Table(name = "refresh_tokens", uniqueConstraints = @UniqueConstraint(columnNames = "hash"))
 public class RefreshTokenEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String hash;
@@ -25,18 +25,20 @@ public class RefreshTokenEntity {
     @Column(name = "revoked_at")
     private LocalDateTime revokedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false, nullable = true)
     private UserEntity user;
+
+    private String userEmail;
 
     public RefreshTokenEntity() {
     }
 
-    public RefreshTokenEntity(Long id, String hash, LocalDateTime revokedAt, UserEntity user) {
+    public RefreshTokenEntity(Long id, String hash, LocalDateTime revokedAt, String userEmail) {
         this.id = id;
         this.hash = hash;
         this.revokedAt = revokedAt;
-        this.user = user;
+        this.userEmail = userEmail;
     }
 
     public Long getId() {
@@ -63,11 +65,11 @@ public class RefreshTokenEntity {
         this.revokedAt = revokedAt;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

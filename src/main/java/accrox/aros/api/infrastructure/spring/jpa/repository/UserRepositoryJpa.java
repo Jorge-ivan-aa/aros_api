@@ -1,17 +1,16 @@
 package accrox.aros.api.infrastructure.spring.jpa.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 
 import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 
-import java.util.List;
-import java.util.Optional;
-
 public interface UserRepositoryJpa extends CrudRepository<UserEntity, Long> {
-
     Optional<UserEntity> findByDocument(String document);
 
-    void deleteByDocument(String document);
+    Optional<UserEntity> deleteByDocument(String document);
+
+    Optional<UserEntity> findByEmail(String email);
 
 }
-

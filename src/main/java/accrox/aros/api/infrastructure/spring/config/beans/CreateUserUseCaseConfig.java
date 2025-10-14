@@ -1,6 +1,6 @@
 package accrox.aros.api.infrastructure.spring.config.beans;
 
-import accrox.aros.api.application.usecases.auth.User.SaveUserUseCase;
+import accrox.aros.api.application.usecases.user.SaveUserUseCase;
 import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.domain.service.PasswordService;
 
@@ -12,8 +12,7 @@ public class CreateUserUseCaseConfig {
     @Bean
     public SaveUserUseCase saveUserUseCase(
             UserRepository userRepository,
-            PasswordService passwordService
-    ) {
+            PasswordService passwordService) {
         return new SaveUserUseCase(userRepository, passwordService);
     }
 }
