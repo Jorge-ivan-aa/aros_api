@@ -3,6 +3,7 @@ package accrox.aros.api.infrastructure.spring.jpa.entity;
 import java.util.Collection;
 
 import accrox.aros.api.domain.model.enums.OrderStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -25,7 +26,7 @@ public class ClientOrderEntity {
 
     private Float total;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private Collection<ClientOrderDetailEntity> details;
 
     public ClientOrderEntity() {

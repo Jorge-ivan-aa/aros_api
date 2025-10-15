@@ -1,12 +1,14 @@
 package accrox.aros.api.infrastructure.spring.mappers;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 import accrox.aros.api.domain.model.DayMenuCategory;
+import accrox.aros.api.domain.model.DayMenuSelection;
 import accrox.aros.api.domain.model.Daymenu;
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderDetailEntity;
-import accrox.aros.api.infrastructure.spring.jpa.entity.DaymenuEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.OrderDetailSubProductEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
 
@@ -52,6 +54,7 @@ public class ClientOrderDetailJpaMapper {
      */
     public static ClientOrderDetailEntity toEntity(
         Product source,
+        ClientOrderEntity order,
         ProductEntity product
     ) {
         ClientOrderDetailEntity target = new ClientOrderDetailEntity();
@@ -62,7 +65,8 @@ public class ClientOrderDetailJpaMapper {
         target.setQuantity(source.getQuantity());
         target.setObservations(source.getObservations());
         target.setProduct(product);
-        target.setSubProducts(null);
+        target.setOrder(order);
+        target.setSubProducts(new LinkedList<>());
 
         return target;
     }
@@ -72,13 +76,36 @@ public class ClientOrderDetailJpaMapper {
      */
     public static ClientOrderDetailEntity toEntity(
         Daymenu source,
-        DaymenuEntity product,
+        ClientOrderEntity order,
+        ProductEntity product,
         Collection<OrderDetailSubProductEntity> subproducts
     ) {
-        ClientOrderDetailEntity target = ClientOrderDetailJpaMapper.toEntity(source, product);
+        ClientOrderDetailEntity target = ClientOrderDetailJpaMapper.toEntity(source, order, product);
 
         target.setSubProducts(subproducts);
 
+        return target;
+    }
+
+    public static ClientOrderDetailEntity toEntity(
+        DayMenuSelection source,
+        ClientOrderEntity order,
+        ProductEntity referencedProduct
+        // Collection<OrderDetailSubProductEntity> subproducts
+    ) {
+        ClientOrderDetailEntity target = ClientOrderDetailJpaMapper.toEntity((Product) source, order, referencedProduct);
+
+        if (source.getSelection() != null && ! source.getSelection().isEmpty()) {
+            source.getSelection().stream().forEach((p) -> {
+                OrderDetailSubProductEntity subProduct = new OrderDetailSubProductEntity();
+                subProduct.setName(p.getName());
+                subProduct.setObservations(p.getObservations());
+                subProduct.setDetail(target);
+
+                target.getSubProducts().add(subProduct);
+            });
+        }
+        
         return target;
     }
 }

@@ -1,5 +1,7 @@
 package accrox.aros.api.domain.repository;
 
-public interface OrderRepository {
+import accrox.aros.api.domain.model.Order;
 
+public interface OrderRepository {
+    public void create(Order order);
 }

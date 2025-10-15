@@ -2,6 +2,7 @@ package accrox.aros.api.infrastructure.spring.jpa.entity;
 
 import java.util.Collection;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,7 +37,7 @@ public class ClientOrderDetailEntity {
 
     private String observations;
 
-    @OneToMany(mappedBy = "detail", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "detail", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<OrderDetailSubProductEntity> subProducts;
 
     public ClientOrderDetailEntity() {
