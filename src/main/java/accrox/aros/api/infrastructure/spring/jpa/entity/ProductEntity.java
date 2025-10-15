@@ -50,9 +50,6 @@ public class ProductEntity {
         inverseJoinColumns = @JoinColumn(name = "id_category")
     )
     private Collection<CategoryEntity> categories;
-
-    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
-    private Collection<DaymenuEntity> parent;
     
     public ProductEntity() {
     }

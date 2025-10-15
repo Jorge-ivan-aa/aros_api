@@ -48,16 +48,6 @@ CREATE TABLE IF NOT EXISTS `daymenus` (
     FOREIGN KEY (`id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `subproducts` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `id_daymenu` BIGINT NOT NULL,
-    `id_subproduct` BIGINT NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`id_daymenu`) REFERENCES `daymenus` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`id_subproduct`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-    UNIQUE INDEX unique_index_product_subproduct (`id_daymenu`, `id_subproduct`)
-);
-
 CREATE TABLE IF NOT EXISTS `categories` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
@@ -75,15 +65,28 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
     UNIQUE INDEX unique_index_product_category (`id_product`, `id_category`)
 );
 
-CREATE TABLE IF NOT EXISTS `category_positions` (
+CREATE TABLE IF NOT EXISTS `daymenu_categories` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `id_daymenu` BIGINT NOT NULL,
     `id_category` BIGINT NOT NULL,
-    `position` TINYINT NOT NULL,
+    `position` TINYINT UNSIGNED NOT NULL,
+
     PRIMARY KEY (`id`),
     FOREIGN KEY (`id_daymenu`) REFERENCES `daymenus` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`id_category`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
-    UNIQUE INDEX unique_index_daymenu_category (`id_daymenu`, `id_category`)
+    UNIQUE INDEX unique_index_daymenu_category (`id_daymenu`, `id_category`),
+    UNIQUE INDEX unique_index_daymenu_position (`id_daymenu`, `position`)
+);
+
+CREATE TABLE IF NOT EXISTS `daymenu_products` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `id_daymenu_category` BIGINT NOT NULL,
+    `id_subproduct` BIGINT NOT NULL,
+
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`id_daymenu_category`) REFERENCES `daymenu_categories` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`id_subproduct`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+    UNIQUE INDEX unique_index_product_subproduct (`id_daymenu_category`, `id_subproduct`)
 );
 
 CREATE TABLE IF NOT EXISTS `tables` (

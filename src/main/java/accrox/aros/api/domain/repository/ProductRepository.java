@@ -1,5 +1,7 @@
 package accrox.aros.api.domain.repository;
 
+import java.util.Set;
+
 import accrox.aros.api.domain.model.Product;
 
 public interface ProductRepository {
@@ -20,4 +22,6 @@ public interface ProductRepository {
      * @return the product exists
      */
     public boolean existsByName(String name);
+
+    public boolean existsAllById(Set<Long> ids);
 }

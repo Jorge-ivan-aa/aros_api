@@ -6,7 +6,7 @@ import java.util.Collection;
 public class Daymenu extends Product {
     private LocalDate creation;
 
-    private Collection<Product> subProducts;
+    private Collection<DayMenuCategory> subProducts;
 
     public Daymenu() {
     }
@@ -18,7 +18,7 @@ public class Daymenu extends Product {
         Float price,
         Integer quantity,
         LocalDate creation,
-        Collection<Product> subProducts
+        Collection<DayMenuCategory> subProducts
     ) {
         super(id, name, description, price, quantity);
         this.creation = creation;
@@ -33,11 +33,11 @@ public class Daymenu extends Product {
         this.creation = creation;
     }
 
-    public Collection<Product> getSubProducts() {
+    public Collection<DayMenuCategory> getSubProducts() {
         return subProducts;
     }
 
-    public void setSubProducts(Collection<Product> subProducts) {
+    public void setSubProducts(Collection<DayMenuCategory> subProducts) {
         this.subProducts = subProducts;
     }
 }

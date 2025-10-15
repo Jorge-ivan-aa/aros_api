@@ -1,5 +1,7 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +27,10 @@ public class ProductJpaAdapter implements ProductRepository {
     @Override
     public boolean existsByName(String name) {
         return this.productRepositoryJpa.existsByName(name);
+    }
+
+    @Override
+    public boolean existsAllById(Set<Long> ids) {
+        return this.productRepositoryJpa.existsAllByIdIn(ids, ids.size());
     }
 }
