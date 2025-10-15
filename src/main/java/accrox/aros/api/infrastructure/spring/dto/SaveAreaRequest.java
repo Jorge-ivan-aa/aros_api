@@ -1,5 +1,4 @@
-package accrox.aros.api.infrastructure.spring.controllers.dto;
-
+package accrox.aros.api.infrastructure.spring.dto;
 import accrox.aros.api.application.dto.area.SaveAreaInput;
 import jakarta.validation.constraints.NotBlank;
 

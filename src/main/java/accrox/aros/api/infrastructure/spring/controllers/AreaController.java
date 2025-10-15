@@ -1,21 +1,28 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import accrox.aros.api.application.dto.area.GetAreaOutput;
 import accrox.aros.api.application.exceptions.ValidationException;
 import accrox.aros.api.application.usecases.area.DeleteAreaUseCase;
 import accrox.aros.api.application.usecases.area.GetAllAreaUseCase;
-import accrox.aros.api.application.usecases.area.SaveAreaUseCase;
 import accrox.aros.api.application.usecases.area.GetAreaUseCase;
-import accrox.aros.api.infrastructure.spring.controllers.dto.DeleteAreaRequest;
-import accrox.aros.api.infrastructure.spring.controllers.dto.GetAreaRequest;
-import accrox.aros.api.infrastructure.spring.controllers.dto.SaveAreaRequest;
+import accrox.aros.api.application.usecases.area.SaveAreaUseCase;
+import accrox.aros.api.infrastructure.spring.dto.DeleteAreaRequest;
+import accrox.aros.api.infrastructure.spring.dto.GetAreaRequest;
+import accrox.aros.api.infrastructure.spring.dto.SaveAreaRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/areas")

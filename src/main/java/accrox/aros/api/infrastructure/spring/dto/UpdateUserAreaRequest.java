@@ -1,10 +1,10 @@
-package accrox.aros.api.infrastructure.spring.controllers.dto;
+package accrox.aros.api.infrastructure.spring.dto;
+
+import java.util.Collection;
 
 import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.application.dto.user.UpdateUserAreaInput;
 import jakarta.validation.constraints.NotBlank;
-
-import java.util.Collection;
 
 public record UpdateUserAreaRequest(
         @NotBlank(message = "required name")
