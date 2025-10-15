@@ -1,6 +1,11 @@
 package accrox.aros.api.domain.repository;
 
 import accrox.aros.api.domain.model.Product;
+import accrox.aros.api.domain.model.User;
+import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
+
+import java.util.Collection;
+import java.util.Optional;
 
 public interface ProductRepository {
     /**
@@ -20,4 +25,18 @@ public interface ProductRepository {
      * @return the product exists
      */
     public boolean existsByName(String name);
+
+    /**
+     *
+     * @param product
+     * @param area
+     */
+    void updateUserArea(Product product , AreaEntity area);
+
+    /**
+     *
+     * @param name
+     * @return Product
+     */
+    public Optional<Product> findByName(String name);
 }
