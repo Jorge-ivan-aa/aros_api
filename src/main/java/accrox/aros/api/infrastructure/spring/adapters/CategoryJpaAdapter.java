@@ -1,5 +1,8 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +28,10 @@ public class CategoryJpaAdapter implements CategoryRepository {
     @Override
     public boolean existsByName(String name) {
         return this.categoryRepositoryJpa.existsByName(name);
+    }
+
+    @Override
+    public boolean existsAllById(Collection<Long> ids) {
+        return this.categoryRepositoryJpa.existsAllByIdIn(new LinkedHashSet<>(ids), ids.size());
     }
 }

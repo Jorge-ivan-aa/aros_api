@@ -3,11 +3,11 @@ package accrox.aros.api.infrastructure.spring.mappers;
 import java.util.Collection;
 
 import accrox.aros.api.domain.model.Category;
+import accrox.aros.api.domain.model.DayMenuCategory;
 import accrox.aros.api.domain.model.Daymenu;
-import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.infrastructure.spring.jpa.entity.CategoryEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.DayMenuCategoryEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.DaymenuEntity;
-import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
 
 public class DaymenuJpaMapper {
     /**
@@ -16,7 +16,7 @@ public class DaymenuJpaMapper {
     public static Daymenu toDomain(
         DaymenuEntity source,
         Collection<Category> categories,
-        Collection<Product> subProducts
+        Collection<DayMenuCategory> subProducts
     ) {
         Daymenu target = new Daymenu();
 
@@ -40,7 +40,7 @@ public class DaymenuJpaMapper {
     public static DaymenuEntity toEntity(
         Daymenu source,
         Collection<CategoryEntity> categories,
-        Collection<ProductEntity> products
+        Collection<DayMenuCategoryEntity> products
     ) {
         DaymenuEntity target = new DaymenuEntity();
 
@@ -53,7 +53,8 @@ public class DaymenuJpaMapper {
         target.setPreparationArea(null);
         target.setCreation(source.getCreation());
         target.setCategories(categories);
-        target.setProducts(products);
+        target.getProducts().addAll(products);
+        // target.setProducts(products);
 
         return target;
     }

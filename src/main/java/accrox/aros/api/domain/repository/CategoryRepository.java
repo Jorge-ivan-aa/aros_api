@@ -1,5 +1,7 @@
 package accrox.aros.api.domain.repository;
 
+import java.util.Collection;
+
 import accrox.aros.api.domain.model.Category;
 
 public interface CategoryRepository {
@@ -11,6 +13,15 @@ public interface CategoryRepository {
      * @return info of the saved category
      */
     public Category create(Category category);
+
+    /**
+     * check for category using his id
+     * 
+     * @param ids ids to search
+     * 
+     * @return the category exists
+     */
+    public boolean existsAllById(Collection<Long> ids);
 
     /**
      * find a category using his name

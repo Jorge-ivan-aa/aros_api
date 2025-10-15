@@ -2,12 +2,11 @@ package accrox.aros.api.infrastructure.spring.jpa.entity;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.LinkedList;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -18,18 +17,11 @@ import jakarta.persistence.Table;
 public class DaymenuEntity extends ProductEntity {
     private LocalDate creation;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "subproducts",
-        joinColumns = @JoinColumn(name = "id_daymenu"),
-        inverseJoinColumns = @JoinColumn(name = "id_subproduct")
-    )
-    private Collection<ProductEntity> products;
-
-    @OneToMany(mappedBy = "daymenu", fetch = FetchType.LAZY)
-    private Collection<CategoryPositionEntity> positions;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "daymenu", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Collection<DayMenuCategoryEntity> products;
 
     public DaymenuEntity() {
+        this.products = new LinkedList<>();
     }
 
     public DaymenuEntity(
@@ -41,14 +33,12 @@ public class DaymenuEntity extends ProductEntity {
         Integer preparationTime,
         Boolean active,
         Collection<CategoryEntity> categories,
-        Collection<ProductEntity> products,
-        Collection<CategoryPositionEntity> positions,
+        Collection<DayMenuCategoryEntity> products,
         LocalDate creation
     ) {
         super(id, name, description, price, preparationArea, preparationTime, active, categories);
         this.creation = creation;
         this.products = products;
-        this.positions = positions;
     }
 
     public LocalDate getCreation() {
@@ -59,19 +49,16 @@ public class DaymenuEntity extends ProductEntity {
         this.creation = creation;
     }
 
-    public Collection<ProductEntity> getProducts() {
+    public Collection<DayMenuCategoryEntity> getProducts() {
         return products;
     }
 
-    public void setProducts(Collection<ProductEntity> products) {
+    public void setProducts(Collection<DayMenuCategoryEntity> products) {
         this.products = products;
     }
 
-    public Collection<CategoryPositionEntity> getPositions() {
-        return positions;
-    }
-
-    public void setPositions(Collection<CategoryPositionEntity> positions) {
-        this.positions = positions;
+    public void addProduct(DayMenuCategoryEntity product) {
+        this.products.add(product);
+        product.setDaymenu(this);
     }
 }

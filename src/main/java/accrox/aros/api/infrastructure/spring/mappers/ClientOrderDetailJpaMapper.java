@@ -2,6 +2,7 @@ package accrox.aros.api.infrastructure.spring.mappers;
 
 import java.util.Collection;
 
+import accrox.aros.api.domain.model.DayMenuCategory;
 import accrox.aros.api.domain.model.Daymenu;
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderDetailEntity;
@@ -32,7 +33,7 @@ public class ClientOrderDetailJpaMapper {
      */
     public static Daymenu toDomain(
         ClientOrderDetailEntity source,
-        Collection<Product> subproducts
+        Collection<DayMenuCategory> subproducts
     ) {
         Daymenu target = new Daymenu();
 
