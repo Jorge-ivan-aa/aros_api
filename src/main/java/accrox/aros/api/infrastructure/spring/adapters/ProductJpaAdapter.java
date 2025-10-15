@@ -26,4 +26,16 @@ public class ProductJpaAdapter implements ProductRepository {
     public boolean existsByName(String name) {
         return this.productRepositoryJpa.existsByName(name);
     }
+
+    @Override
+    public Product findByName(String name) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByName'");
+    }
+
+    @Override
+    public Product update(Product product) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
 }

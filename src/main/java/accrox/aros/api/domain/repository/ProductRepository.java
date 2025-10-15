@@ -20,4 +20,18 @@ public interface ProductRepository {
      * @return the product exists
      */
     public boolean existsByName(String name);
+
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public Product findByName(String name);
+
+    /**
+     * 
+     * @param product
+     * @return
+     */
+    public Product update(Product product);
 }

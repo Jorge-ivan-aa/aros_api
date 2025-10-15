@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import accrox.aros.api.application.exceptions.product.BadUpdateProductException;
 import accrox.aros.api.application.exceptions.product.ProductAlreadyExistsException;
 import accrox.aros.api.application.usecases.product.CreateProductUseCase;
+import accrox.aros.api.application.usecases.product.UpdateProductUseCase;
 import accrox.aros.api.infrastructure.spring.dto.CreateProductRequest;
+import accrox.aros.api.infrastructure.spring.dto.UpdateProductRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -18,12 +21,22 @@ import jakarta.validation.Valid;
 public class ProductController {
     @Autowired
     private CreateProductUseCase createProductUseCase;
+    @Autowired
+    private UpdateProductUseCase updateProductUseCase;
 
-    @PostMapping(path = "")
+    @PostMapping(path = "/create")
     public ResponseEntity<?> create(
             @Valid @RequestBody CreateProductRequest request) throws ProductAlreadyExistsException {
         this.createProductUseCase.execute(request.toInput());
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/update")
+    public ResponseEntity<?> update(
+            @Valid @RequestBody UpdateProductRequest request) throws BadUpdateProductException {
+        this.updateProductUseCase.execute(request.toInput());
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
