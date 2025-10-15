@@ -3,7 +3,6 @@ package accrox.aros.api.domain.repository;
 import java.util.Collection;
 import java.util.Optional;
 
-import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 
