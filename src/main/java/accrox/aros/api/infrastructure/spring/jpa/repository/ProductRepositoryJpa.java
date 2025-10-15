@@ -7,9 +7,13 @@ import org.springframework.data.repository.CrudRepository;
 
 import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
 
+import java.util.Optional;
+
 public interface ProductRepositoryJpa extends CrudRepository<ProductEntity, Long> {
     public boolean existsByName(String name);
 
     @Query("SELECT COUNT(c) = :size FROM ProductEntity c WHERE c.id IN :ids")
     public boolean existsAllByIdIn(Set<Long> ids, long size);
+
+    public Optional<ProductEntity> findByName(String name);
 }
