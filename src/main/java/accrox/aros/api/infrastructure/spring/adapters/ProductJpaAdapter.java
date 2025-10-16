@@ -1,20 +1,17 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
+import java.util.Optional;
 import java.util.Set;
 
-import accrox.aros.api.domain.model.User;
-import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
-import accrox.aros.api.infrastructure.spring.mappers.UserJpaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.domain.repository.ProductRepository;
+import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
 import accrox.aros.api.infrastructure.spring.jpa.repository.ProductRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.mappers.ProductJpaMapper;
-
-import java.util.Optional;
 
 @Repository
 public class ProductJpaAdapter implements ProductRepository {
@@ -50,5 +47,11 @@ public class ProductJpaAdapter implements ProductRepository {
     public Optional<Product> findByName(String name) {
         return productRepositoryJpa.findByName(name)
                 .map(entity -> ProductJpaMapper.toDomain(entity, null, null));
+    }
+
+    @Override
+    public Product update(Product product) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 }

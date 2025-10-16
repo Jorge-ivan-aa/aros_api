@@ -9,17 +9,17 @@ public class DeleteAreaUseCase {
 
     private final AreaRepository repository;
 
-    public DeleteAreaUseCase(AreaRepository repository){
+    public DeleteAreaUseCase(AreaRepository repository) {
         this.repository = repository;
     }
 
-    public void execute(DeleteAreaInput input)  {
+    public void execute(DeleteAreaInput input) {
 
-        if(input.name() == null || input.name().isBlank()){
+        if (input.name() == null || input.name().isBlank()) {
             throw new ValidationException("The name is required");
         }
 
-        if(!repository.existsByName(input.name())){
+        if (!repository.existsByName(input.name())) {
             throw new ValidationException("Are no exist");
         }
 

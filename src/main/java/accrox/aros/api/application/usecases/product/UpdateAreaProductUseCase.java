@@ -1,29 +1,28 @@
 package accrox.aros.api.application.usecases.product;
 
+import java.util.Optional;
+
 import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.application.dto.product.UpdateProductAreaInput;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.Product;
-import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.AreaRepository;
 import accrox.aros.api.domain.repository.ProductRepository;
-import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import jakarta.validation.ValidationException;
-
-import java.util.Optional;
 
 public class UpdateAreaProductUseCase {
 
     private final ProductRepository productRepository;
-    private final AreaRepository   areaRepository;
-    public UpdateAreaProductUseCase(ProductRepository productRepository,AreaRepository areaRepository) {
+    private final AreaRepository areaRepository;
+
+    public UpdateAreaProductUseCase(ProductRepository productRepository, AreaRepository areaRepository) {
         this.productRepository = productRepository;
         this.areaRepository = areaRepository;
     }
 
     public void execute(UpdateProductAreaInput input) {
-        if(input.name() == null || input.name().isBlank()){
+        if (input.name() == null || input.name().isBlank()) {
             throw new IllegalArgumentException("The name is required");
         }
 
@@ -45,6 +44,6 @@ public class UpdateAreaProductUseCase {
         areaEntity.setId(area.getId());
         areaEntity.setName(area.getName());
 
-        productRepository.updateUserArea(product,areaEntity);
+        productRepository.updateUserArea(product, areaEntity);
     }
 }
