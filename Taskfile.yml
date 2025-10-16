@@ -35,6 +35,10 @@ tasks:
     cmds:
       - docker compose down
 
+  mysql:
+    desc: open database
+    cmds:
+      - docker exec -it aros_db bash -c 'mysql -u $MYSQL_USER -p$MYSQL_PASSWORD'
   reset_db:
     desc: Reset database containers and volumes
     cmds:

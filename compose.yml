@@ -1,6 +1,7 @@
 services:
   mysql:
     image: mysql:8.1
+    container_name: aros_db
     environment:
       - 'MYSQL_DATABASE=${MYSQL_DATABASE}'
       - 'MYSQL_PASSWORD=${MYSQL_PASSWORD}'
