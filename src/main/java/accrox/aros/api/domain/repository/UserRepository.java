@@ -1,11 +1,12 @@
 package accrox.aros.api.domain.repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
-import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 
 public interface UserRepository {
 
@@ -35,6 +36,11 @@ public interface UserRepository {
      *         not present.
      */
     Optional<User> findByDocument(String document);
+
+    /**
+     * @return
+     */
+    List<User> findAll();
 
     /**
      * Persists a user in the underlying data source.
