@@ -4,9 +4,15 @@ vars:
   MVN: ./scripts/mvnw
 
 tasks:
+  default: 
+    desc: list all comands
+    cmds: 
+      - task -l
+
   # -----------------------------
   # Comandos principales
   # -----------------------------
+  
   run:
     desc: Run Spring Boot application
     cmds:
