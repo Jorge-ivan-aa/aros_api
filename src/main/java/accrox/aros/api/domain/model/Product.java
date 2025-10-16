@@ -29,17 +29,16 @@ public class Product {
     }
 
     public Product(
-        Long id,
-        String name,
-        String description,
-        Float price,
-        Area preparationArea,
-        Integer preparationTime,
-        Boolean active,
-        Collection<Category> categories,
-        Integer quantity,
-        String observations
-    ) {
+            Long id,
+            String name,
+            String description,
+            Float price,
+            Area preparationArea,
+            Integer preparationTime,
+            Boolean active,
+            Collection<Category> categories,
+            Integer quantity,
+            String observations) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -53,24 +52,22 @@ public class Product {
     }
 
     public Product(
-        Long id,
-        String name,
-        String description,
-        Float price,
-        Integer quantity
-    ) {
+            Long id,
+            String name,
+            String description,
+            Float price,
+            Integer quantity) {
         this(
-            id,
-            name,
-            description,
-            price,
-            null,
-            quantity,
-            true,
-            Collections.emptyList(),
-            quantity,
-            description
-        );
+                id,
+                name,
+                description,
+                price,
+                null,
+                quantity,
+                true,
+                Collections.emptyList(),
+                quantity,
+                description);
     }
 
     public Long getId() {

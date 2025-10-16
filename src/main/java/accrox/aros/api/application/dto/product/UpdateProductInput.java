@@ -1,7 +1,8 @@
 package accrox.aros.api.application.dto.product;
 
-public record CreateProductInput(
-        String name,
+public record UpdateProductInput(
+        String currentName,
+        String newName,
         String description,
         Float price,
         Integer preparationTime) {
