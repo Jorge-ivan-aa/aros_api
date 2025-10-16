@@ -1,26 +1,18 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
+import accrox.aros.api.application.dto.user.GetUserByDocumentInput;
+import accrox.aros.api.application.dto.user.GetUserOuput;
+import accrox.aros.api.application.usecases.user.*;
+import accrox.aros.api.infrastructure.spring.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import accrox.aros.api.application.usecases.user.DeleteUserUseCase;
-import accrox.aros.api.application.usecases.user.SaveUserUseCase;
-import accrox.aros.api.application.usecases.user.UpdateUserAreaUseCase;
-import accrox.aros.api.application.usecases.user.UpdateUserUseCase;
-import accrox.aros.api.infrastructure.spring.dto.CreateUserRequest;
-import accrox.aros.api.infrastructure.spring.dto.DeleteUserRequest;
-import accrox.aros.api.infrastructure.spring.dto.UpdateUserAreaRequest;
-import accrox.aros.api.infrastructure.spring.dto.UpdateUserRequest;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -38,6 +30,25 @@ public class UserController {
 
     @Autowired
     private UpdateUserAreaUseCase updateUserAreaUseCase;
+
+    @Autowired
+    private GetUserByDocumentUseCase getUserByDocumentUseCase;
+
+    @Autowired
+    private GetAllUserUseCase getAllUserUseCase;
+
+    @GetMapping
+    public ResponseEntity<List<GetUserOuput>> getAllUsers() {
+        List<GetUserOuput> users = getAllUserUseCase.execute();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/get/{document}")
+    public ResponseEntity<GetUserOuput> getUser(@Valid @PathVariable GetUserByDocumentRequest document) {
+        GetUserOuput output = getUserByDocumentUseCase.execute(document.toInput());
+        return ResponseEntity.ok(output);
+    }
+
 
     @PostMapping("/save")
     public ResponseEntity<Void> saveUser(@Valid @RequestBody CreateUserRequest request) {

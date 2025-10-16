@@ -1,7 +1,6 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import org.slf4j.Logger;
@@ -38,7 +37,23 @@ public class UserJpaAdapter implements UserRepository {
 
     public Optional<User> findByDocument(String document) {
         return userRepositoryJpa.findByDocument(document)
-                .map(entity -> UserJpaMapper.toDomain(entity, null, null));
+                .map(entity -> UserJpaMapper.toDomain(entity, entity.getAreas(), null));
+    }
+
+    @Override
+    public  List<User> findAll() {
+        Iterable<UserEntity> entities = userRepositoryJpa.findAll();
+
+        if (entities == null) {
+            return Collections.emptyList();
+        }
+
+        List<User> users = new ArrayList<>();
+        for (UserEntity entity : entities) {
+            users.add(UserJpaMapper.toDomain(entity, entity.getAreas(), null));
+        }
+
+        return users;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package accrox.aros.api.infrastructure.spring.mappers;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.RefreshToken;
@@ -15,7 +17,7 @@ public class UserJpaMapper {
      */
     public static User toDomain(
         UserEntity source,
-        Collection<Area> areas,
+        Collection<AreaEntity> areas,
         Collection<RefreshToken> tokens
     ) {
         if (source == null) {
@@ -31,7 +33,22 @@ public class UserJpaMapper {
         target.setPassword(source.getPassword());
         target.setPhone(source.getPhone());
         target.setAddress(source.getAddress());
-        target.setAreas(areas);
+        //target.setAreas(areas);
+        Collection<Area> domainAreas = (areas == null || areas.isEmpty())
+                ? Collections.emptyList()
+                : areas.stream()
+                .map(ae -> {
+                    Area a = new Area();
+                    a.setId(ae.getId());
+                    a.setName(ae.getName());
+                    return a;
+                })
+                .collect(Collectors.toList());
+
+        target.setAreas(domainAreas);
+
+
+
         target.setTokens(tokens);
 
         return target;
