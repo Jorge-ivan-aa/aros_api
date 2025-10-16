@@ -22,34 +22,29 @@ public class UpdateUserAreaUseCase {
         this.userRepository = userRepository;
         this.areaRepository = areaRepository;
     }
-    public void execute(UpdateUserAreaInput input){
+    public void execute(UpdateUserAreaInput input) {
 
-        if(input.document() == null || input.document().isBlank()){
+        if (input.document() == null || input.document().isBlank()) {
             throw new IllegalArgumentException("The document is required");
         }
 
-        Optional<User> userOpt = userRepository.findByDocument(input.document());
+        var userOpt = userRepository.findByDocument(input.document());
         if (userOpt.isEmpty()) {
             throw new ValidationException("No user found with the provided document");
         }
 
-        User user = userOpt.get();
+        var user = userOpt.get();
 
-        Collection<AreaEntity> areas = new ArrayList<>();
-        for (GetAreaInput areaDto : input.areas()) {
-            Area area = areaRepository.getAreaByName(areaDto.name())
-                    .orElseThrow(() -> new ValidationException(
-                            "Area not found: " + areaDto.name()));
+        var areas = input.areas().stream()
+                .map(areaInput -> areaRepository.getAreaByName(areaInput.name())
+                        .orElseThrow(() -> new ValidationException("Area not found: " + areaInput.name())))
+                .toList();
 
-            AreaEntity areaEntity = new AreaEntity();
 
-            areaEntity.setId(area.getId());
-            areaEntity.setName(area.getName());
+        user.setAreas(areas);
 
-            areas.add(areaEntity);
-        }
+        userRepository.save(user);
 
-        userRepository.updateUserArea(user,areas);
     }
 
 }

@@ -59,7 +59,7 @@ public class UserJpaMapper {
      */
     public static UserEntity toEntity(
         User source,
-        Collection<AreaEntity> areas,
+        Collection<Area> areas,
         Collection<RefreshTokenEntity> tokens
     ) {
         if (source == null) {
@@ -75,7 +75,20 @@ public class UserJpaMapper {
         target.setPassword(source.getPassword());
         target.setPhone(source.getPhone());
         target.setAddress(source.getAddress());
-        target.setAreas(areas);
+
+        // Convertir Area (dominio) → AreaEntity
+        Collection<AreaEntity> entityAreas = (areas == null || areas.isEmpty())
+                ? Collections.emptyList()
+                : areas.stream()
+                .map(a -> {
+                    AreaEntity ae = new AreaEntity();
+                    ae.setId(a.getId());
+                    ae.setName(a.getName());
+                    return ae;
+                })
+                .collect(Collectors.toList());
+
+        target.setAreas(entityAreas);
         target.setTokens(tokens);
 
         return target;

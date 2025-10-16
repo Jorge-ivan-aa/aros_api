@@ -58,17 +58,16 @@ public class UserJpaAdapter implements UserRepository {
 
     @Override
     public void save(User user) {
-        UserEntity toSave = UserJpaMapper.toEntity(user, null, null);
-
+        UserEntity toSave = UserJpaMapper.toEntity(user, user.getAreas(), null);
         this.userRepositoryJpa.save(toSave);
     }
 
-    @Override
+  /*  @Override
     public void updateUserArea(User user , Collection<AreaEntity> areas) {
 
-        this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, areas, null));
+        this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, user.getAreas() null));
 
-    }
+    }*/
 
     @Override
     @Transactional

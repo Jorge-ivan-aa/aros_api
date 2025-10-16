@@ -51,7 +51,7 @@ public interface UserRepository {
      */
     void save(User user);
 
-    void updateUserArea(User user , Collection<AreaEntity> areas);
+  //  void updateUserArea(User user , Collection<AreaEntity> areas);
 
 
     void update(User user);

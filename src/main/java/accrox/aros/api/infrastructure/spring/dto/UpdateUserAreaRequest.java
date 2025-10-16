@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 public record UpdateUserAreaRequest(
         @NotBlank(message = "required name")
         String document,
-         Collection<GetAreaInput> areas
+        Collection<GetAreaInput> areas
 ) {
 
     public UpdateUserAreaInput toInput() {
