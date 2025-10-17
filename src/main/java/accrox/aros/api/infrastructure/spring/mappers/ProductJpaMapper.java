@@ -41,8 +41,8 @@ public class ProductJpaMapper {
      */
     public static ProductEntity toEntity(
         Product source,
-        AreaEntity preparationArea,
-        Collection<CategoryEntity> categories
+        Area preparationArea,
+        Collection<Category> categories
     ) {
         if (source == null) {
             return null;
@@ -56,9 +56,26 @@ public class ProductJpaMapper {
         target.setPrice(source.getPrice());
         target.setActive(source.getActive());
         target.setPreparationTime(source.getPreparationTime());
-        target.setPreparationArea(preparationArea);
-        target.setCategories(categories);
+        //domain -> entity
+        if (preparationArea != null) {
+            AreaEntity areaEntity = new AreaEntity();
+            areaEntity.setId(preparationArea.getId());
+            areaEntity.setName(preparationArea.getName());
+            target.setPreparationArea(areaEntity);
+        }
+        //domanin -> entity
+        if (categories != null) {
+            Collection<CategoryEntity> categoryEntities = categories.stream()
+                    .map(category -> {
+                        CategoryEntity ce = new CategoryEntity();
+                        ce.setId(category.getId());
+                        ce.setName(category.getName());
+                        return ce;
+                    })
+                    .toList();
 
+            target.setCategories(categoryEntities);
+        }
         return target;
     }
 }

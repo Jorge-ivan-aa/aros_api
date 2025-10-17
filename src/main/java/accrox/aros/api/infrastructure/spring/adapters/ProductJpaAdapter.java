@@ -37,8 +37,8 @@ public class ProductJpaAdapter implements ProductRepository {
     }
 
     @Override
-    public void updateUserArea(Product product, AreaEntity area) {
-        ProductEntity entity = ProductJpaMapper.toEntity(product, area, null);
+    public void updateProductArea(Product product) {
+        ProductEntity entity = ProductJpaMapper.toEntity(product, product.getPreparationArea(), null);
         this.productRepositoryJpa.save(entity);
 
     }
@@ -53,5 +53,11 @@ public class ProductJpaAdapter implements ProductRepository {
     public Product update(Product product) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
+
+    @Override
+    public void UpdateProductCategories(Product product) {
+        ProductEntity entity=ProductJpaMapper.toEntity(product, product.getPreparationArea(), product.getCategories());
+        this.productRepositoryJpa.save(entity);
     }
 }

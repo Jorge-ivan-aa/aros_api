@@ -1,6 +1,7 @@
 package accrox.aros.api.domain.repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import accrox.aros.api.domain.model.Category;
 
@@ -31,4 +32,6 @@ public interface CategoryRepository {
      * @return the finded category
      */
     public boolean existsByName(String name);
+
+    public Optional<Category> findByName(String name);
 }

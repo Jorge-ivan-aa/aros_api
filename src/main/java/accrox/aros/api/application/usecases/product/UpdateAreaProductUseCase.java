@@ -35,15 +35,11 @@ public class UpdateAreaProductUseCase {
 
         Product product = productOpt.get();
 
-        AreaEntity areaEntity = new AreaEntity();
-
         Area area = areaRepository.getAreaByName(areaDto.name())
                 .orElseThrow(() -> new ValidationException(
                         "Area not found: " + input.name()));
+        product.setPreparationArea(area);
 
-        areaEntity.setId(area.getId());
-        areaEntity.setName(area.getName());
-
-        productRepository.updateUserArea(product, areaEntity);
+        productRepository.updateProductArea(product);
     }
 }

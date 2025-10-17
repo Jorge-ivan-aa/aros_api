@@ -1,5 +1,7 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
+import accrox.aros.api.application.usecases.product.UpdateProductCategoriesUseCase;
+import accrox.aros.api.infrastructure.spring.dto.UpdateProductCategorytRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,8 @@ public class ProductController {
     private UpdateAreaProductUseCase updateAreaProductUseCase;
     @Autowired
     private UpdateProductUseCase updateProductUseCase;
-
+    @Autowired
+    private UpdateProductCategoriesUseCase updateProductCategoriesUseCase;
     @PutMapping(path = "area")
     public ResponseEntity<?> updateArea(@Valid @RequestBody UpdateProductAreaRequest request) {
         this.updateAreaProductUseCase.execute(request.toInput());
@@ -50,4 +53,14 @@ public class ProductController {
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+    @PutMapping(path = "/update-categories")
+    public ResponseEntity<?> updateCategory(
+        @Valid @RequestBody UpdateProductCategorytRequest request
+    ) throws
+        ProductAlreadyExistsException
+    {
+        this.updateProductCategoriesUseCase.execute(request.toInput());
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
 }

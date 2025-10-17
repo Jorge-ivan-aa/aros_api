@@ -28,9 +28,8 @@ public interface ProductRepository {
     /**
      *
      * @param product
-     * @param area
      */
-    void updateUserArea(Product product, AreaEntity area);
+    void updateProductArea(Product product);
 
     /**
      *
@@ -47,4 +46,6 @@ public interface ProductRepository {
      * @return
      */
     public Product update(Product product);
+
+    public void UpdateProductCategories(Product product);
 }
