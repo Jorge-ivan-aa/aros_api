@@ -16,6 +16,7 @@ import accrox.aros.api.application.exceptions.table.TableNotFoundException;
 import accrox.aros.api.application.usecases.order.CreateOrderUseCase;
 import accrox.aros.api.application.usecases.order.MarkOrderAsCompletedUseCase;
 import accrox.aros.api.infrastructure.spring.dto.orders.CreateOrderRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,6 +28,10 @@ public class OrderController {
     @Autowired
     private MarkOrderAsCompletedUseCase markOrderAsCompletedUseCase;
 
+    @Operation(
+        summary = "Mark an order as completed",
+        description = "This endpoint updates the status of an order by marking it as completed. You must provide the order ID in the path parameter."
+    )
     @PatchMapping(path = "/{id}/mark-order-as-completed")
     public ResponseEntity<Void> markAsCompleted(@PathVariable("id") Long id) {
         markOrderAsCompletedUseCase.execute(id);

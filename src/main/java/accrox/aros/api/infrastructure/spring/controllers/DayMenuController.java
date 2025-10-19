@@ -13,14 +13,20 @@ import accrox.aros.api.application.exceptions.product.ProductAlreadyExistsExcept
 import accrox.aros.api.application.exceptions.product.ProductNotFoundException;
 import accrox.aros.api.application.usecases.product.CreateDayMenuUseCase;
 import accrox.aros.api.infrastructure.spring.dto.CreateDayMenuRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/daymenu")
 public class DayMenuController {
+
     @Autowired
     private CreateDayMenuUseCase createDayMenuUseCase;
 
+    @Operation(
+        summary = "Create a new day menu",
+        description = "This endpoint allows the creation of a new day menu. It requires valid product and category IDs."
+    )
     @PostMapping
     public ResponseEntity<?> create(
         @Valid @RequestBody CreateDayMenuRequest request
