@@ -4,6 +4,7 @@ import accrox.aros.api.application.dto.user.CreateUserInput;
 import accrox.aros.api.application.usecases.user.SaveUserUseCase;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
+import accrox.aros.api.domain.service.PasswordService;
 import accrox.aros.api.infrastructure.spring.dto.CreateUserRequest;
 
 import org.junit.jupiter.api.Test;
@@ -24,13 +25,16 @@ public class SaveUserUseCaseTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordService passwordService;
+
     @InjectMocks
     private SaveUserUseCase saveUserUseCase;
 
     @Test
     void whenValidDTO_thenSavesUserSuccessfully() {
 
-        CreateUserRequest request = new CreateUserRequest(
+        CreateUserInput dto = new CreateUserInput(
                 "Carlos Pérez",
                 "12345678",
                 "carlos@example.com",
@@ -38,30 +42,14 @@ public class SaveUserUseCaseTest {
                 "Calle Falsa 123",
                 "5551234567");
 
-        CreateUserInput dto = new CreateUserInput(
-                request.name(),
-                request.document(),
-                request.email(),
-                request.password(),
-                request.address(),
-                request.phone());
-
         when(userRepository.findByDocument(dto.document())).thenReturn(Optional.empty());
 
-        User user = new User();
-        user.setId(1L);
-        user.setDocument(dto.document());
-        user.setName(dto.name());
-        user.setEmail(dto.email());
-        user.setPassword(dto.password());
-        user.setAddress(dto.address());
-        user.setPhone(dto.phone());
+        when(passwordService.encode(dto.password())).thenReturn("encodedPassword123");
 
-        doNothing().when(userRepository).save(any(User.class));
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 
         saveUserUseCase.execute(dto);
 
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository, times(1)).save(userCaptor.capture());
 
         User savedUser = userCaptor.getValue();
@@ -69,7 +57,7 @@ public class SaveUserUseCaseTest {
         assertEquals(dto.document(), savedUser.getDocument());
         assertEquals(dto.name(), savedUser.getName());
         assertEquals(dto.email(), savedUser.getEmail());
-        assertEquals(dto.password(), savedUser.getPassword());
+        assertEquals("encodedPassword123", savedUser.getPassword());
         assertEquals(dto.address(), savedUser.getAddress());
         assertEquals(dto.phone(), savedUser.getPhone());
 

@@ -4,15 +4,13 @@ import accrox.aros.api.application.dto.area.GetAreaOuput;
 import accrox.aros.api.application.dto.user.GetUserOuput;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
-import accrox.aros.api.domain.repository.AreaRepository;
 import accrox.aros.api.domain.repository.UserRepository;
-import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
+
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 
 public class GetAllUserUseCase {
 
