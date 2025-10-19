@@ -7,4 +7,6 @@ import accrox.aros.api.domain.model.Table;
 public interface TableRepository {
     List<Table> findAllTables();
     public void createTable(Table table);
+
+    public boolean existsById(Long id);
 }

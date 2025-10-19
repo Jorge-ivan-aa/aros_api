@@ -11,6 +11,9 @@ import accrox.aros.api.infrastructure.spring.mappers.TableJpaMapper;
 
 @Repository
 public class TableJpaAdapter implements TableRepository {
+    @Autowired
+    private TableRepositoryJpa tableRepositoryJpa;
+
     @Override
     public java.util.List<Table> findAllTables() {
         java.util.List<Table> tables = new java.util.ArrayList<>();
@@ -20,14 +23,14 @@ public class TableJpaAdapter implements TableRepository {
         return tables;
     }
 
-    @Autowired
-    private TableRepositoryJpa tableRepositoryJpa;
-
     @Override
     public void createTable(Table table) {
         TableEntity entity = TableJpaMapper.toEntity(table, null);
         this.tableRepositoryJpa.save(entity);
     }
 
-    
+    @Override
+    public boolean existsById(Long id) {
+        return this.tableRepositoryJpa.existsById(id);
+    }
 }
