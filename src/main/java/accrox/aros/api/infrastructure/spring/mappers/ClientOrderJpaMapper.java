@@ -21,6 +21,7 @@ public class ClientOrderJpaMapper {
         ClientOrder target = new ClientOrder();
 
         target.setId(source.getId());
+        target.setTotal(source.getTotal());
         target.setStatus(source.getStatus());
         target.setDetails(details);
         target.setOrder(order);
@@ -39,8 +40,9 @@ public class ClientOrderJpaMapper {
         ClientOrderEntity target = new ClientOrderEntity();
 
         target.setId(source.getId());
+        target.setTotal(source.getTotal());
         target.setStatus(source.getStatus());
-        target.setDetails(details);
+        target.getDetails().addAll(details);
         target.setOrder(order);
 
         return target;

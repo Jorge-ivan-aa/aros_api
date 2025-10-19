@@ -47,4 +47,9 @@ public class DaymenuJpaAdapter implements DaymenuRepository {
     public boolean existsByName(String name) {
         return this.daymenuRepositoryJpa.existsByName(name);
     }
+
+    @Override
+    public Collection<Long> findIdsIn(Collection<Long> ids) {
+        return this.daymenuRepositoryJpa.findIdsIn(ids);
+    }
 }

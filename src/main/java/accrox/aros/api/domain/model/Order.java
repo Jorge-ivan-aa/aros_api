@@ -16,6 +16,8 @@ public class Order {
 
     private Collection<ClientOrder> clientOrders;
 
+    private Float total;
+
     public Order() {
     }
 
@@ -24,13 +26,15 @@ public class Order {
         OrderStatus status,
         LocalDateTime takedAt,
         Table table,
-        Collection<ClientOrder> clientOrders
+        Collection<ClientOrder> clientOrders,
+        Float total
     ) {
         this.id = id;
         this.status = status;
         this.takedAt = takedAt;
         this.table = table;
         this.clientOrders = clientOrders;
+        this.total = total;
     }
 
     public Long getId() {
@@ -71,5 +75,18 @@ public class Order {
 
     public void setClientOrders(Collection<ClientOrder> clientOrders) {
         this.clientOrders = clientOrders;
+    }
+
+    public void addClientOrder(ClientOrder order) {
+        this.clientOrders.add(order);
+        order.setOrder(this);
+    }
+
+    public Float getTotal() {
+        return total;
+    }
+
+    public void setTotal(Float total) {
+        this.total = total;
     }
 }

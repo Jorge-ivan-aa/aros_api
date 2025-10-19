@@ -19,6 +19,8 @@ import accrox.aros.api.infrastructure.spring.mappers.ClientOrderDetailJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.ClientOrderJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.OrderJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.ProductJpaMapper;
+import accrox.aros.api.infrastructure.spring.mappers.TableJpaMapper;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class OrderJpaAdapter implements OrderRepository {
@@ -26,8 +28,10 @@ public class OrderJpaAdapter implements OrderRepository {
     private OrderRepositoryJpa orderRepositoryJpa;
 
     @Override
+    @Transactional
     public void create(Order order) {
         OrderEntity entity = OrderJpaMapper.toEntity(order, null, new HashSet<>());
+        entity.setTable(TableJpaMapper.toEntity(order.getTable(), null));
 
         order.getClientOrders().stream().forEach((co) -> {
             ClientOrderEntity coe = ClientOrderJpaMapper.toEntity(co, new LinkedList<>(), entity);

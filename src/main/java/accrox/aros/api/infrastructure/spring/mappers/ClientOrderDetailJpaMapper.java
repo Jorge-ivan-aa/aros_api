@@ -59,7 +59,7 @@ public class ClientOrderDetailJpaMapper {
     ) {
         ClientOrderDetailEntity target = new ClientOrderDetailEntity();
 
-        target.setId(source.getId());
+        // target.setId(source.getId());
         target.setName(source.getName());
         target.setPrice(source.getPrice());
         target.setQuantity(source.getQuantity());
