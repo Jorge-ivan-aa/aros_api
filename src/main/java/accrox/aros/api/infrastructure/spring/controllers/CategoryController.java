@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 import accrox.aros.api.application.exceptions.category.CategoryAlreadyExistsException;
 import accrox.aros.api.application.usecases.category.CreateCategoryUseCase;
 import accrox.aros.api.infrastructure.spring.dto.CreateCategoryRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/api/")
+@RequestMapping(path = "/api")
 public class CategoryController {
     @Autowired
     private CreateCategoryUseCase createCategoryUseCase;
 
+    @Operation(summary = "Create a new category", description = "This endpoint allows the creation of a new category. If the category already exists, a CategoryAlreadyExistsException will be thrown.")
     @PostMapping(path = "category")
     public ResponseEntity<?> create(
             @Valid @RequestBody CreateCategoryRequest request) throws CategoryAlreadyExistsException {
