@@ -51,7 +51,8 @@ VALUES
     ('Lomo a la Parrilla', 'Lomo de res jugoso con papas criollas', 25000, 4, 20),
     ('Jugo de Mango', 'Jugo natural preparado al momento', 8000, 2, 3),
     ('Brownie con Helado', 'Brownie de chocolate con bola de helado', 10000, 3, 7),
-    ('Pollo a la Plancha', 'Pechuga de pollo acompañada con arroz y ensalada', 20000, 1, 15);
+    ('Pollo a la Plancha', 'Pechuga de pollo acompañada con arroz y ensalada', 20000, 1, 15),
+    ('Menu del dia 2025-01-01', "Menu para el dia 2025-01-01", 18000, null, 20);
 
 -- ======================
 -- PRODUCTOS - CATEGORÍAS
@@ -67,20 +68,20 @@ VALUES
 -- ======================
 -- MENÚ DEL DÍA
 -- ======================
-INSERT INTO daymenus (creation)
+INSERT INTO daymenus (id, creation)
 VALUES
-    ('2025-10-19');
+    (6, '2025-10-19');
 
 -- ======================
 -- MENÚ - CATEGORÍAS
 -- ======================
 INSERT INTO daymenu_categories (id_daymenu, id_category, position)
 VALUES
-    (1, 1, 1),
-    (1, 2, 2),
-    (1, 3, 3),
-    (1, 4, 4),
-    (1, 5, 5);
+    (6, 1, 1),
+    (6, 2, 2),
+    (6, 3, 3),
+    (6, 4, 4),
+    (6, 5, 5);
 
 -- ======================
 -- MENÚ - PRODUCTOS
@@ -151,10 +152,11 @@ VALUES
 -- ======================
 -- TOKENS DE SESIÓN
 -- ======================
-INSERT INTO refresh_tokens (hash, user_id, user_email)
-VALUES
-    ('token123abc', 1, 'carlos@restaurante.com'),
-    ('token456def', 2, 'maria@restaurante.com'),
-    ('token789ghi', 3, 'javier@restaurante.com'),
-    ('token101jkl', 4, 'laura@restaurante.com'),
-    ('token202mno', 5, 'ana@restaurante.com');
+
+-- INSERT INTO refresh_tokens (hash, user_id, user_email)
+-- VALUES
+--     ('token123abc', 1, 'carlos@restaurante.com'),
+--     ('token456def', 2, 'maria@restaurante.com'),
+--     ('token789ghi', 3, 'javier@restaurante.com'),
+--     ('token101jkl', 4, 'laura@restaurante.com'),
+--     ('token202mno', 5, 'ana@restaurante.com');
