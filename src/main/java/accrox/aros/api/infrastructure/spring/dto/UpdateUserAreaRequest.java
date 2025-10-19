@@ -7,7 +7,7 @@ import accrox.aros.api.application.dto.user.UpdateUserAreaInput;
 import jakarta.validation.constraints.NotBlank;
 
 public record UpdateUserAreaRequest(
-        @NotBlank(message = "required name")
+        @NotBlank(message = "required document")
         String document,
         Collection<GetAreaInput> areas
 ) {

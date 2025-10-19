@@ -34,7 +34,8 @@ public class UserJpaAdapter implements UserRepository {
         return userRepositoryJpa.findByEmail(email)
                 .map(entity -> UserJpaMapper.toDomain(entity, null, null));
     }
-
+    @Override
+    @Transactional
     public Optional<User> findByDocument(String document) {
         return userRepositoryJpa.findByDocument(document)
                 .map(entity -> UserJpaMapper.toDomain(entity, entity.getAreas(), null));
