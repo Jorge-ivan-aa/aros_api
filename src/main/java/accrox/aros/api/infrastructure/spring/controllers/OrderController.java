@@ -38,6 +38,10 @@ public class OrderController {
         return ResponseEntity.accepted().build();
     }
 
+    @Operation(
+            summary = "Create a new order\n",
+            description = "This endpoint allows you to create a new order. You must provide the order details in the request body."
+    )
     @PostMapping(path = "/create")
     public ResponseEntity<?> create(
         @Valid @RequestBody CreateOrderRequest request
