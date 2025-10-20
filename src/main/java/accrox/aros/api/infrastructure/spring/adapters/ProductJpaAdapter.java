@@ -1,5 +1,7 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.domain.repository.ProductRepository;
-import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
 import accrox.aros.api.infrastructure.spring.jpa.repository.ProductRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.mappers.ProductJpaMapper;
@@ -59,5 +60,16 @@ public class ProductJpaAdapter implements ProductRepository {
     public void UpdateProductCategories(Product product) {
         ProductEntity entity=ProductJpaMapper.toEntity(product, product.getPreparationArea(), product.getCategories());
         this.productRepositoryJpa.save(entity);
+    }
+    
+    public Collection<Product> findAllByIdSimple(Set<Long> ids) {
+        Iterable<ProductEntity> entities = this.productRepositoryJpa.findAllById(ids);
+        Collection<Product> domains = new LinkedList<>();
+
+        for (ProductEntity productEntity : entities) {
+            domains.add(ProductJpaMapper.toDomain(productEntity, null, null));
+        }
+
+        return domains;
     }
 }

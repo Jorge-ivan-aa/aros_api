@@ -149,4 +149,8 @@ public class Product {
     public void setObservations(String observations) {
         this.observations = observations;
     }
+
+    public Float calculateTotal() {
+        return this.price * this.quantity;
+    }
 }

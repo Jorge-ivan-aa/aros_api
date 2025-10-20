@@ -55,7 +55,7 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
-		
+
 		<!-- others -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

@@ -13,14 +13,17 @@ public class ClientOrder {
 
     private Collection<Product> details;
 
+    private Float total;
+
     public ClientOrder() {
     }
 
-    public ClientOrder(Long id, Order order, OrderStatus status, Collection<Product> details) {
+    public ClientOrder(Long id, Order order, OrderStatus status, Collection<Product> details, Float total) {
         this.id = id;
         this.order = order;
         this.status = status;
         this.details = details;
+        this.total = total;
     }
 
     public Long getId() {
@@ -53,5 +56,13 @@ public class ClientOrder {
 
     public void setDetails(Collection<Product> details) {
         this.details = details;
+    }
+
+    public Float getTotal() {
+        return total;
+    }
+
+    public void setTotal(Float total) {
+        this.total = total;
     }
 }

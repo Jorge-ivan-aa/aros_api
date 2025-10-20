@@ -26,6 +26,7 @@ public class OrderJpaMapper {
         target.setTakedAt(source.getTakedAt());
         target.setTable(table);
         target.setClientOrders(clientOrders);
+        target.setTotal(source.getTotal());
 
         return target;
     }
@@ -45,6 +46,7 @@ public class OrderJpaMapper {
         target.setTakedAt(source.getTakedAt());
         target.setTable(table);
         target.setOrders(clientOrders);
+        target.setTotal(source.getTotal());
 
         return target;
     }

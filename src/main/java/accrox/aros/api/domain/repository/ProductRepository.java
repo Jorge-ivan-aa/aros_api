@@ -1,10 +1,10 @@
 package accrox.aros.api.domain.repository;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
 import accrox.aros.api.domain.model.Product;
-import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 
 public interface ProductRepository {
     /**
@@ -48,4 +48,6 @@ public interface ProductRepository {
     public Product update(Product product);
 
     public void UpdateProductCategories(Product product);
+
+    public Collection<Product> findAllByIdSimple(Set<Long> ids);
 }

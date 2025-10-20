@@ -33,51 +33,45 @@ public class UpdateUserUseCaseTest {
         @InjectMocks
         private UpdateUserUseCase updateUserUseCase;
 
-        // Update user
-        // Test falla posible problema en passworService -> Me lo juras?
+
         @Test
         void whenUserExists_thenUpdateSuccessfully() {
 
-                UpdateUserRequest request = new UpdateUserRequest(
-                                "1088824",
-                                "Jui",
-                                "j@example.com",
-                                "Password",
-                                "Calle Falsa 123",
-                                "00000000");
-
                 UpdateUserInput dto = new UpdateUserInput(
-                                request.document(),
-                                request.name(),
-                                request.email(),
-                                request.password(),
-                                request.address(),
-                                request.phone());
+                        "1088824",
+                        "Jui",
+                        "j@example.com",
+                        "Password",
+                        "Calle Falsa 123",
+                        "00000000"
+                );
 
                 User user = new User();
-                user.setDocument(request.document());
+                user.setDocument("1088824");
                 user.setName("Old Name");
                 user.setEmail("old@example.com");
-                user.setPassword(passwordService.encode("oldpassword"));
+                user.setPassword("oldpassword");
                 user.setAddress("Old Address");
                 user.setPhone("11111111");
 
-                when(userRepository.findByDocument(request.document()))
-                                .thenReturn(Optional.of(user));
+                when(userRepository.findByDocument(dto.document()))
+                        .thenReturn(Optional.of(user));
 
-                doNothing().when(userRepository).save(any(User.class));
+                when(passwordService.encode(dto.password()))
+                        .thenReturn("encodedPassword");
+
+                doNothing().when(userRepository).update(any(User.class));
 
                 updateUserUseCase.execute(dto);
 
-                assertEquals(request.name(), user.getName());
-                assertEquals(request.email(), user.getEmail());
-                // assertEquals(request.password(), user.getPassword());
-                assertEquals(request.address(), user.getAddress());
-                assertEquals(request.phone(), user.getPhone());
+                assertEquals(dto.name(), user.getName());
+                assertEquals(dto.email(), user.getEmail());
+                assertEquals("encodedPassword", user.getPassword());
+                assertEquals(dto.address(), user.getAddress());
+                assertEquals(dto.phone(), user.getPhone());
 
-                verify(userRepository).findByDocument(request.document());
-                verify(userRepository).save(user);
-
+                verify(userRepository).findByDocument(dto.document());
+                verify(userRepository).update(user);
         }
 
 }
