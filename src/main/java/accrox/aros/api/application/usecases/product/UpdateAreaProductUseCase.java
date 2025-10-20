@@ -8,7 +8,6 @@ import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.domain.repository.AreaRepository;
 import accrox.aros.api.domain.repository.ProductRepository;
-import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import jakarta.validation.ValidationException;
 
 public class UpdateAreaProductUseCase {

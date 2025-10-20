@@ -1,18 +1,34 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
-import accrox.aros.api.application.dto.user.GetUserByDocumentInput;
-import accrox.aros.api.application.dto.user.GetUserOuput;
-import accrox.aros.api.application.usecases.user.*;
-import accrox.aros.api.infrastructure.spring.dto.*;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import accrox.aros.api.application.dto.user.GetUserOuput;
+import accrox.aros.api.application.usecases.user.DeleteUserUseCase;
+import accrox.aros.api.application.usecases.user.GetAllUserUseCase;
+import accrox.aros.api.application.usecases.user.GetUserByDocumentUseCase;
+import accrox.aros.api.application.usecases.user.SaveUserUseCase;
+import accrox.aros.api.application.usecases.user.UpdateUserAreaUseCase;
+import accrox.aros.api.application.usecases.user.UpdateUserUseCase;
+import accrox.aros.api.infrastructure.spring.dto.CreateUserRequest;
+import accrox.aros.api.infrastructure.spring.dto.DeleteUserRequest;
+import accrox.aros.api.infrastructure.spring.dto.GetUserByDocumentRequest;
+import accrox.aros.api.infrastructure.spring.dto.UpdateUserAreaRequest;
+import accrox.aros.api.infrastructure.spring.dto.UpdateUserRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")

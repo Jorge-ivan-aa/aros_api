@@ -1,17 +1,9 @@
 package accrox.aros.api.application.usecases.user;
 
-import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.application.dto.user.UpdateUserAreaInput;
-import accrox.aros.api.domain.model.Area;
-import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.AreaRepository;
 import accrox.aros.api.domain.repository.UserRepository;
-import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import jakarta.validation.ValidationException;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
 
 public class UpdateUserAreaUseCase {
 

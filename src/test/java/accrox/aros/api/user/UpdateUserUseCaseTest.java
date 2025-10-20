@@ -19,7 +19,6 @@ import accrox.aros.api.application.usecases.user.UpdateUserUseCase;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.domain.service.PasswordService;
-import accrox.aros.api.infrastructure.spring.dto.UpdateUserRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class UpdateUserUseCaseTest {

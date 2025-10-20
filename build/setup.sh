@@ -27,13 +27,3 @@ cd ~
 sudo docker compose down
 sudo docker compose pull
 sudo docker compose up -d --build
-
-# Comprobar contenedores
-for service in aros_api aros_db; do
-    status=$(docker inspect -f '{{.State.Running}}' $service)
-    if [ "$status" != "true" ]; then
-        echo "El contenedor $service no está corriendo, reiniciando..."
-        sudo docker compose down
-        sudo docker compose up -d --build
-    fi
-done

@@ -1,19 +1,21 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
+import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 import accrox.aros.api.infrastructure.spring.jpa.repository.UserRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.mappers.UserJpaMapper;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class UserJpaAdapter implements UserRepository {

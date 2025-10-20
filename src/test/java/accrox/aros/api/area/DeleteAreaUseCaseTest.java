@@ -1,19 +1,21 @@
 package accrox.aros.api.area;
 
-import accrox.aros.api.application.dto.area.DeleteAreaInput;
-import accrox.aros.api.application.usecases.area.DeleteAreaUseCase;
-import accrox.aros.api.domain.model.Area;
-import accrox.aros.api.domain.repository.AreaRepository;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import accrox.aros.api.application.dto.area.DeleteAreaInput;
+import accrox.aros.api.application.usecases.area.DeleteAreaUseCase;
+import accrox.aros.api.domain.model.Area;
+import accrox.aros.api.domain.repository.AreaRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class DeleteAreaUseCaseTest {

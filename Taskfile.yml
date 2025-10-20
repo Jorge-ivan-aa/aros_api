@@ -28,6 +28,7 @@ tasks:
     cmds:
       - "{{.MVN}} clean package"
       - cp target/*.jar build/
+      - docker compose down
       - docker compose -f build/compose.yml up
 
 
