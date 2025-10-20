@@ -23,6 +23,14 @@ tasks:
     cmds:
       - "{{.MVN}} test"
 
+  build:
+    desc: run deploy containers
+    cmds:
+      - "{{.MVN}} clean package"
+      - cp target/*.jar build/
+      - docker compose -f build/compose.yml up
+
+
   clean:
     desc: Clean build artifacts
     cmds:
@@ -41,12 +49,13 @@ tasks:
     cmds:
       - docker compose down
 
-  mysql:
-    desc: open database
+  db:
+    desc: open NAME
     cmds:
-      - docker exec -it aros_db bash -c 'mysql -u $MYSQL_USER -p$MYSQL_PASSWORD'
+      - docker exec -it aros_db bash -c 'mariadb -p$DB_ROOT_PASSWORD'
+
   reset_db:
-    desc: Reset database containers and volumes
+    desc: Reset NAME containers and volumes
     cmds:
       - docker compose down -v
       - docker compose up -d

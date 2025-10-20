@@ -8,7 +8,7 @@ Al ser un producto empresarial, buscamos plataformas estables, escalables y con 
 
 - Spring Boot (Java 21) como núcleo para el desarrollo de la API REST.
 - Swagger / OpenAPI para la documentación interactiva de los endpoints.
-- MySQL (9.4.0) como sistema gestor de bases de datos relacional.
+- DB (9.4.0) como sistema gestor de bases de datos relacional.
 - Docker como contenedor para la base de datos.
 
 

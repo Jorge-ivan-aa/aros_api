@@ -1,11 +1,9 @@
 services:
-  mysql:
-    image: mysql:8.1
+  db:
+    image: mariadb:11.2
     container_name: aros_db
     environment:
-      - 'MYSQL_DATABASE=${MYSQL_DATABASE}'
-      - 'MYSQL_PASSWORD=${MYSQL_PASSWORD}'
-      - 'MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}'
-      - 'MYSQL_USER=${MYSQL_USER}'
+      - 'MARIADB_DATABASE=${DB_NAME}'
+      - 'MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}'
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${DB_PORT}:3306"

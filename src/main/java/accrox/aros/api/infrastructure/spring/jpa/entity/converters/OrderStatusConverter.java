@@ -6,13 +6,19 @@ import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
 public class OrderStatusConverter implements AttributeConverter<OrderStatus, String> {
-    @Override
-    public String convertToDatabaseColumn(OrderStatus attribute) {
+    
+    public String convertToNAMEColumn(OrderStatus attribute) {
         return attribute.name().toLowerCase();
     }
 
     @Override
     public OrderStatus convertToEntityAttribute(String dbData) {
         return OrderStatus.valueOf(dbData.toUpperCase());
+    }
+
+    @Override
+    public String convertToDatabaseColumn(OrderStatus attribute) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'convertToDatabaseColumn'");
     }
 }

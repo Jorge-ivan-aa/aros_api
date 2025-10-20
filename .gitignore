@@ -1,6 +1,7 @@
 .idea/
 .vscode/
 target/
+build/*.jar
 .env
 docs/api_request/
 
