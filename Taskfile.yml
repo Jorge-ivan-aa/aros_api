@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  MVN: ./scripts/mvnw
+  MVN: ./.wraper/mvnw
 
 tasks:
   default: 
@@ -16,6 +16,7 @@ tasks:
   run:
     desc: Run Spring Boot application
     cmds:
+      - task up
       - "{{.MVN}} spring-boot:run"
 
   test:
@@ -26,15 +27,15 @@ tasks:
   build:
     desc: run deploy containers
     cmds:
+      - task up
       - "{{.MVN}} clean package"
       - cp target/*.jar build/
-      - docker compose down
+      - task down
       - docker compose -f build/compose.yml up
 
 
   clean:
     desc: Clean build artifacts
-    cmds:
       - "{{.MVN}} clean"
 
   # -----------------------------

@@ -4,7 +4,9 @@ target/
 build/*.jar
 .env
 docs/api_request/
-
+.classpath
+.project
+.settings/
 
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
