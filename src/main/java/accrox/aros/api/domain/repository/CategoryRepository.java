@@ -1,6 +1,7 @@
 package accrox.aros.api.domain.repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import accrox.aros.api.domain.model.Category;
@@ -34,4 +35,6 @@ public interface CategoryRepository {
     public boolean existsByName(String name);
 
     public Optional<Category> findByName(String name);
+    
+    public List<Category> findAll(); 
 }

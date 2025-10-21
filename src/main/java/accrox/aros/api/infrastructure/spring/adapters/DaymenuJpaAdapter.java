@@ -1,12 +1,16 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import accrox.aros.api.domain.model.Daymenu;
+import accrox.aros.api.domain.model.Category;
 import accrox.aros.api.domain.repository.DaymenuRepository;
 import accrox.aros.api.infrastructure.spring.jpa.entity.CategoryEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.DaymenuEntity;
@@ -52,4 +56,23 @@ public class DaymenuJpaAdapter implements DaymenuRepository {
     public Collection<Long> findIdsIn(Collection<Long> ids) {
         return this.daymenuRepositoryJpa.findIdsIn(ids);
     }
+    
+
+    
+    @Override
+    public List<Daymenu> findAll() {
+        Iterable<DaymenuEntity> entities = this.daymenuRepositoryJpa.findAll();
+        List<Daymenu> daymenus = new ArrayList<>();
+        
+        for (DaymenuEntity entity : entities) {
+            Collection<Category> categories = entity.getCategories().stream()
+                .map(categoryEntity -> CategoryJpaMapper.toDomain(categoryEntity, null))
+                .collect(Collectors.toList());
+                
+            daymenus.add(DaymenuJpaMapper.toDomain(entity, categories, null));
+        }
+        
+        return daymenus;
+    }
+
 }

@@ -1,6 +1,7 @@
 package accrox.aros.api.domain.repository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -50,4 +51,6 @@ public interface ProductRepository {
     public void UpdateProductCategories(Product product);
 
     public Collection<Product> findAllByIdSimple(Set<Long> ids);
+    
+    public List<Product> findAll();
 }

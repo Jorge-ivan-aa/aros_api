@@ -1,20 +1,22 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import accrox.aros.api.domain.model.Category;
 import accrox.aros.api.domain.repository.CategoryRepository;
 import accrox.aros.api.infrastructure.spring.jpa.entity.CategoryEntity;
 import accrox.aros.api.infrastructure.spring.jpa.repository.CategoryRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.mappers.CategoryJpaMapper;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class CategoryJpaAdapter implements CategoryRepository {
+
     @Autowired
     private CategoryRepositoryJpa categoryRepositoryJpa;
 
@@ -33,12 +35,30 @@ public class CategoryJpaAdapter implements CategoryRepository {
 
     @Override
     public Optional<Category> findByName(String name) {
-        return categoryRepositoryJpa.findByName(name)
-                .map(entity -> CategoryJpaMapper.toDomain(entity, null));
+        return categoryRepositoryJpa
+            .findByName(name)
+            .map(entity -> CategoryJpaMapper.toDomain(entity, null));
     }
 
     @Override
     public boolean existsAllById(Collection<Long> ids) {
-        return this.categoryRepositoryJpa.existsAllByIdIn(new LinkedHashSet<>(ids), ids.size());
+        return this.categoryRepositoryJpa.existsAllByIdIn(
+            new LinkedHashSet<>(ids),
+            ids.size()
+        );
+    }
+
+    @Override
+    public List<Category> findAll() {
+        Iterable<CategoryEntity> entities =
+            this.categoryRepositoryJpa.findAll();
+        List<Category> categories = StreamSupport.stream(
+            entities.spliterator(),
+            false
+        )
+            .map(entity -> CategoryJpaMapper.toDomain(entity, null))
+            .collect(Collectors.toList());
+
+        return categories;
     }
 }

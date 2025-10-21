@@ -2,6 +2,7 @@ package accrox.aros.api.infrastructure.spring.adapters;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -65,6 +66,18 @@ public class ProductJpaAdapter implements ProductRepository {
     public Collection<Product> findAllByIdSimple(Set<Long> ids) {
         Iterable<ProductEntity> entities = this.productRepositoryJpa.findAllById(ids);
         Collection<Product> domains = new LinkedList<>();
+
+        for (ProductEntity productEntity : entities) {
+            domains.add(ProductJpaMapper.toDomain(productEntity, null, null));
+        }
+
+        return domains;
+    }
+    
+    @Override
+    public List<Product> findAll() {
+        Iterable<ProductEntity> entities = this.productRepositoryJpa.findAll();
+        List<Product> domains = new LinkedList<>();
 
         for (ProductEntity productEntity : entities) {
             domains.add(ProductJpaMapper.toDomain(productEntity, null, null));
