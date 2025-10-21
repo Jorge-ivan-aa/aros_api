@@ -1,5 +1,11 @@
 package accrox.aros.api.infrastructure.spring.security;
 
+import accrox.aros.api.domain.service.TokenService;
+import accrox.aros.api.infrastructure.spring.adapters.UserAdminAdapter;
+import accrox.aros.api.infrastructure.spring.adapters.UserJpaAdapter;
+import accrox.aros.api.infrastructure.spring.filters.TokenFilter;
+import accrox.aros.api.infrastructure.spring.security.authorization.PasswordServiceAdapter;
+import accrox.aros.api.infrastructure.spring.security.entrypoint.TokenAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,30 +21,36 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import accrox.aros.api.domain.service.TokenService;
-import accrox.aros.api.infrastructure.spring.filters.TokenFilter;
-import accrox.aros.api.infrastructure.spring.security.authorization.PasswordServiceAdapter;
-import accrox.aros.api.infrastructure.spring.security.entrypoint.TokenAuthenticationEntryPoint;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http,
-            TokenFilter filter) throws Exception {
+        HttpSecurity http,
+        TokenFilter filter
+    ) throws Exception {
         return http
-                .securityMatcher("/api/**")
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(excp -> excp
-                        .authenticationEntryPoint(new TokenAuthenticationEntryPoint()))
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(new String[] { "/api/login", "/api/refresh" }).permitAll()
-                        .anyRequest().permitAll())
-                .build();
+            .securityMatcher("/api/**")
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(s ->
+                s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(excp ->
+                excp.authenticationEntryPoint(
+                    new TokenAuthenticationEntryPoint()
+                )
+            )
+            .authorizeHttpRequests(authz ->
+                authz
+                    .requestMatchers("/api/login", "/api/refresh")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+            )
+            .build();
     }
 
     @Bean
@@ -47,22 +59,30 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordServiceAdapter passwordService(
-            PasswordEncoder encoder) {
+    public PasswordServiceAdapter passwordService(PasswordEncoder encoder) {
         return new PasswordServiceAdapter(encoder);
     }
 
     @Bean
     public TokenFilter tokenFilter(
-            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptionResolver,
-            AuthenticationProvider provider) {
-
+        @Qualifier(
+            "handlerExceptionResolver"
+        ) HandlerExceptionResolver exceptionResolver,
+        AuthenticationProvider provider
+    ) {
         return new TokenFilter(provider, exceptionResolver);
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider(
-            TokenService tokenService) {
-        return new TokenAuthenticatorProvider(tokenService);
+        TokenService tokenService,
+        UserJpaAdapter userJpaAdapter,
+        UserAdminAdapter userAdminAdapter
+    ) {
+        return new TokenAuthenticatorProvider(
+            tokenService,
+            userJpaAdapter,
+            userAdminAdapter
+        );
     }
 }
