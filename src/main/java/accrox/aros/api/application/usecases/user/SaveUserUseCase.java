@@ -2,6 +2,7 @@ package accrox.aros.api.application.usecases.user;
 
 import accrox.aros.api.application.dto.user.CreateUserInput;
 import accrox.aros.api.domain.model.User;
+import accrox.aros.api.domain.repository.AreaRepository;
 import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.domain.service.PasswordService;
 import jakarta.validation.ValidationException;
@@ -10,10 +11,13 @@ public class SaveUserUseCase {
 
     private final UserRepository userRepository;
 
+    private final AreaRepository areaRepository;
+
     private final PasswordService passwordService;
 
-    public SaveUserUseCase(UserRepository userRepository, PasswordService passwordService) {
+    public SaveUserUseCase(UserRepository userRepository,AreaRepository areaRepository ,PasswordService passwordService) {
         this.userRepository = userRepository;
+        this.areaRepository = areaRepository;
         this.passwordService = passwordService;
     }
 
@@ -34,6 +38,12 @@ public class SaveUserUseCase {
         user.setPassword(this.passwordService.encode(dto.password()));
         user.setAddress(dto.address());
         user.setPhone(dto.phone());
+
+        var areas = dto.areas().stream()
+                .map(areaInput -> areaRepository.getAreaByName(areaInput.name())
+                        .orElseThrow(() -> new ValidationException("Area not found: " + areaInput.name())))
+                .toList();
+        user.setAreas(areas);
 
         userRepository.save(user);
     }

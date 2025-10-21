@@ -1,9 +1,12 @@
 package accrox.aros.api.infrastructure.spring.dto;
 
+import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.application.dto.user.CreateUserInput;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.Collection;
 
 public record CreateUserRequest (
 
@@ -26,7 +29,9 @@ public record CreateUserRequest (
         String address,
 
         //@Pattern(regexp = "\\d{10}", message = "Phone number must contain exactly 10 digits")
-        String phone
+        String phone,
+
+        Collection<GetAreaInput>areas
 
 ){
         /**
@@ -41,7 +46,8 @@ public record CreateUserRequest (
                         this.email,
                         this.password,
                         this.address,
-                        this.phone
+                        this.phone,
+                        this.areas
                 );
         }
 }
