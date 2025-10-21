@@ -3,11 +3,11 @@
 -- ======================
 INSERT INTO users (document, name, email, password, address, phone)
 VALUES
-    ('1001', 'Carlos Gómez', 'carlos@restaurante.com', '123456', 'Calle 10 #12-30', '3001234567'),
-    ('1002', 'María López', 'maria@restaurante.com', '123456', 'Carrera 8 #15-45', '3002345678'),
-    ('1003', 'Javier Ruiz', 'javier@restaurante.com', '123456', 'Calle 5 #7-20', '3003456789'),
-    ('1004', 'Laura Torres', 'laura@restaurante.com', '123456', 'Av Bolívar #20-15', '3004567890'),
-    ('1005', 'Ana Pérez', 'ana@restaurante.com', '123456', 'Calle 3 #9-18', '3005678901');
+    ('1001', 'Carlos Gómez', 'carlos@restaurante.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IJsg2gLbDd1.8a7.8e5Cne7e7QYjW', 'Calle 10 #12-30', '3001234567'),
+    ('1002', 'María López', 'maria@restaurante.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IJsg2gLbDd1.8a7.8e5Cne7e7QYjW', 'Carrera 8 #15-45', '3002345678'),
+    ('1003', 'Javier Ruiz', 'javier@restaurante.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IJsg2gLbDd1.8a7.8e5Cne7e7QYjW', 'Calle 5 #7-20', '3003456789'),
+    ('1004', 'Laura Torres', 'laura@restaurante.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IJsg2gLbDd1.8a7.8e5Cne7e7QYjW', 'Av Bolívar #20-15', '3004567890'),
+    ('1005', 'Ana Pérez', 'ana@restaurante.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye.IJsg2gLbDd1.8a7.8e5Cne7e7QYjW', 'Calle 3 #9-18', '3005678901');
 
 -- ======================
 -- ÁREAS
@@ -148,15 +148,3 @@ VALUES
     (3, 'Papas criollas', ''),
     (4, 'Sirope extra', 'Chocolate'),
     (5, 'Ensalada adicional', 'Con tomate');
-
--- ======================
--- TOKENS DE SESIÓN
--- ======================
-
--- INSERT INTO refresh_tokens (hash, user_id, user_email)
--- VALUES
---     ('token123abc', 1, 'carlos@restaurante.com'),
---     ('token456def', 2, 'maria@restaurante.com'),
---     ('token789ghi', 3, 'javier@restaurante.com'),
---     ('token101jkl', 4, 'laura@restaurante.com'),
---     ('token202mno', 5, 'ana@restaurante.com');
