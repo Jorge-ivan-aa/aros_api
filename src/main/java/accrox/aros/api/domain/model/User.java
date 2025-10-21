@@ -1,9 +1,11 @@
 package accrox.aros.api.domain.model;
 
-import java.util.Collection;
+import accrox.aros.api.domain.service.AdminAuthService;
 import accrox.aros.api.domain.service.PasswordService;
+import java.util.Collection;
 
 public class User {
+
     private Long id;
 
     private String document;
@@ -22,19 +24,19 @@ public class User {
 
     private Collection<RefreshToken> tokens;
 
-    public User() {
-    }
+    public User() {}
 
     public User(
-            Long id,
-            String document,
-            String name,
-            String email,
-            String password,
-            String address,
-            String phone,
-            Collection<Area> areas,
-            Collection<RefreshToken> tokens) {
+        Long id,
+        String document,
+        String name,
+        String email,
+        String password,
+        String address,
+        String phone,
+        Collection<Area> areas,
+        Collection<RefreshToken> tokens
+    ) {
         this.id = id;
         this.document = document;
         this.name = name;
@@ -125,5 +127,13 @@ public class User {
 
     public boolean passwordMatches(String rawPassword, PasswordService hasher) {
         return hasher.matches(rawPassword, this.password);
+    }
+
+    /**
+     * Check if this user has admin privileges
+     * This method delegates to AdminAuthService for admin detection
+     */
+    public boolean isAdmin(AdminAuthService adminAuthService) {
+        return adminAuthService.isAdminCredentials(this.email);
     }
 }
