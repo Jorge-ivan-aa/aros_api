@@ -6,6 +6,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.application.dto.user.CreateUserInput;
 import accrox.aros.api.application.usecases.user.SaveUserUseCase;
 import accrox.aros.api.domain.model.User;
@@ -35,14 +38,18 @@ public class SaveUserUseCaseTest {
 
     @Test
     void whenValidDTO_thenSavesUserSuccessfully() {
-
+        GetAreaInput area = new GetAreaInput("Cocina");
+        Collection<GetAreaInput> areas = List.of(area);
+        
         CreateUserInput dto = new CreateUserInput(
                 "Carlos Pérez",
                 "12345678",
                 "carlos@example.com",
                 "StrongPassword1",
                 "Calle Falsa 123",
-                "5551234567");
+                "5551234567",
+                areas
+        );
 
         when(userRepository.findByDocument(dto.document())).thenReturn(Optional.empty());
 

@@ -1,13 +1,13 @@
 package accrox.aros.api.infrastructure.spring.dto.orders;
 
+import java.util.Collection;
+
 import accrox.aros.api.application.dto.order.CreateOrderDetailInput;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import java.util.Collection;
-import java.util.List;
 
 @Schema(
     description = "Represents a single order detail with product information and customization",
