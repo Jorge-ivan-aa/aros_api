@@ -1,4 +1,4 @@
-package accrox.aros.api.infrastructure.spring.config.beans;
+package accrox.aros.api.infrastructure.spring.config.beans.user;
 
 import accrox.aros.api.application.usecases.user.SaveUserUseCase;
 import accrox.aros.api.domain.repository.AreaRepository;

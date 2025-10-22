@@ -1,4 +1,4 @@
-package accrox.aros.api.infrastructure.spring.config.beans;
+package accrox.aros.api.infrastructure.spring.config.beans.user;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
