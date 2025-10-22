@@ -1,5 +1,6 @@
 name: Build API image
 on: 
+  workflow_dispatch:
   push:
     branches:
       - dev
@@ -21,7 +22,7 @@ jobs:
         run: docker compose up -d
 
       - name: Build project with Maven
-        run: ./.wrapper/mvnw clean package
+        run: ./.wraper/mvnw clean package
 
       - name: Copy JAR to build folder
         run: cp target/*.jar build/
