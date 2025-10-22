@@ -1,13 +1,13 @@
 package accrox.aros.api.infrastructure.spring.dto.orders;
 
+import java.util.Collection;
+
 import accrox.aros.api.application.dto.order.CreateClientOrderInput;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.List;
 
 @Schema(
     description = "Represents an individual client's order with multiple order details",
