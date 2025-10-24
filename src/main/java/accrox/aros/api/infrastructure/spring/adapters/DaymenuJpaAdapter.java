@@ -60,6 +60,7 @@ public class DaymenuJpaAdapter implements DaymenuRepository {
 
     
     @Override
+    @Transactional
     public List<Daymenu> findAll() {
         Iterable<DaymenuEntity> entities = this.daymenuRepositoryJpa.findAll();
         List<Daymenu> daymenus = new ArrayList<>();
