@@ -1,4 +1,4 @@
-package accrox.aros.api.application.dto.Table;
+package accrox.aros.api.application.dto.table;
 
 public class CreateTableDto {
 

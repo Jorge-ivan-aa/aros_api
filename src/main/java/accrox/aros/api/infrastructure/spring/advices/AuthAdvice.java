@@ -1,6 +1,5 @@
 package accrox.aros.api.infrastructure.spring.advices;
 
-import accrox.aros.api.application.exceptions.auth.InsecurePasswordException;
 import accrox.aros.api.application.exceptions.auth.InvalidCredentialsException;
 import accrox.aros.api.application.exceptions.auth.InvalidTokenException;
 import java.util.HashMap;
@@ -45,7 +44,7 @@ public class AuthAdvice {
         response.put("error", "Authentication failed");
         response.put("message", "Invalid credentials");
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
@@ -59,21 +58,5 @@ public class AuthAdvice {
         response.put("message", "The provided token is invalid or expired");
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-    }
-
-    @ExceptionHandler(InsecurePasswordException.class)
-    public ResponseEntity<Map<String, String>> handleInsecurePasswordException(
-        InsecurePasswordException ex
-    ) {
-        logger.warn("Insecure password detected: {}", ex.getMessage());
-
-        Map<String, String> response = new HashMap<>();
-        response.put("error", "Insecure password");
-        response.put(
-            "message",
-            "The password does not meet security requirements"
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

@@ -2,7 +2,7 @@ package accrox.aros.api.application.usecases.auth;
 
 import java.time.LocalDateTime;
 
-import accrox.aros.api.application.dto.auth.AuthTokenReponseDto;
+import accrox.aros.api.application.dto.auth.AuthOutput;
 import accrox.aros.api.application.exceptions.auth.InvalidTokenException;
 import accrox.aros.api.domain.model.RefreshToken;
 import accrox.aros.api.domain.repository.RefreshTokenRepository;
@@ -26,7 +26,7 @@ public class RefreshTokenUseCase {
         this.manager = manager;
     }
 
-    public AuthTokenReponseDto execute(String token) throws InvalidTokenException {
+    public AuthOutput execute(String token) throws InvalidTokenException {
         RefreshToken refreshToken = this.tokenRepository.findByHash(token)
                 .orElseThrow(() -> new InvalidTokenException());
 
@@ -50,6 +50,6 @@ public class RefreshTokenUseCase {
                 LocalDateTime.now(),
                 userEmail));
 
-        return new AuthTokenReponseDto(newRefreshToken, newAccessToken);
+        return new AuthOutput(newRefreshToken, newAccessToken);
     }
 }

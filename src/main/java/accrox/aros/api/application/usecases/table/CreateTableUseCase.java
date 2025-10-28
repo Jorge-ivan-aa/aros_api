@@ -1,6 +1,6 @@
-package accrox.aros.api.application.usecases.Table;
+package accrox.aros.api.application.usecases.table;
 
-import accrox.aros.api.application.dto.Table.CreateTableDto;
+import accrox.aros.api.application.dto.table.CreateTableDto;
 import accrox.aros.api.domain.model.Table;
 import accrox.aros.api.domain.repository.TableRepository;
 

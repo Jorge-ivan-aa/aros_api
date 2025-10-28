@@ -31,6 +31,7 @@ tasks:
       - "{{.MVN}} clean package"
       - cp target/*.jar build/
       - task down
+      - docker build -t buhoaullador/aros-api:latest build/
       - docker compose -f build/compose.yml up
 
 
