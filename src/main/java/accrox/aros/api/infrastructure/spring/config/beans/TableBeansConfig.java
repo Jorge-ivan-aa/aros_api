@@ -11,9 +11,14 @@ public class TableBeansConfig {
 
     @Bean
     public CreateTableUseCase createTableUseCase(
-        TableRepository tableRepository
-    ) {
+            TableRepository tableRepository) {
         return new CreateTableUseCase(tableRepository);
+    }
+
+    @Bean
+    public accrox.aros.api.application.usecases.Table.CreateTablesUseCase createTablesUseCase(
+            CreateTableUseCase createTableUseCase) {
+        return new accrox.aros.api.application.usecases.Table.CreateTablesUseCase(createTableUseCase);
     }
 
 }
