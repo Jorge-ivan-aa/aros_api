@@ -13,6 +13,7 @@ import accrox.aros.api.infrastructure.spring.dto.GetUserByDocumentRequest;
 import accrox.aros.api.infrastructure.spring.dto.UpdateUserAreaRequest;
 import accrox.aros.api.infrastructure.spring.dto.UpdateUserRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.slf4j.Logger;
@@ -80,18 +81,18 @@ public class UserController {
     @GetMapping("/get/{document}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<GetUserOuput> getUser(
-        @Valid @PathVariable GetUserByDocumentRequest document
+            @PathVariable String  document
     ) {
         logger.info(
             "GET /api/users/get/{} - Retrieving user by document",
-            document.document()
+            document
         );
         GetUserOuput output = getUserByDocumentUseCase.execute(
-            document.toInput()
+            document
         );
         logger.info(
             "GET /api/users/get/{} - Retrieved user: {}",
-            document.document(),
+            document,
             output.name()
         );
         return ResponseEntity.ok(output);
@@ -127,17 +128,16 @@ public class UserController {
     @DeleteMapping("/delete-user/{document}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(
-        @Valid @PathVariable DeleteUserRequest document
+        @PathVariable String document
     ) {
         logger.info(
             "DELETE /api/users/delete-user/{} - Deleting user by document",
-            document.document()
+            document
         );
-        this.deletUserUseCase.execute(document.toInput());
+        this.deletUserUseCase.execute(document);
         logger.info(
             "DELETE /api/users/delete-user/{} - User deleted successfully",
-            document.document()
-        );
+            document        );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

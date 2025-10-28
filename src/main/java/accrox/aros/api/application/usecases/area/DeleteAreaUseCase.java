@@ -13,17 +13,17 @@ public class DeleteAreaUseCase {
         this.repository = repository;
     }
 
-    public void execute(DeleteAreaInput input) {
+    public void execute(String name) {
 
-        if (input.name() == null || input.name().isBlank()) {
+        if (name== null || name.isBlank()) {
             throw new ValidationException("The name is required");
         }
 
-        if (!repository.existsByName(input.name())) {
+        if (!repository.existsByName(name)) {
             throw new ValidationException("Are no exist");
         }
 
-        Area area = repository.getAreaByName(input.name())
+        Area area = repository.getAreaByName(name)
                 .orElseThrow(() -> new ValidationException("Area not found"));
 
         repository.deleteArea(area.getId());

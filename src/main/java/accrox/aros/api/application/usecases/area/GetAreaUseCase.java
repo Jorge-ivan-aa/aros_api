@@ -14,17 +14,17 @@ public class GetAreaUseCase {
         this.repository = repository;
     }
 
-    public GetAreaOutput execute(GetAreaInput input){
+    public GetAreaOutput execute(String name){
 
-        if(input.name() == null || input.name().isBlank()){
+        if(name == null || name.isBlank()){
             throw new ValidationException("The name is required");
         }
 
-        if(!repository.existsByName(input.name())){
+        if(!repository.existsByName(name)){
             throw new ValidationException("Are no exist");
         }
 
-        Area area = repository.getAreaByName(input.name())
+        Area area = repository.getAreaByName(name)
                 .orElseThrow(() -> new ValidationException("Area not found"));
 
         return new GetAreaOutput(area.getName());
