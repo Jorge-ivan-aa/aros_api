@@ -1,10 +1,13 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
+import accrox.aros.api.application.dto.order.OrdersOutput;
 import accrox.aros.api.application.exceptions.order.EmptyDayMenuSelectionException;
 import accrox.aros.api.application.exceptions.product.ProductNotFoundException;
 import accrox.aros.api.application.exceptions.table.TableNotFoundException;
 import accrox.aros.api.application.usecases.order.CreateOrderUseCase;
+import accrox.aros.api.application.usecases.order.GetOrdersByStatusUseCase;
 import accrox.aros.api.application.usecases.order.MarkOrderAsCompletedUseCase;
+import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.infrastructure.spring.dto.orders.CreateOrderRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -14,12 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/orders")
@@ -28,6 +28,8 @@ public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(
         OrderController.class
     );
+    @Autowired
+    private GetOrdersByStatusUseCase getOrdersByStatusUseCase;
 
     @Autowired
     private CreateOrderUseCase createOrderUseCase;
@@ -78,5 +80,34 @@ public class OrderController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(
+            tags = "Orders Management",
+            summary = "Get orders by status",
+            description = "Retrieves all orders filtered by status (PENDING, COMPLETED, or CANCELLED). If the status is invalid or not provided, all orders will be returned."
+    )
+    @GetMapping("/status/{status}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<OrdersOutput>> getOrdersByStatus(@PathVariable String status) {
+        logger.info("GET /api/orders/status/{} - Fetching orders by status", status);
+
+        try {
+            List<OrdersOutput> orders = getOrdersByStatusUseCase.execute(status);
+
+            if (orders.isEmpty()) {
+                logger.info("GET /api/orders/status/{} - No orders found", status);
+                return ResponseEntity.noContent().build();
+            }
+
+            logger.info("GET /api/orders/status/{} - {} orders found", status, orders.size());
+            return ResponseEntity.ok(orders);
+
+        } catch (RuntimeException e) {
+            logger.error("GET /api/orders/status/{} - Error: {}", status, e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
     }
 }

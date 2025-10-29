@@ -1,9 +1,9 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
+import accrox.aros.api.domain.model.Table;
+import accrox.aros.api.infrastructure.spring.jpa.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,10 +11,6 @@ import accrox.aros.api.domain.model.DayMenuSelection;
 import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.enums.OrderStatus;
 import accrox.aros.api.domain.repository.OrderRepository;
-import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderDetailEntity;
-import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderEntity;
-import accrox.aros.api.infrastructure.spring.jpa.entity.OrderEntity;
-import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
 import accrox.aros.api.infrastructure.spring.jpa.repository.OrderRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.mappers.ClientOrderDetailJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.ClientOrderJpaMapper;
@@ -58,5 +54,23 @@ public class OrderJpaAdapter implements OrderRepository {
         });
 
         this.orderRepositoryJpa.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public List<Order> findAll() {
+        Iterable<OrderEntity> entities = orderRepositoryJpa.findAll();
+
+        if(entities == null ){
+            return Collections.emptyList();
+        }
+
+        List<Order> orders = new ArrayList<>();
+        for(OrderEntity entity : entities){
+            Table table = TableJpaMapper.toDomain(entity.getTable(),null);
+            orders.add(OrderJpaMapper.toDomain(entity, table, null));
+        }
+
+        return orders;
     }
 }

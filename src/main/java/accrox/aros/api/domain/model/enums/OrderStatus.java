@@ -1,3 +1,3 @@
 package accrox.aros.api.domain.model.enums;
 
-public enum OrderStatus { PENDING, COMPLETED }
+public enum OrderStatus { PENDING, COMPLETED, CANCELLED }
