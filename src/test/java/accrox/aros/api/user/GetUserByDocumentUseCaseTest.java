@@ -1,13 +1,14 @@
 package accrox.aros.api.user;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
+import accrox.aros.api.infrastructure.spring.jpa.repository.UserRepositoryJpa;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import accrox.aros.api.application.dto.user.GetUserOuput;
 import accrox.aros.api.application.usecases.user.GetUserByDocumentUseCase;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @ExtendWith(MockitoExtension.class)
 public class GetUserByDocumentUseCaseTest {
@@ -30,7 +32,7 @@ public class GetUserByDocumentUseCaseTest {
     private GetUserByDocumentUseCase getUserByDocumentUseCase;
 
     @Test
-    void whenUserExist_thenGetUserByDocument(){
+    void whenUserExist_thenGetUserByDocument() {
 
         GetUserByDocumentInput input = new GetUserByDocumentInput("1088824");
 
@@ -45,8 +47,7 @@ public class GetUserByDocumentUseCaseTest {
         when(userRepository.findByDocument(input.document()))
                 .thenReturn(Optional.of(user1));
 
-
-        GetUserOuput result = getUserByDocumentUseCase.execute(input);
+        GetUserOuput result = getUserByDocumentUseCase.execute(input.document());
 
         assertNotNull(result);
         assertEquals("Nikoll", result.name());
@@ -55,4 +56,5 @@ public class GetUserByDocumentUseCaseTest {
         verify(userRepository, times(1)).findByDocument("1088824");
 
     }
+
 }

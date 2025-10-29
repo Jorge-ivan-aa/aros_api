@@ -13,16 +13,16 @@ public class DeleteUserUseCase {
     }
 
 
-    public void execute(DeleteUserInput document) {
-        if (document.document() == null || document.document().isBlank()) {
+    public void execute(String document) {
+        if (document== null || document.isBlank()) {
             throw new ValidationException("The document is required");
         }
 
-        var userOpt = userRepository.findByDocument(document.document());
+        var userOpt = userRepository.findByDocument(document);
         if (userOpt.isEmpty()) {
             throw new ValidationException("No user found with the provided document");
         }
 
-        userRepository.deleteUserByDocument(document.document());
+        userRepository.deleteUserByDocument(document);
     }
 }

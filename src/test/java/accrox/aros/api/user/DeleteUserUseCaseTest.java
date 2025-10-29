@@ -41,7 +41,7 @@ public class DeleteUserUseCaseTest {
         when(userRepository.findByDocument(request.document()))
                 .thenReturn(Optional.of(user));
 
-        deleteUserUseCase.execute(input);
+        deleteUserUseCase.execute(input.document());
 
         verify(userRepository, times(1)).deleteUserByDocument(input.document());
     }

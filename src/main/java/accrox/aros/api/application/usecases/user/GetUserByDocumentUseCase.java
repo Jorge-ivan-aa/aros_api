@@ -19,13 +19,12 @@ public class GetUserByDocumentUseCase {
         this.userRepository = userRepository;
     }
 
-    public GetUserOuput execute(GetUserByDocumentInput input) {
+    public GetUserOuput execute(String document) throws ValidationException {
 
-        if(input.document() == null || input.document().isBlank()){
+        if(document== null || document.isBlank()){
             throw new IllegalArgumentException("The document is required");
         }
-
-        Optional<User> userOpt = userRepository.findByDocument(input.document());
+        Optional<User> userOpt = userRepository.findByDocument(document);
         if (userOpt.isEmpty()) {
             throw new ValidationException("No user found with the provided document");
         }

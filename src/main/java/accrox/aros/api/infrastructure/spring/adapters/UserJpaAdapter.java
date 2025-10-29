@@ -47,11 +47,12 @@ public class UserJpaAdapter implements UserRepository {
     @Override
     @Transactional
     public Optional<User> findByDocument(String document) {
+        logger.info("Document received: {}", document);
         return userRepositoryJpa
-            .findByDocument(document)
-            .map(entity ->
-                UserJpaMapper.toDomain(entity, entity.getAreas(), null)
-            );
+                .findByDocument(document)
+                .map(entity ->
+                        UserJpaMapper.toDomain(entity, entity.getAreas(), null)
+                );
     }
 
     @Override
