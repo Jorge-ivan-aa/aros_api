@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ExtendWith(MockitoExtension.class)
 public class GetUserByDocumentUseCaseTest {
 
-
     @Mock
     private UserRepository userRepository;
 
@@ -33,7 +32,7 @@ public class GetUserByDocumentUseCaseTest {
     private GetUserByDocumentUseCase getUserByDocumentUseCase;
 
     @Test
-    void whenUserExist_thenGetUserByDocument(){
+    void whenUserExist_thenGetUserByDocument() {
 
         GetUserByDocumentInput input = new GetUserByDocumentInput("1088824");
 
@@ -48,8 +47,7 @@ public class GetUserByDocumentUseCaseTest {
         when(userRepository.findByDocument(input.document()))
                 .thenReturn(Optional.of(user1));
 
-
-        GetUserOuput result = getUserByDocumentUseCase.execute(input);
+        GetUserOuput result = getUserByDocumentUseCase.execute(input.document());
 
         assertNotNull(result);
         assertEquals("Nikoll", result.name());
