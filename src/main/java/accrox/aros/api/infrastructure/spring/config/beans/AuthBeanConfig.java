@@ -53,8 +53,13 @@ public class AuthBeanConfig {
     @Bean
     public GetDetailsUseCase getDetailsUseCase(
         TokenService tokenService,
-        UserRepository userRepository
+        UserRepository userRepository,
+        AdminAuthService adminAuthService
     ) {
-        return new GetDetailsUseCase(tokenService, userRepository);
+        return new GetDetailsUseCase(
+            tokenService,
+            userRepository,
+            adminAuthService
+        );
     }
 }

@@ -6,21 +6,26 @@ import accrox.aros.api.application.exceptions.auth.InvalidTokenException;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
+import accrox.aros.api.domain.service.AdminAuthService;
 import accrox.aros.api.domain.service.TokenService;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class GetDetailsUseCase {
 
     private final TokenService tokenService;
     private final UserRepository userRepository;
+    private final AdminAuthService adminAuthService;
 
     public GetDetailsUseCase(
         TokenService tokenService,
-        UserRepository userRepository
+        UserRepository userRepository,
+        AdminAuthService adminAuthService
     ) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
+        this.adminAuthService = adminAuthService;
     }
 
     public GetUserOuput execute(String token) throws InvalidTokenException {
@@ -50,6 +55,22 @@ public class GetDetailsUseCase {
             "DEBUG: GetDetailsUseCase - Extracted user document: " +
                 userDocument
         );
+
+        // Check if this is an admin user
+        if (adminAuthService.isAdminCredentials(userDocument)) {
+            System.out.println(
+                "DEBUG: GetDetailsUseCase - Admin user detected, returning admin details"
+            );
+            User adminUser = adminAuthService.getUser();
+            return new GetUserOuput(
+                "Admin",
+                adminUser.getDocument(),
+                adminUser.getDocument(), // Use document as email for admin
+                null, // No phone for admin
+                null, // No address for admin
+                List.of(new GetAreaOuput("ADMINISTRATION"))
+            );
+        }
 
         // Additional debug: Check if this looks like email or document
         System.out.println(
