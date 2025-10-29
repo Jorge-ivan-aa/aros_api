@@ -1,4 +1,4 @@
-package accrox.aros.api.infrastructure.spring.dto;
+package accrox.aros.api.infrastructure.spring.dto.table;
 
 import accrox.aros.api.application.dto.table.CreateTableDto;
 import io.swagger.v3.oas.annotations.media.Schema;

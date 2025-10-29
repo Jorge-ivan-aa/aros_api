@@ -6,9 +6,9 @@ import accrox.aros.api.application.usecases.area.DeleteAreaUseCase;
 import accrox.aros.api.application.usecases.area.GetAllAreaUseCase;
 import accrox.aros.api.application.usecases.area.GetAreaUseCase;
 import accrox.aros.api.application.usecases.area.SaveAreaUseCase;
-import accrox.aros.api.infrastructure.spring.dto.DeleteAreaRequest;
-import accrox.aros.api.infrastructure.spring.dto.GetAreaRequest;
-import accrox.aros.api.infrastructure.spring.dto.SaveAreaRequest;
+import accrox.aros.api.infrastructure.spring.dto.area.DeleteAreaRequest;
+import accrox.aros.api.infrastructure.spring.dto.area.GetAreaRequest;
+import accrox.aros.api.infrastructure.spring.dto.area.SaveAreaRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -31,8 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AreaController {
 
     private static final Logger logger = LoggerFactory.getLogger(
-        AreaController.class
-    );
+            AreaController.class);
 
     @Autowired
     private SaveAreaUseCase saveAreaUseCase;
@@ -46,11 +45,7 @@ public class AreaController {
     @Autowired
     private GetAllAreaUseCase getAllAreaRequest;
 
-    @Operation(
-        tags = "Areas Management",
-        summary = "Retrieve all areas",
-        description = "This endpoint retrieves a list of all available areas."
-    )
+    @Operation(tags = "Areas Management", summary = "Retrieve all areas", description = "This endpoint retrieves a list of all available areas.")
     @GetMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getAll() {
@@ -60,64 +55,46 @@ public class AreaController {
         return ResponseEntity.ok(areasOut);
     }
 
-    @Operation(
-        tags = "Areas Management",
-        summary = "Retrieve a specific area",
-        description = "This endpoint retrieves the details of a specific area by its name."
-    )
+    @Operation(tags = "Areas Management", summary = "Retrieve a specific area", description = "This endpoint retrieves the details of a specific area by its name.")
     @GetMapping("/get/{name}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> get(@PathVariable String name) {
         logger.info(
-            "GET /api/areas/get/{} - Retrieving specific area",
-            name
-        );
+                "GET /api/areas/get/{} - Retrieving specific area",
+                name);
         GetAreaOutput output = this.getAreaRequest.execute(name);
         logger.info(
-            "GET /api/areas/get/{} - Retrieved area: {}",
-            name,
-            output.name()
-        );
+                "GET /api/areas/get/{} - Retrieved area: {}",
+                name,
+                output.name());
         return ResponseEntity.ok(output);
     }
 
-    @Operation(
-        tags = "Areas Management",
-        summary = "Create a new area",
-        description = "This endpoint creates a new area using the provided data."
-    )
+    @Operation(tags = "Areas Management", summary = "Create a new area", description = "This endpoint creates a new area using the provided data.")
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody SaveAreaRequest request)
-        throws ValidationException {
+            throws ValidationException {
         logger.info(
-            "POST /api/areas/create - Creating new area: {}",
-            request.name()
-        );
+                "POST /api/areas/create - Creating new area: {}",
+                request.name());
         this.saveAreaUseCase.execute(request.toInput());
         logger.info(
-            "POST /api/areas/create - Area '{}' created successfully",
-            request.name()
-        );
+                "POST /api/areas/create - Area '{}' created successfully",
+                request.name());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(
-        tags = "Areas Management",
-        summary = "Delete an area by name",
-        description = "This endpoint deletes an area identified by its name."
-    )
+    @Operation(tags = "Areas Management", summary = "Delete an area by name", description = "This endpoint deletes an area identified by its name.")
     @DeleteMapping("/delete/{name}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(
-        @PathVariable String name
-    ) {
+            @PathVariable String name) {
         logger.info("DELETE /api/areas/delete/{} - Deleting area", name);
         this.deleteAreaUseCase.execute(name);
         logger.info(
-            "DELETE /api/areas/delete/{} - Area deleted successfully",
-            name
-        );
+                "DELETE /api/areas/delete/{} - Area deleted successfully",
+                name);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

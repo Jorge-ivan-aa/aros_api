@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 // application DTOs not used directly by the controller (infrastructure requests are used)
-import accrox.aros.api.infrastructure.spring.dto.CreateTableRequest;
-import accrox.aros.api.infrastructure.spring.dto.CreateTablesRequest;
+import accrox.aros.api.infrastructure.spring.dto.table.CreateTableRequest;
+import accrox.aros.api.infrastructure.spring.dto.table.CreateTablesRequest;
 import accrox.aros.api.application.usecases.table.CreateTableUseCase;
 import accrox.aros.api.application.usecases.table.CreateTablesUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import accrox.aros.api.application.usecases.table.UpdateTablesCountUseCase;
-import accrox.aros.api.infrastructure.spring.dto.UpdateTablesCountRequest;
+import accrox.aros.api.infrastructure.spring.dto.table.UpdateTablesCountRequest;
 import jakarta.validation.Valid;
 
 @RestController

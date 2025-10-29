@@ -16,7 +16,7 @@ import accrox.aros.api.application.dto.user.DeleteUserInput;
 import accrox.aros.api.application.usecases.user.DeleteUserUseCase;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
-import accrox.aros.api.infrastructure.spring.dto.DeleteUserRequest;
+import accrox.aros.api.infrastructure.spring.dto.user.DeleteUserRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class DeleteUserUseCaseTest {
