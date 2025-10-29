@@ -12,7 +12,7 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class AdminBeanConfig {
 
-    @Value("${admin.email}")
+    @Value("${admin.document}")
     private String email;
 
     @Value("${admin.password}")

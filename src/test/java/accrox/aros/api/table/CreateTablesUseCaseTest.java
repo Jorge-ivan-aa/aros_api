@@ -1,8 +1,8 @@
 package accrox.aros.api.table;
 
-import accrox.aros.api.application.dto.Table.CreateTablesDto;
-import accrox.aros.api.application.usecases.Table.CreateTablesUseCase;
-import accrox.aros.api.application.usecases.Table.CreateTableUseCase;
+import accrox.aros.api.application.dto.table.CreateTablesDto;
+import accrox.aros.api.application.usecases.table.CreateTablesUseCase;
+import accrox.aros.api.application.usecases.table.CreateTableUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

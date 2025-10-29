@@ -51,7 +51,7 @@ public class AreaController {
         summary = "Retrieve all areas",
         description = "This endpoint retrieves a list of all available areas."
     )
-    @GetMapping("/get")
+    @GetMapping("")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getAll() {
         logger.info("GET /api/areas/get - Retrieving all areas");
@@ -67,15 +67,15 @@ public class AreaController {
     )
     @GetMapping("/get/{name}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> get(@Valid @PathVariable GetAreaRequest name) {
+    public ResponseEntity<?> get(@PathVariable String name) {
         logger.info(
             "GET /api/areas/get/{} - Retrieving specific area",
-            name.name()
+            name
         );
-        GetAreaOutput output = this.getAreaRequest.execute(name.toInput());
+        GetAreaOutput output = this.getAreaRequest.execute(name);
         logger.info(
             "GET /api/areas/get/{} - Retrieved area: {}",
-            name.name(),
+            name,
             output.name()
         );
         return ResponseEntity.ok(output);
@@ -110,13 +110,13 @@ public class AreaController {
     @DeleteMapping("/delete/{name}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(
-        @Valid @PathVariable DeleteAreaRequest name
+        @PathVariable String name
     ) {
-        logger.info("DELETE /api/areas/delete/{} - Deleting area", name.name());
-        this.deleteAreaUseCase.execute(name.toInput());
+        logger.info("DELETE /api/areas/delete/{} - Deleting area", name);
+        this.deleteAreaUseCase.execute(name);
         logger.info(
             "DELETE /api/areas/delete/{} - Area deleted successfully",
-            name.name()
+            name
         );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

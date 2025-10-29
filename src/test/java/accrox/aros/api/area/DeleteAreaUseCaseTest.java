@@ -38,7 +38,7 @@ public class DeleteAreaUseCaseTest {
         when(repository.existsByName("Cocina")).thenReturn(true);
         when(repository.getAreaByName("Cocina")).thenReturn(Optional.of(area));
 
-        useCase.execute(input);
+        useCase.execute(input.name());
 
         verify(repository, times(1)).existsByName("Cocina");
         verify(repository, times(1)).getAreaByName("Cocina");

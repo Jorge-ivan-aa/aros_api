@@ -16,7 +16,7 @@ jobs:
           echo "DB_NAME=aros_db" >> .env
           echo "DB_PORT=3301" >> .env
           echo "DB_HOST=localhost" >> .env
-          echo "ADMIN_EMAIL=admin@aros.co" >> .env
+          echo "ADMIN_DOCUMENT=admin@aros.co" >> .env
           echo "LOGGING_LEVEL_APP=INFO" >> .env
           echo "LOGGING_LEVEL_ROOT=WARN" >> .env
           echo "DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}" >> .env

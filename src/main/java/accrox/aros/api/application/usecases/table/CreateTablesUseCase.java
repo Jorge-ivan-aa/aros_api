@@ -1,17 +1,17 @@
-package accrox.aros.api.application.usecases.Table;
+package accrox.aros.api.application.usecases.table;
 
-import accrox.aros.api.application.dto.Table.CreateTablesDto;
-import accrox.aros.api.application.dto.Table.CreateTableDto;
+import accrox.aros.api.application.dto.table.CreateTablesDto;
+import accrox.aros.api.application.dto.table.CreateTableDto;
 
 public class CreateTablesUseCase {
-    private CreateTableUseCase createTableUseCase;
+    private final CreateTableUseCase createTableUseCase;
 
     public CreateTablesUseCase(CreateTableUseCase createTableUseCase) {
         this.createTableUseCase = createTableUseCase;
     }
 
     public void execute(CreateTablesDto dto) {
-        int count = dto.getCount();
+        int count = dto.count();
         if (count <= 0) {
             throw new IllegalArgumentException("count must be greater than 0");
         }

@@ -26,7 +26,6 @@ public class GetAreaUseCaseTest {
     @InjectMocks
     private GetAreaUseCase useCase;
 
-
     @Test
     void whenAreaExists_thenReturnAreaSuccessfully() {
         // Arrange
@@ -38,7 +37,7 @@ public class GetAreaUseCaseTest {
         when(repository.existsByName("Cocina")).thenReturn(true);
         when(repository.getAreaByName("Cocina")).thenReturn(Optional.of(area));
 
-        GetAreaOutput result = useCase.execute(input);
+        GetAreaOutput result = useCase.execute(input.name());
 
         assertNotNull(result);
         assertEquals("Cocina", result.name());
@@ -54,13 +53,11 @@ public class GetAreaUseCaseTest {
 
         ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> useCase.execute(input)
-        );
+                () -> useCase.execute(input.name()));
 
         assertEquals("Are no exist", exception.getMessage());
         verify(repository, times(1)).existsByName("Inexistente");
         verify(repository, never()).getAreaByName(anyString());
     }
-
 
 }
