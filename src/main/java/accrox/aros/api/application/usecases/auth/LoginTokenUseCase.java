@@ -44,12 +44,28 @@ public class LoginTokenUseCase {
         throws InvalidCredentialsException, InsecurePasswordException {
         User user;
         if (adminAuthService.isAdminCredentials(request.document())) {
+            System.out.println(
+                "DEBUG: LoginTokenUseCase - Admin credentials detected for document: " +
+                    request.document()
+            );
             user = adminAuthService.getUser();
+            System.out.println(
+                "DEBUG: LoginTokenUseCase - Admin user created with document: " +
+                    user.getDocument()
+            );
         } else {
-            user = this.userRepository.findByEmail(
+            System.out.println(
+                "DEBUG: LoginTokenUseCase - Regular user login for document: " +
+                    request.document()
+            );
+            user = this.userRepository.findByDocument(
                 request.document()
             ).orElseThrow(() ->
                 new InvalidCredentialsException("User not found")
+            );
+            System.out.println(
+                "DEBUG: LoginTokenUseCase - Regular user found with document: " +
+                    user.getDocument()
             );
         }
 
@@ -57,21 +73,31 @@ public class LoginTokenUseCase {
             throw new InvalidCredentialsException("Invalid password");
         }
 
-        String refreshToken = this.tokenService.generateRefreshToken(
-            user.getEmail()
-        );
-        String accessToken = this.tokenService.generateAccessToken(
-            user.getEmail()
+        String userDocument = user.getDocument();
+        System.out.println(
+            "DEBUG: LoginTokenUseCase - Generating tokens for document: " +
+                userDocument
         );
 
-        this.tokenRepository.create(
-            new RefreshToken(
-                null,
-                refreshToken,
-                LocalDateTime.now(),
-                user.getEmail()
-            )
+        String refreshToken = this.tokenService.generateRefreshToken(
+            userDocument
         );
+        String accessToken = this.tokenService.generateAccessToken(
+            userDocument
+        );
+
+        RefreshToken refreshTokenEntity = new RefreshToken(
+            null,
+            refreshToken,
+            LocalDateTime.now(),
+            user.getDocument()
+        );
+        System.out.println(
+            "DEBUG: LoginTokenUseCase - Creating refresh token with document: " +
+                refreshTokenEntity.getUserDocument()
+        );
+
+        this.tokenRepository.create(refreshTokenEntity);
 
         return new AuthOutput(refreshToken, accessToken);
     }

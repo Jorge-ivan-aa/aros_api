@@ -21,16 +21,15 @@ public class UserDetailsAdapter implements UserDetails {
     }
 
     public UserDetailsAdapter(
-        User user,
-        Collection<? extends GrantedAuthority> authorities
-    ) {
+            User user,
+            Collection<? extends GrantedAuthority> authorities) {
         this.data = user;
         this.authorities = authorities;
     }
 
     @Override
     public String getUsername() {
-        return this.data.getEmail();
+        return this.data.getDocument();
     }
 
     @Override
@@ -47,8 +46,8 @@ public class UserDetailsAdapter implements UserDetails {
         return data;
     }
 
-    public String getEmail() {
-        return this.data.getEmail();
+    public String getDocument() {
+        return this.data.getDocument();
     }
 
     public String getName() {
@@ -70,9 +69,8 @@ public class UserDetailsAdapter implements UserDetails {
      * - Additional authorities based on areas
      */
     private Collection<? extends GrantedAuthority> buildAuthorities(
-        User user,
-        boolean isAdmin
-    ) {
+            User user,
+            boolean isAdmin) {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
         // Add role based on user type
@@ -86,14 +84,11 @@ public class UserDetailsAdapter implements UserDetails {
         // Add area-based authorities if needed
         if (user.getAreas() != null) {
             user
-                .getAreas()
-                .stream()
-                .map(area ->
-                    new SimpleGrantedAuthority(
-                        "AREA_" + area.getName().toUpperCase()
-                    )
-                )
-                .forEach(authorities::add);
+                    .getAreas()
+                    .stream()
+                    .map(area -> new SimpleGrantedAuthority(
+                            "AREA_" + area.getName().toUpperCase()))
+                    .forEach(authorities::add);
         }
 
         return authorities;

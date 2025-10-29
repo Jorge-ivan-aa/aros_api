@@ -1,29 +1,28 @@
 package accrox.aros.api.infrastructure.spring.config.beans;
 
+import accrox.aros.api.application.exceptions.auth.InsecurePasswordException;
+import jakarta.annotation.PostConstruct;
 import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import accrox.aros.api.application.exceptions.auth.InsecurePasswordException;
-import jakarta.annotation.PostConstruct;
 
 @Component
 public class AdminBeanConfig {
 
     @Value("${admin.document}")
-    private String email;
+    private String document;
 
     @Value("${admin.password}")
     private String password;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private static final Pattern BCRYPT_PATTERN = Pattern.compile("^\\$2[abxy]\\$\\d{2}\\$.{53}$");
+    private static final Pattern BCRYPT_PATTERN = Pattern.compile(
+        "^\\$2[abxy]\\$\\d{2}\\$.{53}$"
+    );
 
     @PostConstruct
     public void validatePasswordSecurity() {
-
         if (password.isEmpty()) {
             throw new InsecurePasswordException();
         }
@@ -34,7 +33,7 @@ public class AdminBeanConfig {
 
         if (!isPasswordHashed(password)) {
             String hashedPassword = encoder.encode(password);
-            throw new InsecurePasswordException(email, hashedPassword);
+            throw new InsecurePasswordException(document, hashedPassword);
         }
     }
 
@@ -42,8 +41,8 @@ public class AdminBeanConfig {
         return password != null && BCRYPT_PATTERN.matcher(password).matches();
     }
 
-    public String getEmail() {
-        return email;
+    public String getDocument() {
+        return document;
     }
 
     public String getPassword() {

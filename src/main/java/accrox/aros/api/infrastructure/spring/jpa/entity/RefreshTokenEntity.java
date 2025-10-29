@@ -1,7 +1,5 @@
 package accrox.aros.api.infrastructure.spring.jpa.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,10 +10,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "refresh_tokens", uniqueConstraints = @UniqueConstraint(columnNames = "hash"))
+@Table(
+    name = "refresh_tokens",
+    uniqueConstraints = @UniqueConstraint(columnNames = "hash")
+)
 public class RefreshTokenEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,19 +29,29 @@ public class RefreshTokenEntity {
     private LocalDateTime revokedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false, nullable = true)
+    @JoinColumn(
+        name = "user_id",
+        referencedColumnName = "id",
+        insertable = false,
+        updatable = false,
+        nullable = true
+    )
     private UserEntity user;
 
-    private String userEmail;
+    private String userDocument;
 
-    public RefreshTokenEntity() {
-    }
+    public RefreshTokenEntity() {}
 
-    public RefreshTokenEntity(Long id, String hash, LocalDateTime revokedAt, String userEmail) {
+    public RefreshTokenEntity(
+        Long id,
+        String hash,
+        LocalDateTime revokedAt,
+        String userDocument
+    ) {
         this.id = id;
         this.hash = hash;
         this.revokedAt = revokedAt;
-        this.userEmail = userEmail;
+        this.userDocument = userDocument;
     }
 
     public Long getId() {
@@ -65,11 +78,11 @@ public class RefreshTokenEntity {
         this.revokedAt = revokedAt;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getUserDocument() {
+        return userDocument;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserDocument(String userDocument) {
+        this.userDocument = userDocument;
     }
 }

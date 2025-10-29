@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `refresh_tokens` (
     `hash` VARCHAR(255) NOT NULL,
     `revoked_at` DATETIME,
     `user_id` BIGINT NULL,
-    `user_email` VARCHAR(255) NOT NULL,
+    `user_document` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
     UNIQUE INDEX unique_index_hash (`hash`)

@@ -4,38 +4,36 @@ public interface TokenService {
     /**
      * generate a new (opaque) refresh token
      *
-     * @param userEmail owner of the token
+     * @param userDocument owner of the token
      *
      * @return generated token
      */
-    public String generateRefreshToken(String userEmail);
+    public String generateRefreshToken(String userDocument);
 
     /**
      * generate a new accesss token
      *
-     * @param userEmail owner of the token
+     * @param userDocument owner of the token
      *
      * @return generated token
      */
-    public String generateAccessToken(String userEmail);
+    public String generateAccessToken(String userDocument);
 
     /**
      * check for a valid access token
-     * 
+     *
      * @param token token to check
      *
      * @return token is valid
      */
     public boolean validateAccessToken(String token);
 
-
     /**
-     * extract the userEmail from a access token
-     * 
+     * extract the userDocument from a access token
+     *
      * @param token token with the info
      *
-     * @return extracted userEmailname
+     * @return extracted userDocument
      */
-    public String extractUserEmail(String token);
-
+    public String extractUserDocument(String token);
 }

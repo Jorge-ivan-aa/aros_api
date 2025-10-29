@@ -41,13 +41,13 @@ public class TokenAuthenticatorProvider implements AuthenticationProvider {
         logger.info("Authenticating token for user");
 
         if (this.tokenService.validateAccessToken(token)) {
-            String email = this.tokenService.extractUserEmail(token);
-            logger.info("Token validated for email: {}", email);
+            String document = this.tokenService.extractUserDocument(token);
+            logger.info("Token validated for document: {}", document);
 
-            if (userAdminAdapter.isAdminCredentials(email)) {
+            if (userAdminAdapter.isAdminCredentials(document)) {
                 logger.info(
                     "User {} is admin, creating admin authentication",
-                    email
+                    document
                 );
                 User adminUser = userAdminAdapter.getUser();
                 UserDetailsAdapter adminDetails = new UserDetailsAdapter(
@@ -66,14 +66,14 @@ public class TokenAuthenticatorProvider implements AuthenticationProvider {
             }
 
             User user = userJpaAdapter
-                .findByEmail(email)
+                .findByDocument(document)
                 .orElseThrow(() ->
                     new BadCredentialsException("User not found")
                 );
 
             logger.info(
                 "User {} found, creating regular user authentication",
-                email
+                document
             );
             UserDetailsAdapter userDetails = new UserDetailsAdapter(
                 user,

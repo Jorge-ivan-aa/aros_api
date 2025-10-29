@@ -3,22 +3,27 @@ package accrox.aros.api.domain.model;
 import java.time.LocalDateTime;
 
 public class RefreshToken {
+
     private Long id;
 
     private String hash;
 
     private LocalDateTime revokedAt;
 
-    private String userEmail;
+    private String userDocument;
 
-    public RefreshToken() {
-    }
+    public RefreshToken() {}
 
-    public RefreshToken(Long id, String hash, LocalDateTime revokedAt, String userEmail) {
+    public RefreshToken(
+        Long id,
+        String hash,
+        LocalDateTime revokedAt,
+        String userDocument
+    ) {
         this.id = id;
         this.hash = hash;
         this.revokedAt = revokedAt;
-        this.userEmail = userEmail;
+        this.userDocument = userDocument;
     }
 
     public Long getId() {
@@ -45,11 +50,11 @@ public class RefreshToken {
         this.revokedAt = revokedAt;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getUserDocument() {
+        return userDocument;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserDocument(String userDocument) {
+        this.userDocument = userDocument;
     }
 }
