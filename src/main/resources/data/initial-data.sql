@@ -108,13 +108,13 @@ VALUES
 -- ======================
 -- PEDIDOS
 -- ======================
-INSERT INTO orders (status, id_table, total)
+INSERT INTO orders (status, id_table, id_user, total)
 VALUES
-    ('PENDING', 1, 37000),
-    ('COMPLETED', 2, 33000),
-    ('PENDING', 3, 45000),
-    ('PENDING', 4, 28000),
-    ('CANCELLED', 5, 0);
+    ('PENDING', 1, 1, 37000),
+    ('COMPLETED', 2, 1, 33000),
+    ('PENDING', 3, 1, 45000),
+    ('PENDING', 4, 2, 28000),
+    ('CANCELLED', 5, 3, 0);
 
 
 -- ======================

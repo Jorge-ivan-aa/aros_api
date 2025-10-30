@@ -27,6 +27,13 @@ public class OrderEntity {
     private Set<ClientOrderEntity> orders;
 
     private Float total;
+    
+    /**
+     * user who took the order
+     */
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH })
+    @JoinColumn(name = "id_user")
+    private UserEntity responsible;
 
     public OrderEntity() {
     }
@@ -93,5 +100,13 @@ public class OrderEntity {
 
     public void setTotal(Float total) {
         this.total = total;
+    }
+
+    public UserEntity getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(UserEntity responsible) {
+        this.responsible = responsible;
     }
 }

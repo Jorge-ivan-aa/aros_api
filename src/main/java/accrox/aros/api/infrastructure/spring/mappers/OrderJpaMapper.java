@@ -6,9 +6,11 @@ import java.util.Set;
 import accrox.aros.api.domain.model.ClientOrder;
 import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.Table;
+import accrox.aros.api.domain.model.User;
 import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.OrderEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.TableEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 
 public class OrderJpaMapper {
     /**
@@ -17,7 +19,8 @@ public class OrderJpaMapper {
     public static Order toDomain(
         OrderEntity source,
         Table table,
-        Collection<ClientOrder> clientOrders
+        Collection<ClientOrder> clientOrders,
+        User responsible
     ) {
         Order target = new Order();
 
@@ -27,6 +30,7 @@ public class OrderJpaMapper {
         target.setTable(table);
         target.setClientOrders(clientOrders);
         target.setTotal(source.getTotal());
+        target.setResponsible(responsible);
 
         return target;
     }
@@ -37,7 +41,8 @@ public class OrderJpaMapper {
     public static OrderEntity toEntity(
         Order source,
         TableEntity table,
-        Set<ClientOrderEntity> clientOrders
+        Set<ClientOrderEntity> clientOrders,
+        UserEntity responsible
     ) {
         OrderEntity target = new OrderEntity();
 
@@ -47,6 +52,7 @@ public class OrderJpaMapper {
         target.setTable(table);
         target.setOrders(clientOrders);
         target.setTotal(source.getTotal());
+        target.setResponsible(responsible);
 
         return target;
     }

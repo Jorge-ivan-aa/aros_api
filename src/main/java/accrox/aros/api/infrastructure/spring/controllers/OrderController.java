@@ -5,10 +5,11 @@ import accrox.aros.api.application.exceptions.order.EmptyDayMenuSelectionExcepti
 import accrox.aros.api.application.exceptions.product.ProductNotFoundException;
 import accrox.aros.api.application.exceptions.table.TableNotFoundException;
 import accrox.aros.api.application.usecases.order.CreateOrderUseCase;
+import accrox.aros.api.application.usecases.order.GetOrdersByResponsibleUseCase;
 import accrox.aros.api.application.usecases.order.GetOrdersByStatusUseCase;
 import accrox.aros.api.application.usecases.order.MarkOrderAsCompletedUseCase;
-import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.infrastructure.spring.dto.orders.CreateOrderRequest;
+import accrox.aros.api.infrastructure.spring.security.UserDetailsAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,10 +26,10 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/orders")
 public class OrderController {
-
     private static final Logger logger = LoggerFactory.getLogger(
         OrderController.class
     );
+
     @Autowired
     private GetOrdersByStatusUseCase getOrdersByStatusUseCase;
 
@@ -36,6 +38,9 @@ public class OrderController {
 
     @Autowired
     private MarkOrderAsCompletedUseCase markOrderAsCompletedUseCase;
+    
+    @Autowired
+    private GetOrdersByResponsibleUseCase getOrdersByResponsibleUseCase;
 
     @Operation(
         tags = "Orders Management",
@@ -65,7 +70,8 @@ public class OrderController {
     @PostMapping(path = "/create")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> create(
-        @Valid @RequestBody CreateOrderRequest request
+        @Valid @RequestBody CreateOrderRequest request,
+        @AuthenticationPrincipal UserDetailsAdapter authentication
     )
         throws ProductNotFoundException, TableNotFoundException, EmptyDayMenuSelectionException {
         logger.info(
@@ -73,7 +79,8 @@ public class OrderController {
             request.table(),
             request.clientOrders().size()
         );
-        this.createOrderUseCase.execute(request.toInput());
+        this.createOrderUseCase.execute(request.toInput(), authentication.getUser()
+        );
         logger.info(
             "POST /api/orders/create - Order created successfully for table {}",
             request.table()
@@ -109,5 +116,20 @@ public class OrderController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(null);
         }
+    }
+    
+    @Operation(
+        tags = "Orders Management",
+        summary = "Get orders by responsible/worker/employee",
+        description = "Retrieves all orders filtered by responsible (id)"
+    )
+    @GetMapping("/responsible/{responsible}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<OrdersOutput>> getOrdersByResponsible(
+        @PathVariable Long responsible
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            this.getOrdersByResponsibleUseCase.execute(responsible)
+        );
     }
 }

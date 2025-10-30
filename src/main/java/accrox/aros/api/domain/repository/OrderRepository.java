@@ -11,4 +11,13 @@ public interface OrderRepository {
     public void create(Order order);
 
     public List<Order> findAll();
+    
+    /**
+     * find all the orders taken by a determinate user
+     * 
+     * @param responsibleId user's id
+     *
+     * @return orders taken by the user
+     */
+    public List<Order> findAllByResponsible(Long responsibleId);
 }

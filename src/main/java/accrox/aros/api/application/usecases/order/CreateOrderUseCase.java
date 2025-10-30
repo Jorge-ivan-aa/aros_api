@@ -21,6 +21,7 @@ import accrox.aros.api.domain.model.DayMenuSelection;
 import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.domain.model.Table;
+import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.model.enums.OrderStatus;
 import accrox.aros.api.domain.repository.DaymenuRepository;
 import accrox.aros.api.domain.repository.OrderRepository;
@@ -52,7 +53,8 @@ public class CreateOrderUseCase {
     }
 
     public void execute(
-        CreateOrderInput input
+        CreateOrderInput input,
+        User responsible
     ) throws
         ProductNotFoundException,
         TableNotFoundException,
@@ -65,8 +67,10 @@ public class CreateOrderUseCase {
         Collection<Product> products = this.validateProductsInputAndRetrieve(input);
 
         products.forEach(p -> this.products.put(p.getId(), p));
+        Order order = this.transformInputIntoOrder(input);
+        order.setResponsible(responsible);
 
-        this.repository.create(this.transformInputIntoOrder(input));
+        this.repository.create(order);
     }
 
     private Order transformInputIntoOrder(CreateOrderInput input) {

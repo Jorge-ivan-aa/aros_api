@@ -31,6 +31,7 @@ public class UserJpaAdapter implements UserRepository {
             UserJpaMapper.toDomain(
                 userRepositoryJpa.findById(id).get(),
                 null,
+                null,
                 null
             )
         );
@@ -41,7 +42,7 @@ public class UserJpaAdapter implements UserRepository {
         logger.info("Validating user credentials for: {}", email);
         return userRepositoryJpa
             .findByEmail(email)
-            .map(entity -> UserJpaMapper.toDomain(entity, null, null));
+            .map(entity -> UserJpaMapper.toDomain(entity, null, null, null));
     }
 
     @Override
@@ -49,10 +50,10 @@ public class UserJpaAdapter implements UserRepository {
     public Optional<User> findByDocument(String document) {
         logger.info("Document received: {}", document);
         return userRepositoryJpa
-                .findByDocument(document)
-                .map(entity ->
-                        UserJpaMapper.toDomain(entity, entity.getAreas(), null)
-                );
+            .findByDocument(document)
+            .map(entity ->
+                UserJpaMapper.toDomain(entity, entity.getAreas(), null, null)
+            );
     }
 
     @Override
@@ -66,7 +67,7 @@ public class UserJpaAdapter implements UserRepository {
 
         List<User> users = new ArrayList<>();
         for (UserEntity entity : entities) {
-            users.add(UserJpaMapper.toDomain(entity, entity.getAreas(), null));
+            users.add(UserJpaMapper.toDomain(entity, entity.getAreas(), null, null));
         }
 
         return users;
@@ -74,7 +75,7 @@ public class UserJpaAdapter implements UserRepository {
 
     @Override
     public void save(User user) {
-        UserEntity toSave = UserJpaMapper.toEntity(user, user.getAreas(), null);
+        UserEntity toSave = UserJpaMapper.toEntity(user, user.getAreas(), null, null);
         this.userRepositoryJpa.save(toSave);
     }
 
@@ -94,6 +95,6 @@ public class UserJpaAdapter implements UserRepository {
     @Override
     @Transactional
     public void update(User user) {
-        this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, null, null));
+        this.userRepositoryJpa.save(UserJpaMapper.toEntity(user, null, null, null));
     }
 }
