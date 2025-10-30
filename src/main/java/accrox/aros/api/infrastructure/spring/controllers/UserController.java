@@ -8,12 +8,9 @@ import accrox.aros.api.application.usecases.user.SaveUserUseCase;
 import accrox.aros.api.application.usecases.user.UpdateUserAreaUseCase;
 import accrox.aros.api.application.usecases.user.UpdateUserUseCase;
 import accrox.aros.api.infrastructure.spring.dto.CreateUserRequest;
-import accrox.aros.api.infrastructure.spring.dto.DeleteUserRequest;
-import accrox.aros.api.infrastructure.spring.dto.GetUserByDocumentRequest;
 import accrox.aros.api.infrastructure.spring.dto.UpdateUserAreaRequest;
 import accrox.aros.api.infrastructure.spring.dto.UpdateUserRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.slf4j.Logger;
@@ -80,16 +77,12 @@ public class UserController {
     )
     @GetMapping("/get/{document}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<GetUserOuput> getUser(
-            @PathVariable String  document
-    ) {
+    public ResponseEntity<GetUserOuput> getUser(@PathVariable String document) {
         logger.info(
             "GET /api/users/get/{} - Retrieving user by document",
             document
         );
-        GetUserOuput output = getUserByDocumentUseCase.execute(
-            document
-        );
+        GetUserOuput output = getUserByDocumentUseCase.execute(document);
         logger.info(
             "GET /api/users/get/{} - Retrieved user: {}",
             document,
@@ -127,9 +120,7 @@ public class UserController {
     )
     @DeleteMapping("/delete-user/{document}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteUser(
-        @PathVariable String document
-    ) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String document) {
         logger.info(
             "DELETE /api/users/delete-user/{} - Deleting user by document",
             document
@@ -137,7 +128,8 @@ public class UserController {
         this.deletUserUseCase.execute(document);
         logger.info(
             "DELETE /api/users/delete-user/{} - User deleted successfully",
-            document        );
+            document
+        );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
