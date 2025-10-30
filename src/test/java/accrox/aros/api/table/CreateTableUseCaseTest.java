@@ -36,7 +36,7 @@ class CreateTableUseCaseTest {
         verify(tableRepository).createTable(captor.capture());
 
         Table createdTable = captor.getValue();
-        assertEquals("1", createdTable.getName());
+        assertEquals("Mesa 1", createdTable.getName());
     }
 
     @Test
@@ -56,6 +56,6 @@ class CreateTableUseCaseTest {
         verify(tableRepository).createTable(captor.capture());
 
         Table createdTable = captor.getValue();
-        assertEquals("3", createdTable.getName());
+        assertEquals("Mesa 3", createdTable.getName());
     }
 }

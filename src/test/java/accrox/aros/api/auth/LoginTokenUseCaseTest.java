@@ -1,25 +1,26 @@
 package accrox.aros.api.auth;
 
-import accrox.aros.api.application.dto.auth.AuthInput;
-import accrox.aros.api.application.usecases.auth.LoginTokenUseCase;
-import accrox.aros.api.domain.model.User;
-import accrox.aros.api.domain.model.RefreshToken;
-import accrox.aros.api.domain.repository.RefreshTokenRepository;
-import accrox.aros.api.domain.repository.UserRepository;
-import accrox.aros.api.domain.service.AdminAuthService;
-import accrox.aros.api.domain.service.PasswordService;
-import accrox.aros.api.domain.service.TokenService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.time.LocalDateTime;
+import accrox.aros.api.application.dto.auth.AuthInput;
+import accrox.aros.api.application.usecases.auth.LoginTokenUseCase;
+import accrox.aros.api.domain.model.RefreshToken;
+import accrox.aros.api.domain.model.User;
+import accrox.aros.api.domain.repository.RefreshTokenRepository;
+import accrox.aros.api.domain.repository.UserRepository;
+import accrox.aros.api.domain.service.AdminAuthService;
+import accrox.aros.api.domain.service.PasswordService;
+import accrox.aros.api.domain.service.TokenService;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginTokenUseCaseTest {
@@ -53,14 +54,14 @@ public class LoginTokenUseCaseTest {
         AuthInput input = new AuthInput("user@example.com", "secret");
 
         User user = new User();
-        user.setEmail("user@example.com");
+        user.setDocument("9312038201");
         user.setPassword("hashed");
 
         when(adminAuthService.isAdminCredentials(input.document())).thenReturn(false);
-        when(userRepository.findByEmail(input.document())).thenReturn(java.util.Optional.of(user));
+        when(userRepository.findByDocument(input.document())).thenReturn(java.util.Optional.of(user));
         when(passwordService.matches(input.password(), user.getPassword())).thenReturn(true);
-        when(tokenService.generateRefreshToken(user.getEmail())).thenReturn("r-token");
-        when(tokenService.generateAccessToken(user.getEmail())).thenReturn("a-token");
+        when(tokenService.generateRefreshToken(user.getDocument())).thenReturn("r-token");
+        when(tokenService.generateAccessToken(user.getDocument())).thenReturn("a-token");
 
         var output = useCase.execute(input);
 

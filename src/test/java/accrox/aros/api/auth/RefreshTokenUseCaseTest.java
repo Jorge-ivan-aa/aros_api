@@ -40,11 +40,11 @@ public class RefreshTokenUseCaseTest {
                 1L,
                 "old-hash",
                 null,
-                "user@example.com");
+                "3213567537");
 
         when(tokenRepository.findByHash("old-hash")).thenReturn(java.util.Optional.of(stored));
-        when(tokenService.generateRefreshToken(stored.getUserEmail())).thenReturn("new-refresh");
-        when(tokenService.generateAccessToken(stored.getUserEmail())).thenReturn("new-access");
+        when(tokenService.generateRefreshToken(stored.getUserDocument())).thenReturn("new-refresh");
+        when(tokenService.generateAccessToken(stored.getUserDocument())).thenReturn("new-access");
 
         AuthOutput out = useCase.execute("old-hash");
 
