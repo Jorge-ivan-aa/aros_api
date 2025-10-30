@@ -27,7 +27,7 @@ class CreateTableUseCaseTest {
 
     @Test
     void when_no_tables_exist_then_create_table_with_name_1() {
-        CreateTableDto dto = new CreateTableDto();
+        CreateTableDto dto = new CreateTableDto(null);
         when(tableRepository.findAllTables()).thenReturn(Collections.emptyList());
 
         createTableUseCase.execute(dto);
@@ -48,7 +48,7 @@ class CreateTableUseCaseTest {
 
         when(tableRepository.findAllTables()).thenReturn(List.of(t1, t2, t3));
 
-        CreateTableDto dto = new CreateTableDto();
+        CreateTableDto dto = new CreateTableDto(null);
 
         createTableUseCase.execute(dto);
 

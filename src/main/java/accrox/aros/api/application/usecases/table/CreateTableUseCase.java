@@ -10,25 +10,31 @@ public class CreateTableUseCase {
     public CreateTableUseCase(TableRepository repository) {
         this.repository = repository;
     }
+
     public void execute(CreateTableDto dto) {
         java.util.List<Table> tables = repository.findAllTables();
         java.util.Set<Integer> usedNumbers = new java.util.HashSet<>();
+        java.util.regex.Pattern digits = java.util.regex.Pattern.compile("\\d+");
         for (Table t : tables) {
-            try {
-                int num = Integer.parseInt(t.getName());
-                if (num > 0) {
-                    usedNumbers.add(num);
+            String name = t.getName();
+            if (name == null)
+                continue;
+            java.util.regex.Matcher m = digits.matcher(name);
+            if (m.find()) {
+                try {
+                    int num = Integer.parseInt(m.group());
+                    if (num > 0)
+                        usedNumbers.add(num);
+                } catch (NumberFormatException e) {
+                    // ignore
                 }
-            } catch (NumberFormatException e) {
-                // Ignorar nombres no numéricos
             }
         }
         int nextNumber = 1;
-        while (usedNumbers.contains(nextNumber)) {
+        while (usedNumbers.contains(nextNumber))
             nextNumber++;
-        }
         Table table = new Table();
-        table.setName(String.valueOf(nextNumber));
+        table.setName("Mesa " + nextNumber);
         repository.createTable(table);
     }
 }

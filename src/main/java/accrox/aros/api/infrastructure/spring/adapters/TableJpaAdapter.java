@@ -30,6 +30,11 @@ public class TableJpaAdapter implements TableRepository {
     }
 
     @Override
+    public void deleteTable(Long id) {
+        this.tableRepositoryJpa.deleteById(id);
+    }
+
+    @Override
     public boolean existsById(Long id) {
         return this.tableRepositoryJpa.existsById(id);
     }
