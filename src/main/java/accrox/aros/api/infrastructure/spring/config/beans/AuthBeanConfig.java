@@ -40,13 +40,15 @@ public class AuthBeanConfig {
         UserRepository workerRespository,
         RefreshTokenRepository refreshTokenRepository,
         TokenService tokenService,
-        EntityManager manager
+        EntityManager manager,
+        @Value("${security.token.lifetime}") Integer tokenLifeTime
     ) {
         return new RefreshTokenUseCase(
             refreshTokenRepository,
             workerRespository,
             tokenService,
-            manager
+            manager,
+            tokenLifeTime
         );
     }
 

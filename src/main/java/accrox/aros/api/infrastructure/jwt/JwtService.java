@@ -12,8 +12,14 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import javax.crypto.SecretKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JwtService implements TokenService {
+
+    private static final Logger logger = LoggerFactory.getLogger(
+        JwtService.class
+    );
 
     private String accessTokenSecrect;
 
@@ -26,6 +32,7 @@ public class JwtService implements TokenService {
      */
     @Override
     public String generateAccessToken(String userDocument) {
+        logger.debug("Generating access token for user: {}", userDocument);
         SecretKey signKey = Keys.hmacShaKeyFor(
             accessTokenSecrect.getBytes(StandardCharsets.UTF_8)
         );
@@ -41,7 +48,12 @@ public class JwtService implements TokenService {
 
         builder.claim("userDocument.areas", Collections.EMPTY_SET);
 
-        return builder.compact();
+        String token = builder.compact();
+        logger.debug(
+            "Access token generated successfully, length: {}",
+            token.length()
+        );
+        return token;
     }
 
     /**
@@ -49,11 +61,19 @@ public class JwtService implements TokenService {
      */
     @Override
     public String generateRefreshToken(String userDocument) {
+        logger.debug("Generating refresh token for user: {}", userDocument);
         SecureRandom secureRandom = new SecureRandom();
         byte[] bytes = new byte[32];
         secureRandom.nextBytes(bytes);
 
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+        String token = Base64.getUrlEncoder()
+            .withoutPadding()
+            .encodeToString(bytes);
+        logger.debug(
+            "Refresh token generated successfully, length: {}",
+            token.length()
+        );
+        return token;
     }
 
     /**
@@ -61,18 +81,23 @@ public class JwtService implements TokenService {
      */
     @Override
     public boolean validateAccessToken(String token) {
+        logger.debug("Validating access token, length: {}", token.length());
         Claims claims;
+        logger.debug("Attempting to parse access token");
 
         try {
             claims = this.extractClaimsAccessToken(token);
         } catch (JwtException e) {
+            logger.warn("Failed to parse access token: {}", e.getMessage());
             return false;
         }
 
         if (!claims.getExpiration().after(new Date())) {
+            logger.warn("Access token has expired");
             return false;
         }
 
+        logger.debug("Access token validation successful");
         return true;
     }
 
@@ -81,7 +106,10 @@ public class JwtService implements TokenService {
      */
     @Override
     public String extractUserDocument(String token) {
-        return this.extractClaimsAccessToken(token).getSubject();
+        logger.debug("Extracting user document from access token");
+        String userDocument = this.extractClaimsAccessToken(token).getSubject();
+        logger.debug("Extracted user document: {}", userDocument);
+        return userDocument;
     }
 
     /**
@@ -94,14 +122,21 @@ public class JwtService implements TokenService {
      * @throws JwtException the token can't be parsed
      */
     private Claims extractClaimsAccessToken(String token) {
+        logger.debug("Extracting claims from access token");
         SecretKey signKey = Keys.hmacShaKeyFor(
             accessTokenSecrect.getBytes(StandardCharsets.UTF_8)
         );
 
-        return Jwts.parser()
+        Claims claims = Jwts.parser()
             .verifyWith(signKey)
             .build()
             .parseSignedClaims(token)
             .getPayload();
+
+        logger.debug(
+            "Claims extracted successfully, subject: {}",
+            claims.getSubject()
+        );
+        return claims;
     }
 }

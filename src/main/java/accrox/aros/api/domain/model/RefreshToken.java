@@ -8,6 +8,8 @@ public class RefreshToken {
 
     private String hash;
 
+    private LocalDateTime createdAt;
+
     private LocalDateTime revokedAt;
 
     private String userDocument;
@@ -17,11 +19,13 @@ public class RefreshToken {
     public RefreshToken(
         Long id,
         String hash,
+        LocalDateTime createdAt,
         LocalDateTime revokedAt,
         String userDocument
     ) {
         this.id = id;
         this.hash = hash;
+        this.createdAt = createdAt;
         this.revokedAt = revokedAt;
         this.userDocument = userDocument;
     }
@@ -40,6 +44,14 @@ public class RefreshToken {
 
     public void setHash(String hash) {
         this.hash = hash;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getRevokedAt() {

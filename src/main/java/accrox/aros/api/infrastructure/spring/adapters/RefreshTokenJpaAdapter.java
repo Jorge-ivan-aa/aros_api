@@ -22,42 +22,86 @@ public class RefreshTokenJpaAdapter implements RefreshTokenRepository {
 
     @Override
     public Optional<RefreshToken> findById(Long id) {
-        logger.info("Searching refresh token by ID: {}", id);
-        return refreshTokenRepositoryJpa
+        logger.debug("Searching refresh token by ID: {}", id);
+        Optional<RefreshToken> result = refreshTokenRepositoryJpa
             .findById(id)
-            .map(entity -> RefreshTokenJpaMapper.toDomain(entity, null));
+            .map(entity ->
+                RefreshTokenJpaMapper.toDomain(entity, entity.getUserDocument())
+            );
+
+        if (result.isPresent()) {
+            logger.debug("Refresh token found by ID: {}", id);
+        } else {
+            logger.debug("Refresh token not found by ID: {}", id);
+        }
+
+        return result;
     }
 
     @Override
     public Optional<RefreshToken> findByHash(String hash) {
-        logger.info("Searching refresh token by hash: {}", hash);
-        return refreshTokenRepositoryJpa
+        logger.debug(
+            "Searching refresh token by hash, hash length: {}",
+            hash.length()
+        );
+        Optional<RefreshToken> result = refreshTokenRepositoryJpa
             .findByHash(hash)
-            .map(entity -> RefreshTokenJpaMapper.toDomain(entity, null));
+            .map(entity ->
+                RefreshTokenJpaMapper.toDomain(entity, entity.getUserDocument())
+            );
+
+        if (result.isPresent()) {
+            logger.debug("Refresh token found by hash");
+            RefreshToken token = result.get();
+            logger.debug(
+                "Token ID: {}, User: {}, Revoked: {}",
+                token.getId(),
+                token.getUserDocument(),
+                token.getRevokedAt()
+            );
+        } else {
+            logger.warn("Refresh token not found by hash");
+        }
+
+        return result;
     }
 
     @Override
     public RefreshToken create(RefreshToken token) {
-        logger.info(
+        logger.debug(
             "Creating refresh token for user: {}",
             token.getUserDocument()
         );
-        return RefreshTokenJpaMapper.toDomain(
+        RefreshToken result = RefreshTokenJpaMapper.toDomain(
             this.refreshTokenRepositoryJpa.save(
                 RefreshTokenJpaMapper.toEntity(token, token.getUserDocument())
             ),
             token.getUserDocument()
         );
+
+        logger.debug(
+            "Refresh token created successfully, ID: {}",
+            result.getId()
+        );
+        return result;
     }
 
     @Override
     public void revokeToken(Long id) {
-        logger.info("Revoking refresh token with ID: {}", id);
+        logger.debug("Revoking refresh token with ID: {}", id);
         refreshTokenRepositoryJpa
             .findById(id)
             .ifPresent(token -> {
+                logger.debug(
+                    "Found token to revoke, current revokedAt: {}",
+                    token.getRevokedAt()
+                );
                 token.setRevokedAt(java.time.LocalDateTime.now());
                 refreshTokenRepositoryJpa.save(token);
+                logger.debug(
+                    "Token revoked successfully, new revokedAt: {}",
+                    token.getRevokedAt()
+                );
             });
     }
 }

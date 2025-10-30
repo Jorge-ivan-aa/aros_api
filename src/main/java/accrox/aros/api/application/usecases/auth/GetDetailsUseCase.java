@@ -1,7 +1,7 @@
 package accrox.aros.api.application.usecases.auth;
 
 import accrox.aros.api.application.dto.area.GetAreaOuput;
-import accrox.aros.api.application.dto.user.GetUserOuput;
+import accrox.aros.api.application.dto.auth.AuthDetailsOutput;
 import accrox.aros.api.application.exceptions.auth.InvalidTokenException;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
@@ -11,8 +11,14 @@ import accrox.aros.api.domain.service.TokenService;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GetDetailsUseCase {
+
+    private static final Logger logger = LoggerFactory.getLogger(
+        GetDetailsUseCase.class
+    );
 
     private final TokenService tokenService;
     private final UserRepository userRepository;
@@ -28,95 +34,56 @@ public class GetDetailsUseCase {
         this.adminAuthService = adminAuthService;
     }
 
-    public GetUserOuput execute(String token) throws InvalidTokenException {
-        System.out.println(
-            "DEBUG: GetDetailsUseCase - Token received: " +
-                (token != null
-                    ? token.substring(0, Math.min(token.length(), 20)) + "..."
-                    : "null")
+    public AuthDetailsOutput execute(String token)
+        throws InvalidTokenException {
+        logger.debug(
+            "Get user details request, token length: {}",
+            token.length()
         );
 
-        // Validate the access token
         boolean isValid = tokenService.validateAccessToken(token);
-        System.out.println(
-            "DEBUG: GetDetailsUseCase - Token validation result: " + isValid
-        );
+        logger.debug("Token validation result: {}", isValid);
 
         if (!isValid) {
-            System.out.println(
-                "DEBUG: GetDetailsUseCase - Token validation failed"
-            );
+            logger.warn("Invalid access token provided");
             throw new InvalidTokenException();
         }
 
         // Extract user document from token
         String userDocument = tokenService.extractUserDocument(token);
-        System.out.println(
-            "DEBUG: GetDetailsUseCase - Extracted user document: " +
-                userDocument
-        );
+        logger.debug("Extracted user document from token: {}", userDocument);
 
-        // Check if this is an admin user
+        // For ADMIN
         if (adminAuthService.isAdminCredentials(userDocument)) {
-            System.out.println(
-                "DEBUG: GetDetailsUseCase - Admin user detected, returning admin details"
-            );
+            logger.debug("Admin user detected: {}", userDocument);
             User adminUser = adminAuthService.getUser();
-            return new GetUserOuput(
+            logger.debug(
+                "Returning admin details for: {}",
+                adminUser.getDocument()
+            );
+            return new AuthDetailsOutput(
                 "Admin",
                 adminUser.getDocument(),
-                adminUser.getDocument(), // Use document as email for admin
-                null, // No phone for admin
-                null, // No address for admin
                 List.of(new GetAreaOuput("ADMINISTRATION"))
             );
         }
 
-        // Additional debug: Check if this looks like email or document
-        System.out.println(
-            "DEBUG: GetDetailsUseCase - Document format check - " +
-                "Contains @: " +
-                userDocument.contains("@") +
-                ", Length: " +
-                userDocument.length()
-        );
-
-        // Find user by document
+        // For user
         Optional<User> userOpt = userRepository.findByDocument(userDocument);
+        logger.debug(
+            "Regular user lookup result present: {}",
+            userOpt.isPresent()
+        );
         if (userOpt.isEmpty()) {
-            System.out.println(
-                "DEBUG: GetDetailsUseCase - User not found with document: " +
-                    userDocument
-            );
-
-            // Try to find by email as fallback for debugging
-            Optional<User> userByEmailOpt = userRepository.findByEmail(
-                userDocument
-            );
-            System.out.println(
-                "DEBUG: GetDetailsUseCase - Fallback search by email found user: " +
-                    userByEmailOpt.isPresent()
-            );
-
-            throw new InvalidTokenException();
+            logger.warn("User not found in repository: {}", userDocument);
+            throw new InvalidTokenException("User not found, report"); // TODO: make a correct exception for this case
         }
 
         User user = userOpt.get();
-        System.out.println(
-            "DEBUG: GetDetailsUseCase - User found: " +
-                user.getName() +
-                " (" +
-                user.getDocument() +
-                ")"
-        );
-
-        // Convert user to output DTO
-        return new GetUserOuput(
+        logger.debug("Returning user details for: {}", user.getDocument());
+        return new AuthDetailsOutput(
             user.getName(),
             user.getDocument(),
-            user.getEmail(),
-            user.getPhone(),
-            user.getAddress(),
             convertAreas(user.getAreas())
         );
     }
