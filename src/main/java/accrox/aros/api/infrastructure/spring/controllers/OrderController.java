@@ -91,6 +91,19 @@ public class OrderController {
 
     @Operation(
             tags = "Orders Management",
+            summary = "Get all orders",
+            description = "Retrieves a list of all available orders in the system.")
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<OrdersOutput>> getAllOrders() {
+        logger.info("GET /api/orders/all - Retrieving all orders");
+        List<OrdersOutput> orders = getOrdersByStatusUseCase.execute(null);
+        logger.info("GET /api/orders/all - Retrieved {} orders", orders.size());
+        return ResponseEntity.ok(orders);
+    }
+
+    @Operation(
+            tags = "Orders Management",
             summary = "Get orders by status",
             description = "Retrieves all orders filtered by status (PENDING, COMPLETED, or CANCELLED). If the status is invalid or not provided, all orders will be returned."
     )
