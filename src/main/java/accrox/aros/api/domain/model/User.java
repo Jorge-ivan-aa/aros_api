@@ -23,6 +23,8 @@ public class User {
     private Collection<Area> areas;
 
     private Collection<RefreshToken> tokens;
+    
+    private Collection<Order> orders;
 
     public User() {}
 
@@ -35,7 +37,8 @@ public class User {
         String address,
         String phone,
         Collection<Area> areas,
-        Collection<RefreshToken> tokens
+        Collection<RefreshToken> tokens,
+        Collection<Order> orders
     ) {
         this.id = id;
         this.document = document;
@@ -46,6 +49,7 @@ public class User {
         this.phone = phone;
         this.areas = areas;
         this.tokens = tokens;
+        this.orders = orders;
     }
 
     public User(String email, String password) {
@@ -135,5 +139,13 @@ public class User {
      */
     public boolean isAdmin(AdminAuthService adminAuthService) {
         return adminAuthService.isAdminCredentials(this.email);
+    }
+
+    public Collection<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Collection<Order> orders) {
+        this.orders = orders;
     }
 }

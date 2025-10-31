@@ -101,9 +101,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
     `status` VARCHAR(255),
     `taked_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `id_table` BIGINT NOT NULL,
+    `id_user` BIGINT NOT NULL,
     `total` FLOAT,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`id_table`) REFERENCES `tables` (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`id_table`) REFERENCES `tables` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `client_orders` (

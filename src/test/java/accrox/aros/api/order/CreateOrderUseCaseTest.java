@@ -18,6 +18,7 @@ import accrox.aros.api.application.exceptions.product.ProductNotFoundException;
 import accrox.aros.api.application.exceptions.table.TableNotFoundException;
 import accrox.aros.api.application.usecases.order.CreateOrderUseCase;
 import accrox.aros.api.domain.model.Product;
+import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.DaymenuRepository;
 import accrox.aros.api.domain.repository.OrderRepository;
 import accrox.aros.api.domain.repository.ProductRepository;
@@ -49,7 +50,7 @@ public class CreateOrderUseCaseTest {
         CreateOrderInput input = this.makeOrderInput();
 
         Assertions.assertThrows(ProductNotFoundException.class, () -> {
-            useCase.execute(input);
+            useCase.execute(input, null);
         });
     }
 
@@ -68,7 +69,7 @@ public class CreateOrderUseCaseTest {
         CreateOrderInput input = this.makeOrderInput();
 
         Assertions.assertThrows(EmptyDayMenuSelectionException.class, () -> {
-            useCase.execute(input);
+            useCase.execute(input, null);
         });
     }
 
@@ -79,7 +80,7 @@ public class CreateOrderUseCaseTest {
         CreateOrderInput input = this.makeOrderInput();
 
         Assertions.assertThrows(TableNotFoundException.class, () -> {
-            useCase.execute(input);
+            useCase.execute(input, null);
         });
     }
 
@@ -96,8 +97,10 @@ public class CreateOrderUseCaseTest {
         Mockito.doNothing().when(orderRepository).create(Mockito.any());
 
         CreateOrderInput input = this.makeOrderInput();
+        User responsible = new User();
+        responsible.setId(1L);
 
-        Assertions.assertDoesNotThrow(() -> useCase.execute(input));
+        Assertions.assertDoesNotThrow(() -> useCase.execute(input, responsible));
     }
 
     private CreateOrderInput makeOrderInput() {

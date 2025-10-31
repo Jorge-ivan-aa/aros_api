@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 public class DatabaseInitializer implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(
-        DatabaseInitializer.class
-    );
+            DatabaseInitializer.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -27,42 +26,36 @@ public class DatabaseInitializer implements CommandLineRunner {
                 logger.info("The database is empty. Loading initial data...");
 
                 ClassPathResource resource = new ClassPathResource(
-                    "data/initial-data.sql"
-                );
+                        "data/initial-data.sql");
 
                 try (
-                    Connection connection = jdbcTemplate
-                        .getDataSource()
-                        .getConnection()
-                ) {
+                        Connection connection = jdbcTemplate
+                                .getDataSource()
+                                .getConnection()) {
                     ScriptUtils.executeSqlScript(connection, resource);
                 }
 
                 logger.info("Initial data loaded successfully.");
             } else {
                 logger.info(
-                    "The database already contains data. Initial load will not be performed."
-                );
+                        "The database already contains data. Initial load will not be performed.");
             }
         } catch (Exception e) {
             logger.error(
-                "Error during database initialization: {}",
-                e.getMessage(),
-                e
-            );
+                    "Error during database initialization: {}",
+                    e.getMessage(),
+                    e);
         }
     }
 
     private boolean isDatabaseEmpty() {
         try {
             int userCount = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM users",
-                Integer.class
-            );
+                    "SELECT COUNT(*) FROM users",
+                    Integer.class);
             int areaCount = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM areas",
-                Integer.class
-            );
+                    "SELECT COUNT(*) FROM areas",
+                    Integer.class);
             return userCount == 0 && areaCount == 0;
         } catch (Exception e) {
             logger.warn("Error checking database status: {}", e.getMessage());

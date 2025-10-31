@@ -17,6 +17,11 @@ public class Order {
     private Collection<ClientOrder> clientOrders;
 
     private Float total;
+    
+    /**
+     * user who took the order
+     */
+    private User responsible;
 
     public Order() {
     }
@@ -27,7 +32,8 @@ public class Order {
         LocalDateTime takedAt,
         Table table,
         Collection<ClientOrder> clientOrders,
-        Float total
+        Float total,
+        User responsible
     ) {
         this.id = id;
         this.status = status;
@@ -35,6 +41,7 @@ public class Order {
         this.table = table;
         this.clientOrders = clientOrders;
         this.total = total;
+        this.responsible = responsible;
     }
 
     public Long getId() {
@@ -88,5 +95,13 @@ public class Order {
 
     public void setTotal(Float total) {
         this.total = total;
+    }
+
+    public User getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(User responsible) {
+        this.responsible = responsible;
     }
 }

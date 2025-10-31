@@ -1,6 +1,5 @@
 package accrox.aros.api.application.usecases.area;
 
-import accrox.aros.api.application.dto.area.DeleteAreaInput;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.repository.AreaRepository;
 import jakarta.validation.ValidationException;
@@ -15,7 +14,7 @@ public class DeleteAreaUseCase {
 
     public void execute(String name) {
 
-        if (name== null || name.isBlank()) {
+        if (name == null || name.isBlank()) {
             throw new ValidationException("The name is required");
         }
 

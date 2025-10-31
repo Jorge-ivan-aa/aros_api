@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import accrox.aros.api.application.usecases.order.CreateOrderUseCase;
+import accrox.aros.api.application.usecases.order.GetOrdersByResponsibleUseCase;
 import accrox.aros.api.application.usecases.order.MarkOrderAsCompletedUseCase;
 import accrox.aros.api.domain.repository.DaymenuRepository;
 import accrox.aros.api.domain.repository.OrderRepository;
@@ -32,5 +33,12 @@ public class OrderBeansConfig {
             daymenuRepository,
             tableRepository
         );
+    }
+    
+    @Bean
+    public GetOrdersByResponsibleUseCase getOrdersByResponsibleUseCase(
+        OrderRepository orderRepository
+    ) {
+        return new GetOrdersByResponsibleUseCase(orderRepository);
     }
 }

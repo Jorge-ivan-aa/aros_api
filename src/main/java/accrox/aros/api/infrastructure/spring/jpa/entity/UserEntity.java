@@ -46,6 +46,9 @@ public class UserEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Collection<RefreshTokenEntity> tokens = new HashSet<>();
+    
+    @OneToMany(mappedBy = "responsible", fetch = FetchType.LAZY)
+    private Collection<OrderEntity> orders;
 
     public UserEntity() {
     }
@@ -120,5 +123,13 @@ public class UserEntity {
 
     public void setTokens(Collection<RefreshTokenEntity> tokens) {
         this.tokens = tokens;
+    }
+
+    public Collection<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Collection<OrderEntity> orders) {
+        this.orders = orders;
     }
 }

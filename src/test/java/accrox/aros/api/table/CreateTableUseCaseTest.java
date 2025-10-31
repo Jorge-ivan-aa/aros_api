@@ -27,7 +27,7 @@ class CreateTableUseCaseTest {
 
     @Test
     void when_no_tables_exist_then_create_table_with_name_1() {
-        CreateTableDto dto = new CreateTableDto();
+        CreateTableDto dto = new CreateTableDto(null);
         when(tableRepository.findAllTables()).thenReturn(Collections.emptyList());
 
         createTableUseCase.execute(dto);
@@ -36,7 +36,7 @@ class CreateTableUseCaseTest {
         verify(tableRepository).createTable(captor.capture());
 
         Table createdTable = captor.getValue();
-        assertEquals("1", createdTable.getName());
+        assertEquals("Mesa 1", createdTable.getName());
     }
 
     @Test
@@ -48,7 +48,7 @@ class CreateTableUseCaseTest {
 
         when(tableRepository.findAllTables()).thenReturn(List.of(t1, t2, t3));
 
-        CreateTableDto dto = new CreateTableDto();
+        CreateTableDto dto = new CreateTableDto(null);
 
         createTableUseCase.execute(dto);
 
@@ -56,6 +56,6 @@ class CreateTableUseCaseTest {
         verify(tableRepository).createTable(captor.capture());
 
         Table createdTable = captor.getValue();
-        assertEquals("3", createdTable.getName());
+        assertEquals("Mesa 3", createdTable.getName());
     }
 }

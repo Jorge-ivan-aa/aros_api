@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 import accrox.aros.api.domain.model.Area;
+import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.RefreshToken;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.infrastructure.spring.jpa.entity.AreaEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.OrderEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.RefreshTokenEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 
@@ -18,7 +20,8 @@ public class UserJpaMapper {
     public static User toDomain(
         UserEntity source,
         Collection<AreaEntity> areas,
-        Collection<RefreshToken> tokens
+        Collection<RefreshToken> tokens,
+        Collection<Order> orders
     ) {
         if (source == null) {
             return null;
@@ -35,21 +38,19 @@ public class UserJpaMapper {
         target.setAddress(source.getAddress());
         //target.setAreas(areas);
         Collection<Area> domainAreas = (areas == null || areas.isEmpty())
-                ? Collections.emptyList()
-                : areas.stream()
-                .map(ae -> {
-                    Area a = new Area();
-                    a.setId(ae.getId());
-                    a.setName(ae.getName());
-                    return a;
-                })
-                .collect(Collectors.toList());
+            ? Collections.emptyList()
+            : areas.stream()
+            .map(ae -> {
+                Area a = new Area();
+                a.setId(ae.getId());
+                a.setName(ae.getName());
+                return a;
+            })
+            .collect(Collectors.toList());
 
         target.setAreas(domainAreas);
-
-
-
         target.setTokens(tokens);
+        target.setOrders(orders);
 
         return target;
     }
@@ -60,7 +61,8 @@ public class UserJpaMapper {
     public static UserEntity toEntity(
         User source,
         Collection<Area> areas,
-        Collection<RefreshTokenEntity> tokens
+        Collection<RefreshTokenEntity> tokens,
+        Collection<OrderEntity> orders
     ) {
         if (source == null) {
             return null;
@@ -78,18 +80,19 @@ public class UserJpaMapper {
 
         // Convertir Area (dominio) → AreaEntity
         Collection<AreaEntity> entityAreas = (areas == null || areas.isEmpty())
-                ? Collections.emptyList()
-                : areas.stream()
-                .map(a -> {
-                    AreaEntity ae = new AreaEntity();
-                    ae.setId(a.getId());
-                    ae.setName(a.getName());
-                    return ae;
-                })
-                .collect(Collectors.toList());
+            ? Collections.emptyList()
+            : areas.stream()
+            .map(a -> {
+                AreaEntity ae = new AreaEntity();
+                ae.setId(a.getId());
+                ae.setName(a.getName());
+                return ae;
+            })
+            .collect(Collectors.toList());
 
         target.setAreas(entityAreas);
         target.setTokens(tokens);
+        target.setOrders(orders);
 
         return target;
     }

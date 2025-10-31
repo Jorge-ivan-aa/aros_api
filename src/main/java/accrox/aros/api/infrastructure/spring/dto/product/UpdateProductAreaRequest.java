@@ -1,4 +1,4 @@
-package accrox.aros.api.infrastructure.spring.dto;
+package accrox.aros.api.infrastructure.spring.dto.product;
 
 import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.application.dto.product.UpdateProductAreaInput;

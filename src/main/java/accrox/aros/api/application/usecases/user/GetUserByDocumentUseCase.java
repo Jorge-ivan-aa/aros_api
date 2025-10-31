@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import accrox.aros.api.application.dto.area.GetAreaOuput;
-import accrox.aros.api.application.dto.user.GetUserByDocumentInput;
 import accrox.aros.api.application.dto.user.GetUserOuput;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
@@ -21,7 +20,7 @@ public class GetUserByDocumentUseCase {
 
     public GetUserOuput execute(String document) throws ValidationException {
 
-        if(document== null || document.isBlank()){
+        if (document == null || document.isBlank()) {
             throw new IllegalArgumentException("The document is required");
         }
         Optional<User> userOpt = userRepository.findByDocument(document);
@@ -35,13 +34,13 @@ public class GetUserByDocumentUseCase {
                 userOpt.get().getEmail(),
                 userOpt.get().getPhone(),
                 userOpt.get().getAddress(),
-                convertAreas(userOpt.get().getAreas())
-        );
+                convertAreas(userOpt.get().getAreas()));
 
         return ouput;
     }
-    private Collection<GetAreaOuput> convertAreas(Collection<Area> areas){
-        if(areas == null){
+
+    private Collection<GetAreaOuput> convertAreas(Collection<Area> areas) {
+        if (areas == null) {
             return null;
         }
         return areas.stream()

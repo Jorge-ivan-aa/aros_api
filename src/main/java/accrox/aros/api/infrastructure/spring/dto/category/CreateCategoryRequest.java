@@ -1,4 +1,4 @@
-package accrox.aros.api.infrastructure.spring.dto;
+package accrox.aros.api.infrastructure.spring.dto.category;
 
 import accrox.aros.api.application.dto.category.CreateCategoryInput;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package accrox.aros.api.infrastructure.spring.dto;
+package accrox.aros.api.infrastructure.spring.dto.product;
 
 import org.hibernate.validator.constraints.UniqueElements;
 

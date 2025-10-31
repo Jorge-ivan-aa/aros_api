@@ -108,24 +108,26 @@ VALUES
 -- ======================
 -- PEDIDOS
 -- ======================
-INSERT INTO orders (status, id_table, total)
+INSERT INTO orders (status, id_table, id_user, total)
 VALUES
-    ('Pendiente', 1, 37000),
-    ('Entregado', 2, 33000),
-    ('Pendiente', 3, 45000),
-    ('En preparación', 4, 28000),
-    ('Cancelado', 5, 0);
+    ('PENDING', 1, 1, 37000),
+    ('COMPLETED', 2, 1, 33000),
+    ('PENDING', 3, 1, 45000),
+    ('PENDING', 4, 2, 28000),
+    ('CANCELLED', 5, 3, 0);
+
 
 -- ======================
 -- CLIENT ORDERS
 -- ======================
 INSERT INTO client_orders (status, id_order, total)
 VALUES
-    ('Pendiente', 1, 37000),
-    ('Entregado', 2, 33000),
-    ('Pendiente', 3, 45000),
-    ('En preparación', 4, 28000),
-    ('Cancelado', 5, 0);
+    ('PENDING', 1, 37000),
+    ('COMPLETED', 2, 33000),
+    ('PENDING', 3, 45000),
+    ('PENDING', 4, 28000),
+    ('CANCELLED', 5, 0);
+
 
 -- ======================
 -- DETALLES DE PEDIDOS

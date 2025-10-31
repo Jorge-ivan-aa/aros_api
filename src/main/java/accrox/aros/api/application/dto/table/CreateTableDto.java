@@ -1,21 +1,9 @@
 package accrox.aros.api.application.dto.table;
 
-public class CreateTableDto {
-
-    private String name;
-
-    public CreateTableDto() {
-    }
-
-    public CreateTableDto(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+/**
+ * DTO used by application layer to create a table.
+ * Converted to a record following the project's DTO style.
+ */
+public record CreateTableDto(
+        String name) {
 }
