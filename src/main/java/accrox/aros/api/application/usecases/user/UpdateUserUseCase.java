@@ -1,6 +1,7 @@
 package accrox.aros.api.application.usecases.user;
 
 import accrox.aros.api.application.dto.user.UpdateUserInput;
+import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
 import accrox.aros.api.domain.service.PasswordService;
@@ -42,6 +43,12 @@ public class UpdateUserUseCase {
         }
         if (toUptate.password() != null && !toUptate.password().isBlank()) {
             userOpt.get().setPassword(this.passwordService.encode(toUptate.password()));
+        }
+         
+        if (toUptate.areas() != null) {
+            userOpt.get().setAreas(toUptate.areas().stream().map(a -> {
+                return new Area(a, null, null);
+            }).toList());
         }
 
         userRepository.update(userOpt.get());

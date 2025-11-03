@@ -1,6 +1,8 @@
 package accrox.aros.api.application.dto.user;
 
 import accrox.aros.api.application.dto.area.GetAreaOuput;
+import accrox.aros.api.application.dto.area.GetAreaOutput;
+
 import java.util.Collection;
 
 public record GetUserOuput(
@@ -9,5 +11,5 @@ public record GetUserOuput(
     String email,
     String phone,
     String address,
-    Collection<GetAreaOuput> areas
+    Collection<GetAreaOutput> areas
 ) {}

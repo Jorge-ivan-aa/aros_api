@@ -1,6 +1,7 @@
 package accrox.aros.api.application.usecases.user;
 
 import accrox.aros.api.application.dto.area.GetAreaOuput;
+import accrox.aros.api.application.dto.area.GetAreaOutput;
 import accrox.aros.api.application.dto.user.GetUserOuput;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
@@ -39,12 +40,12 @@ public class GetAllUserUseCase {
                 .toList();
     }
 
-    private Collection<GetAreaOuput> convertAreas(Collection<Area> areas){
+    private Collection<GetAreaOutput> convertAreas(Collection<Area> areas){
         if(areas == null){
             return null;
         }
         return areas.stream()
-                .map(area -> new GetAreaOuput(area.getName()))
+                .map(area -> new GetAreaOutput(area.getId(), area.getName()))
                 .toList();
     }
 }

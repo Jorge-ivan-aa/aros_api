@@ -6,6 +6,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -42,7 +44,8 @@ public class UpdateUserUseCaseTest {
                         "j@example.com",
                         "Password",
                         "Calle Falsa 123",
-                        "00000000"
+                        "00000000",
+                        List.of(1L)
                 );
 
                 User user = new User();

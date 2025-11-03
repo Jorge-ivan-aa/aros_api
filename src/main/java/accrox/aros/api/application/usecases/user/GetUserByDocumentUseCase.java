@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import accrox.aros.api.application.dto.area.GetAreaOuput;
+import accrox.aros.api.application.dto.area.GetAreaOutput;
 import accrox.aros.api.application.dto.user.GetUserByDocumentInput;
 import accrox.aros.api.application.dto.user.GetUserOuput;
 import accrox.aros.api.domain.model.Area;
@@ -40,12 +41,12 @@ public class GetUserByDocumentUseCase {
 
         return ouput;
     }
-    private Collection<GetAreaOuput> convertAreas(Collection<Area> areas){
+    private Collection<GetAreaOutput> convertAreas(Collection<Area> areas){
         if(areas == null){
             return null;
         }
         return areas.stream()
-                .map(area -> new GetAreaOuput(area.getName()))
+                .map(area -> new GetAreaOutput(area.getId(), area.getName()))
                 .toList();
     }
 

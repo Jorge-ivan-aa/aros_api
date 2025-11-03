@@ -18,7 +18,7 @@ public class GetAllAreaUseCase {
 
         List<Area> areas = repository.getAreas();
         return areas.stream()
-                .map(area -> new GetAreaOutput(area.getName()))
+                .map(area -> new GetAreaOutput(area.getId(), area.getName()))
                 .toList();
     }
 }

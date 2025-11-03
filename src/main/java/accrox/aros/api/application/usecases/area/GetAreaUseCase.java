@@ -27,7 +27,7 @@ public class GetAreaUseCase {
         Area area = repository.getAreaByName(name)
                 .orElseThrow(() -> new ValidationException("Area not found"));
 
-        return new GetAreaOutput(area.getName());
+        return new GetAreaOutput(area.getId(), area.getName());
 
     }
 }

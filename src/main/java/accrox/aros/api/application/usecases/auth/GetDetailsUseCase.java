@@ -1,6 +1,7 @@
 package accrox.aros.api.application.usecases.auth;
 
 import accrox.aros.api.application.dto.area.GetAreaOuput;
+import accrox.aros.api.application.dto.area.GetAreaOutput;
 import accrox.aros.api.application.dto.user.GetUserOuput;
 import accrox.aros.api.application.exceptions.auth.InvalidTokenException;
 import accrox.aros.api.domain.model.Area;
@@ -68,7 +69,7 @@ public class GetDetailsUseCase {
                 adminUser.getDocument(), // Use document as email for admin
                 null, // No phone for admin
                 null, // No address for admin
-                List.of(new GetAreaOuput("ADMINISTRATION"))
+                List.of(new GetAreaOutput(0L, "ADMINISTRATION"))
             );
         }
 
@@ -121,13 +122,13 @@ public class GetDetailsUseCase {
         );
     }
 
-    private Collection<GetAreaOuput> convertAreas(Collection<Area> areas) {
+    private Collection<GetAreaOutput> convertAreas(Collection<Area> areas) {
         if (areas == null) {
             return null;
         }
         return areas
             .stream()
-            .map(area -> new GetAreaOuput(area.getName()))
+            .map(area -> new GetAreaOutput(area.getId(), area.getName()))
             .toList();
     }
 }
