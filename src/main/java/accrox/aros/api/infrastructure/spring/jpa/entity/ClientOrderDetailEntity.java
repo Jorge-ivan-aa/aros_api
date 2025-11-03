@@ -1,7 +1,5 @@
 package accrox.aros.api.infrastructure.spring.jpa.entity;
 
-import java.util.Collection;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,12 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Collection;
 
 @Entity
-@Table(
-    name = "order_details"
-)
+@Table(name = "order_details")
 public class ClientOrderDetailEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,11 +38,14 @@ public class ClientOrderDetailEntity {
 
     private String observations;
 
-    @OneToMany(mappedBy = "detail", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(
+        mappedBy = "detail",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL
+    )
     private Collection<OrderDetailSubProductEntity> subProducts;
 
-    public ClientOrderDetailEntity() {
-    }
+    public ClientOrderDetailEntity() {}
 
     public ClientOrderDetailEntity(
         Long id,
@@ -126,7 +127,9 @@ public class ClientOrderDetailEntity {
         return subProducts;
     }
 
-    public void setSubProducts(Collection<OrderDetailSubProductEntity> subProducts) {
+    public void setSubProducts(
+        Collection<OrderDetailSubProductEntity> subProducts
+    ) {
         this.subProducts = subProducts;
     }
 }
