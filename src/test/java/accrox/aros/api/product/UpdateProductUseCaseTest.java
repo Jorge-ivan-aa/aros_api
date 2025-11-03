@@ -8,6 +8,8 @@ import accrox.aros.api.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -32,16 +34,18 @@ class UpdateProductUseCaseTest {
         String newName = "Deluxe Pizza";
 
         Product existingProduct = new Product();
+        existingProduct.setId(1L);
         existingProduct.setName(currentName);
+        existingProduct.setActive(true);
         existingProduct.setDescription("Cheese Pizza");
         existingProduct.setPrice(15.0f);
         existingProduct.setPreparationTime(10);
 
         UpdateProductInput input = new UpdateProductInput(
-                currentName, newName, "Extra cheese", 18.0f, 12
+            1L, newName, "Extra cheese", 18.0f, true, 12, 1L, List.of()
         );
 
-        when(productRepository.findByName(currentName)).thenReturn(Optional.of(existingProduct));
+        when(productRepository.findById(input.id())).thenReturn(Optional.of(existingProduct));
         when(productRepository.existsByName(newName)).thenReturn(false);
 
         updateProductUseCase.execute(input);

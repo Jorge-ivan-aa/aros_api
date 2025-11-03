@@ -15,6 +15,8 @@ public class AreaJpaMapper {
         AreaEntity source,
         Collection<Product> products
     ) {
+        if (source == null) return null;
+
         Area target = new Area();
 
         target.setId(source.getId());

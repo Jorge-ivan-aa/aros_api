@@ -26,6 +26,8 @@ public interface ProductRepository {
      */
     public boolean existsByName(String name);
 
+    public boolean existsByNameIgnoring(String name, Set<Long> ids);
+
     /**
      *
      * @param product
@@ -38,6 +40,8 @@ public interface ProductRepository {
      * @return Product
      */
     public Optional<Product> findByName(String name);
+    
+    public Optional<Product> findById(Long id);
 
     public boolean existsAllById(Set<Long> ids);
 
@@ -53,4 +57,13 @@ public interface ProductRepository {
     public Collection<Product> findAllByIdSimple(Set<Long> ids);
     
     public List<Product> findAll();
+    
+    public List<Product> findByCategories(Set<Long> categories);
+    
+    /**
+     * obtains register that are only products (no herence)
+     *
+     * @return
+     */
+    public List<Product> getNoDayMenuProducts();
 }

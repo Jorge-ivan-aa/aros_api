@@ -2,6 +2,7 @@ package accrox.aros.api.application.usecases.product;
 
 import accrox.aros.api.application.dto.product.CreateProductInput;
 import accrox.aros.api.application.exceptions.product.ProductAlreadyExistsException;
+import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.domain.repository.ProductRepository;
 
@@ -32,6 +33,7 @@ public class CreateProductUseCase {
         product.setPrice(input.price());
         product.setPreparationTime(input.preparationTime());
         product.setActive(true);
+        product.setPreparationArea(new Area(input.preparationArea(), null, null));
 
         return product;
     }

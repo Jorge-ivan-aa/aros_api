@@ -2,6 +2,9 @@ package accrox.aros.api.infrastructure.spring.config.beans;
 
 import accrox.aros.api.application.usecases.product.CreateProductUseCase;
 import accrox.aros.api.application.usecases.product.GetAllProductsUseCase;
+import accrox.aros.api.application.usecases.product.GetNoDayMenuProducts;
+import accrox.aros.api.application.usecases.product.GetProductByIdUseCase;
+import accrox.aros.api.application.usecases.product.GetProductsByCategoryUseCase;
 import accrox.aros.api.application.usecases.product.UpdateProductUseCase;
 import accrox.aros.api.domain.repository.ProductRepository;
 import org.springframework.context.annotation.Bean;
@@ -29,5 +32,26 @@ public class ProductBeansConfig {
         ProductRepository repository
     ) {
         return new GetAllProductsUseCase(repository);
+    }
+    
+    @Bean
+    public GetProductByIdUseCase getProductByIdUseCase(
+        ProductRepository repository
+    ) {
+        return new GetProductByIdUseCase(repository);
+    }
+
+    @Bean
+    public GetProductsByCategoryUseCase getProductsByCategoryUseCase(
+        ProductRepository repository
+    ) {
+        return new GetProductsByCategoryUseCase(repository);
+    }
+
+    @Bean
+    public GetNoDayMenuProducts getNoDayMenuProducts(
+        ProductRepository repository
+    ) {
+        return new GetNoDayMenuProducts(repository);
     }
 }

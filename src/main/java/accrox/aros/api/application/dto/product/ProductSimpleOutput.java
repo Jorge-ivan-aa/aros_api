@@ -1,16 +1,13 @@
 package accrox.aros.api.application.dto.product;
 
-import java.util.Collection;
-
-public record UpdateProductInput(
+public record ProductSimpleOutput (
     Long id,
     String name,
     String description,
     Float price,
     Boolean active,
     Integer preparationTime,
-    Long preparationArea,
-    Collection<Long> categories
+    String preparationArea
 ) {
-    // 
+
 }

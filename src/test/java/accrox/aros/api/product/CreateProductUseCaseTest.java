@@ -31,7 +31,8 @@ public class CreateProductUseCaseTest {
             "Spoon",
             "The greatest tool in the world",
             1200.0F,
-            3
+            3,
+            1L
         );
 
         Assertions.assertThrows(ProductAlreadyExistsException.class, () -> {
@@ -51,7 +52,8 @@ public class CreateProductUseCaseTest {
             "Spoon",
             "The greatest tool in the world",
             1200.0F,
-            3
+            3,
+            1L
         );
 
         // check the call don't fail

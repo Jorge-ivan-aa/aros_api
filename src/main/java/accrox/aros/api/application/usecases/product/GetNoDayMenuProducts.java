@@ -1,19 +1,19 @@
 package accrox.aros.api.application.usecases.product;
 
-import accrox.aros.api.application.dto.product.ProductSimpleOutput;
-import accrox.aros.api.domain.repository.ProductRepository;
 import java.util.List;
 
-public class GetAllProductsUseCase {
+import accrox.aros.api.application.dto.product.ProductSimpleOutput;
+import accrox.aros.api.domain.repository.ProductRepository;
 
+public class GetNoDayMenuProducts {
     private final ProductRepository productRepository;
 
-    public GetAllProductsUseCase(ProductRepository productRepository) {
+    public GetNoDayMenuProducts(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     public List<ProductSimpleOutput> execute() {
-        return productRepository.findAll()
+        return productRepository.getNoDayMenuProducts()
             .stream()
             .map(p -> {
                 return new ProductSimpleOutput(

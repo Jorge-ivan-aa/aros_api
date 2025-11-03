@@ -1,25 +1,35 @@
 package accrox.aros.api.infrastructure.spring.dto.product;
 
-import org.hibernate.validator.constraints.UniqueElements;
+
+import java.util.Collection;
 
 import accrox.aros.api.application.dto.product.UpdateProductInput;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 public record UpdateProductRequest(
-        @NotNull @NotBlank @UniqueElements(message = "Name product must be unique") String currentName,
-        @Nullable String newName,
-        @Nullable String description,
-        @NotNull @PositiveOrZero Float price,
-        @NotNull @PositiveOrZero Integer preparationTime) {
+    @NotNull @Positive Long id,
+    @Nullable @NotBlank String name,
+    @Nullable String description,
+    @Nullable Boolean active,
+    @NotNull @PositiveOrZero Float price,
+    @NotNull @PositiveOrZero Integer preparationTime,
+    @NotNull @Positive Long preparationArea,
+    @Nullable Collection<Long> categories
+) {
     public UpdateProductInput toInput() {
         return new UpdateProductInput(
-                this.currentName,
-                this.newName,
-                this.description,
-                this.price,
-                this.preparationTime);
+            this.id,
+            this.name,
+            this.description,
+            this.price,
+            this.active,
+            this.preparationTime,
+            this.preparationArea,
+            this.categories
+        );
     }
 }

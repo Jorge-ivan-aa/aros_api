@@ -1,5 +1,6 @@
 package accrox.aros.api.product;
 
+import accrox.aros.api.application.dto.product.ProductSimpleOutput;
 import accrox.aros.api.application.usecases.product.GetAllProductsUseCase;
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.domain.repository.ProductRepository;
@@ -39,11 +40,11 @@ public class GetAllProductsUseCaseTest {
 
         when(repository.findAll()).thenReturn(list);
 
-        List<Product> result = useCase.execute();
+        List<ProductSimpleOutput> result = useCase.execute();
 
         assertEquals(2, result.size());
-        assertEquals("Coffee", result.get(0).getName());
-        assertEquals("Tea", result.get(1).getName());
+        assertEquals("Coffee", result.get(0).name());
+        assertEquals("Tea", result.get(1).name());
     }
 
 }
