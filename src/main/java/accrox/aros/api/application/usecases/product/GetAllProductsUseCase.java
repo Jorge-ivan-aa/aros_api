@@ -13,6 +13,6 @@ public class GetAllProductsUseCase {
     }
 
     public List<Product> execute() {
-        return productRepository.findAll();
+        return productRepository.findAllWithRelations();
     }
 }
