@@ -25,6 +25,9 @@ public class RefreshTokenEntity {
 
     private String hash;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
     @Column(name = "revoked_at")
     private LocalDateTime revokedAt;
 
@@ -45,11 +48,13 @@ public class RefreshTokenEntity {
     public RefreshTokenEntity(
         Long id,
         String hash,
+        LocalDateTime createdAt,
         LocalDateTime revokedAt,
         String userDocument
     ) {
         this.id = id;
         this.hash = hash;
+        this.createdAt = createdAt;
         this.revokedAt = revokedAt;
         this.userDocument = userDocument;
     }
@@ -68,6 +73,14 @@ public class RefreshTokenEntity {
 
     public void setHash(String hash) {
         this.hash = hash;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getRevokedAt() {

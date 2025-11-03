@@ -1,16 +1,14 @@
 package accrox.aros.api.application.usecases.user;
 
-import accrox.aros.api.application.dto.area.GetAreaOuput;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import accrox.aros.api.application.dto.area.GetAreaOutput;
 import accrox.aros.api.application.dto.user.GetUserOuput;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.UserRepository;
-
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 
 public class GetAllUserUseCase {

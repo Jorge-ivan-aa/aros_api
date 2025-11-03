@@ -33,8 +33,6 @@ class UserRepositoryJpaTest {
 
         // Ejecutar el método a probar
         Optional<UserEntity> result = userRepositoryJpa.findByDocument("1088824");
-        System.out.println("name: "+ result.get().getName() + " email: " + result.get().getEmail()+" document: "+result.get().getDocument());
-        // Verificaciones
         assertTrue(result.isPresent());
         assertEquals("Nikoll", result.get().getName());
         assertEquals("nkk@mail.com", result.get().getEmail());

@@ -27,7 +27,8 @@ public class OrderJpaAdapter implements OrderRepository {
 
     @Override
     public void MarkOrderAsCompleted(Long orderId) {
-        OrderEntity orderEntity = this.orderRepositoryJpa.findById(orderId).orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        OrderEntity orderEntity = this.orderRepositoryJpa.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
         orderEntity.setStatus(OrderStatus.COMPLETED);
         this.orderRepositoryJpa.save(orderEntity);
     }
@@ -62,31 +63,26 @@ public class OrderJpaAdapter implements OrderRepository {
     @Transactional
     public List<Order> findAll() {
         Iterable<OrderEntity> entities = orderRepositoryJpa.findAll();
-
-        if (entities == null) {
-            return Collections.emptyList();
-        }
-
         List<Order> orders = new ArrayList<>();
 
         for (OrderEntity entity : entities) {
-            Table table = TableJpaMapper.toDomain(entity.getTable(),null);
+            Table table = TableJpaMapper.toDomain(entity.getTable(), null);
             orders.add(OrderJpaMapper.toDomain(entity, table, null, null));
         }
 
         return orders;
     }
-    
+
     @Override
     @Transactional
     public List<Order> findAllByResponsible(Long responsibleId) {
         return this.orderRepositoryJpa.findAllByResponsibleId(responsibleId)
-            .stream()
-            .map((o) -> {
-                Table t = TableJpaMapper.toDomain(o.getTable(), null);
+                .stream()
+                .map((o) -> {
+                    Table t = TableJpaMapper.toDomain(o.getTable(), null);
 
-                return OrderJpaMapper.toDomain(o, t, null, null);
-            })
-            .toList();
+                    return OrderJpaMapper.toDomain(o, t, null, null);
+                })
+                .toList();
     }
 }

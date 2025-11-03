@@ -16,8 +16,9 @@ public class RefreshTokenJpaMapper {
 
         target.setId(source.getId());
         target.setHash(source.getHash());
+        target.setCreatedAt(source.getCreatedAt());
         target.setRevokedAt(source.getRevokedAt());
-        target.setUserDocument(userDocument);
+        target.setUserDocument(source.getUserDocument());
 
         return target;
     }
@@ -33,8 +34,9 @@ public class RefreshTokenJpaMapper {
 
         target.setId(source.getId());
         target.setHash(source.getHash());
+        target.setCreatedAt(source.getCreatedAt());
         target.setRevokedAt(source.getRevokedAt());
-        target.setUserDocument(userDocument);
+        target.setUserDocument(source.getUserDocument());
 
         return target;
     }

@@ -1,6 +1,5 @@
 package accrox.aros.api.application.usecases.user;
 
-import accrox.aros.api.application.dto.user.DeleteUserInput;
 import accrox.aros.api.domain.repository.UserRepository;
 import jakarta.validation.ValidationException;
 
@@ -12,9 +11,8 @@ public class DeleteUserUseCase {
         this.userRepository = userRepository;
     }
 
-
     public void execute(String document) {
-        if (document== null || document.isBlank()) {
+        if (document == null || document.isBlank()) {
             throw new ValidationException("The document is required");
         }
 

@@ -1,13 +1,12 @@
 package accrox.aros.api.application.usecases.order;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import accrox.aros.api.application.dto.order.OrdersOutput;
 import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.enums.OrderStatus;
 import accrox.aros.api.domain.repository.OrderRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GetOrdersByStatusUseCase {
 
@@ -34,7 +33,6 @@ public class GetOrdersByStatusUseCase {
         List<Order> filteredOrders;
 
         if (orderStatus != null) {
-            OrderStatus finalOrderStatus = orderStatus;
             OrderStatus finalOrderStatus1 = orderStatus;
             filteredOrders = allOrders.stream()
                     .filter(order -> order.getStatus() == finalOrderStatus1)
@@ -43,15 +41,13 @@ public class GetOrdersByStatusUseCase {
             filteredOrders = allOrders;
         }
 
-
         return filteredOrders.stream()
                 .map(order -> new OrdersOutput(
                         order.getId().intValue(),
                         order.getStatus().name(),
                         order.getTakedAt() != null ? order.getTakedAt().toString() : null,
                         order.getTable() != null ? order.getTable().getName() : null,
-                        order.getTotal()
-                ))
+                        order.getTotal()))
                 .collect(Collectors.toList());
     }
 }

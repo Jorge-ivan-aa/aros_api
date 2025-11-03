@@ -40,11 +40,10 @@ public class CreateOrderUseCase {
     private Map<Long, Product> products;
 
     public CreateOrderUseCase(
-        OrderRepository repository,
-        ProductRepository productRepository,
-        DaymenuRepository daymenuRepository,
-        TableRepository tableRepository
-    ) {
+            OrderRepository repository,
+            ProductRepository productRepository,
+            DaymenuRepository daymenuRepository,
+            TableRepository tableRepository) {
         this.repository = repository;
         this.productRepository = productRepository;
         this.tableRepository = tableRepository;
@@ -53,14 +52,11 @@ public class CreateOrderUseCase {
     }
 
     public void execute(
-        CreateOrderInput input,
-        User responsible
-    ) throws
-        ProductNotFoundException,
-        TableNotFoundException,
-        EmptyDayMenuSelectionException
-    {
-        if (! this.tableRepository.existsById(input.table())) {
+            CreateOrderInput input,
+            User responsible) throws ProductNotFoundException,
+            TableNotFoundException,
+            EmptyDayMenuSelectionException {
+        if (!this.tableRepository.existsById(input.table())) {
             throw new TableNotFoundException();
         }
 
@@ -130,17 +126,16 @@ public class CreateOrderUseCase {
     }
 
     private Collection<Product> validateProductsInputAndRetrieve(
-        CreateOrderInput input
-    ) throws ProductNotFoundException, EmptyDayMenuSelectionException {
+            CreateOrderInput input) throws ProductNotFoundException, EmptyDayMenuSelectionException {
         Collection<Long> subProductsIds = input.clientOrders().stream()
-            .flatMap(co -> co.details().stream())
-            .flatMap(cod -> cod.subProducts() != null ? cod.subProducts().stream() : Stream.empty())
-            .collect(Collectors.toSet());
+                .flatMap(co -> co.details().stream())
+                .flatMap(cod -> cod.subProducts() != null ? cod.subProducts().stream() : Stream.empty())
+                .collect(Collectors.toSet());
 
         Set<Long> productsIds = input.clientOrders().stream()
-            .flatMap(co -> co.details().stream())
-            .map(cod -> cod.product())
-            .collect(Collectors.toSet());
+                .flatMap(co -> co.details().stream())
+                .map(cod -> cod.product())
+                .collect(Collectors.toSet());
 
         Set<Long> allProductsIds = new LinkedHashSet<>();
         allProductsIds.addAll(productsIds);
@@ -159,19 +154,16 @@ public class CreateOrderUseCase {
     }
 
     private void validateDayMenuHasSubProducts(
-        CreateOrderInput input,
-        Collection<Long> daymenuIds
-    ) throws EmptyDayMenuSelectionException {
+            CreateOrderInput input,
+            Collection<Long> daymenuIds) throws EmptyDayMenuSelectionException {
         if (daymenuIds.isEmpty()) {
             return;
         }
 
         for (CreateClientOrderInput co : input.clientOrders()) {
             for (CreateOrderDetailInput detail : co.details()) {
-                if (
-                    daymenuIds.contains(detail.product())
-                    && detail.subProducts() == null
-                ) {
+                if (daymenuIds.contains(detail.product())
+                        && detail.subProducts() == null) {
                     throw new EmptyDayMenuSelectionException();
                 }
             }

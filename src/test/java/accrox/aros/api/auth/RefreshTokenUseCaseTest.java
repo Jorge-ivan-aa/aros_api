@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
+
 @ExtendWith(MockitoExtension.class)
 public class RefreshTokenUseCaseTest {
 
@@ -36,11 +38,7 @@ public class RefreshTokenUseCaseTest {
 
     @Test
     void whenValidRefreshToken_thenIssueNewTokens() throws Exception {
-        RefreshToken stored = new RefreshToken(
-                1L,
-                "old-hash",
-                null,
-                "3213567537");
+        RefreshToken stored = new RefreshToken(1L, "old-hash", LocalDateTime.now(), null, "0000000000");
 
         when(tokenRepository.findByHash("old-hash")).thenReturn(java.util.Optional.of(stored));
         when(tokenService.generateRefreshToken(stored.getUserDocument())).thenReturn("new-refresh");

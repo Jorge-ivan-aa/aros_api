@@ -12,8 +12,14 @@ import accrox.aros.api.domain.service.AdminAuthService;
 import accrox.aros.api.domain.service.PasswordService;
 import accrox.aros.api.domain.service.TokenService;
 import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoginTokenUseCase {
+
+    private static final Logger logger = LoggerFactory.getLogger(
+        LoginTokenUseCase.class
+    );
 
     private TokenService tokenService;
 
@@ -42,42 +48,35 @@ public class LoginTokenUseCase {
 
     public AuthOutput execute(AuthInput request)
         throws InvalidCredentialsException, InsecurePasswordException {
+        logger.debug("Login attempt for user: {}", request.document());
+
         User user;
         if (adminAuthService.isAdminCredentials(request.document())) {
-            System.out.println(
-                "DEBUG: LoginTokenUseCase - Admin credentials detected for document: " +
-                    request.document()
+            logger.debug(
+                "Admin credentials detected for user: {}",
+                request.document()
             );
             user = adminAuthService.getUser();
-            System.out.println(
-                "DEBUG: LoginTokenUseCase - Admin user created with document: " +
-                    user.getDocument()
-            );
         } else {
-            System.out.println(
-                "DEBUG: LoginTokenUseCase - Regular user login for document: " +
-                    request.document()
+            logger.debug(
+                "Regular user login attempt for: {}",
+                request.document()
             );
             user = this.userRepository.findByDocument(
                 request.document()
-            ).orElseThrow(() ->
-                new InvalidCredentialsException("User not found")
-            );
-            System.out.println(
-                "DEBUG: LoginTokenUseCase - Regular user found with document: " +
-                    user.getDocument()
-            );
+            ).orElseThrow(() -> {
+                logger.warn("User not found: {}", request.document());
+                return new InvalidCredentialsException("User not found");
+            });
         }
 
         if (!user.passwordMatches(request.password(), this.passwordService)) {
+            logger.warn("Invalid password for user: {}", request.document());
             throw new InvalidCredentialsException("Invalid password");
         }
 
         String userDocument = user.getDocument();
-        System.out.println(
-            "DEBUG: LoginTokenUseCase - Generating tokens for document: " +
-                userDocument
-        );
+        logger.debug("Generating tokens for user: {}", userDocument);
 
         String refreshToken = this.tokenService.generateRefreshToken(
             userDocument
@@ -90,15 +89,17 @@ public class LoginTokenUseCase {
             null,
             refreshToken,
             LocalDateTime.now(),
+            null,
             user.getDocument()
-        );
-        System.out.println(
-            "DEBUG: LoginTokenUseCase - Creating refresh token with document: " +
-                refreshTokenEntity.getUserDocument()
         );
 
         this.tokenRepository.create(refreshTokenEntity);
+        logger.debug(
+            "Refresh token stored successfully for user: {}",
+            userDocument
+        );
 
+        logger.debug("Login successful for user: {}", userDocument);
         return new AuthOutput(refreshToken, accessToken);
     }
 }
