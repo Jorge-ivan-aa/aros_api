@@ -1,30 +1,17 @@
 package accrox.aros.api.domain.repository;
 
+import accrox.aros.api.domain.model.Product;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import accrox.aros.api.domain.model.Product;
-
 public interface ProductRepository {
-    /**
-     * save the information of a product
-     * 
-     * @param product the product to save
-     * 
-     * @return the saved info
-     */
-    public Product create(Product product);
+    Product create(Product product);
 
-    /**
-     * check if exists a product with a given name
-     * 
-     * @param name name of the product
-     * 
-     * @return the product exists
-     */
-    public boolean existsByName(String name);
+    boolean existsByName(String name);
+
+    boolean existsAllById(Set<Long> ids);
 
     public boolean existsByNameIgnoring(String name, Set<Long> ids);
 
@@ -43,16 +30,14 @@ public interface ProductRepository {
     
     public Optional<Product> findById(Long id);
 
-    public boolean existsAllById(Set<Long> ids);
+    Product update(Product product);
+
+    void UpdateProductCategories(Product product);
 
     /**
-     * 
-     * @param product
-     * @return
+     * Find all products with their relations (areas and categories) loaded
      */
-    public Product update(Product product);
-
-    public void UpdateProductCategories(Product product);
+    List<Product> findAllWithRelations();
 
     public Collection<Product> findAllByIdSimple(Set<Long> ids);
     

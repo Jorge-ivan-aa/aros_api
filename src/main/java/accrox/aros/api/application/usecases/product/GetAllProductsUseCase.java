@@ -28,4 +28,8 @@ public class GetAllProductsUseCase {
             })
             .toList();
     }
+
+    // public List<Product> execute() {
+    //     return productRepository.findAllWithRelations();
+    // }
 }

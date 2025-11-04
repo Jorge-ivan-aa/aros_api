@@ -1,24 +1,43 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
+import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.Table;
 import accrox.aros.api.domain.repository.TableRepository;
 import accrox.aros.api.infrastructure.spring.jpa.entity.TableEntity;
 import accrox.aros.api.infrastructure.spring.jpa.repository.TableRepositoryJpa;
+import accrox.aros.api.infrastructure.spring.mappers.OrderJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.TableJpaMapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class TableJpaAdapter implements TableRepository {
+
     @Autowired
     private TableRepositoryJpa tableRepositoryJpa;
 
     @Override
-    public java.util.List<Table> findAllTables() {
-        java.util.List<Table> tables = new java.util.ArrayList<>();
+    public List<Table> findAllTables() {
+        List<Table> tables = new ArrayList<>();
         for (TableEntity entity : tableRepositoryJpa.findAll()) {
             tables.add(TableJpaMapper.toDomain(entity, null));
+        }
+        return tables;
+    }
+
+    @Override
+    public List<Table> findAllTablesWithOrders() {
+        List<Table> tables = new ArrayList<>();
+        for (TableEntity entity : tableRepositoryJpa.findAllWithOrders()) {
+            List<Order> orders = entity
+                .getOrders()
+                .stream()
+                .map(OrderJpaMapper::toDomain)
+                .collect(Collectors.toList());
+            tables.add(TableJpaMapper.toDomain(entity, orders));
         }
         return tables;
     }

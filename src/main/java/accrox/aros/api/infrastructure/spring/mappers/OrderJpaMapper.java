@@ -1,8 +1,5 @@
 package accrox.aros.api.infrastructure.spring.mappers;
 
-import java.util.Collection;
-import java.util.Set;
-
 import accrox.aros.api.domain.model.ClientOrder;
 import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.Table;
@@ -11,8 +8,11 @@ import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.OrderEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.TableEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
+import java.util.Collection;
+import java.util.Set;
 
 public class OrderJpaMapper {
+
     /**
      * map {@link OrderEntity} to {@link Order}
      */
@@ -53,6 +53,20 @@ public class OrderJpaMapper {
         target.setOrders(clientOrders);
         target.setTotal(source.getTotal());
         target.setResponsible(responsible);
+
+        return target;
+    }
+
+    /**
+     * Simplified mapping for table status calculation - only includes basic order info
+     */
+    public static Order toDomain(OrderEntity source) {
+        Order target = new Order();
+
+        target.setId(source.getId());
+        target.setStatus(source.getStatus());
+        target.setTakedAt(source.getTakedAt());
+        target.setTotal(source.getTotal());
 
         return target;
     }

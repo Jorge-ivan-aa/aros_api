@@ -1,5 +1,7 @@
 package accrox.aros.api.infrastructure.spring.jpa.repository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
@@ -7,9 +9,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import accrox.aros.api.infrastructure.spring.jpa.entity.CategoryEntity;
 import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface ProductRepositoryJpa extends CrudRepository<ProductEntity, Long> {
     public boolean existsByName(String name);
@@ -40,4 +39,28 @@ public interface ProductRepositoryJpa extends CrudRepository<ProductEntity, Long
         "WHERE dm.id IS NULL"
     )
     public List<ProductEntity> findNoDayMenuProducts();
+
+    @Query(
+        "SELECT DISTINCT p FROM ProductEntity p LEFT JOIN FETCH p.preparationArea"
+    )
+    List<ProductEntity> findAllWithArea();
+
+    @Query(
+        "SELECT DISTINCT p FROM ProductEntity p LEFT JOIN FETCH p.categories"
+    )
+    List<ProductEntity> findAllWithCategories();
+
+    @Query(
+        "SELECT DISTINCT p FROM ProductEntity p " +
+            "LEFT JOIN FETCH p.preparationArea " +
+            "WHERE p.id IN :ids"
+    )
+    List<ProductEntity> findAllByIdWithArea(Set<Long> ids);
+
+    @Query(
+        "SELECT DISTINCT p FROM ProductEntity p " +
+            "LEFT JOIN FETCH p.categories " +
+            "WHERE p.id IN :ids"
+    )
+    List<ProductEntity> findAllByIdWithCategories(Set<Long> ids);
 }
