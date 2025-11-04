@@ -3,42 +3,58 @@ package accrox.aros.api.infrastructure.spring.config.beans;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import accrox.aros.api.application.usecases.order.CancelOrderUseCase;
 import accrox.aros.api.application.usecases.order.CreateOrderUseCase;
 import accrox.aros.api.application.usecases.order.GetOrdersByResponsibleUseCase;
 import accrox.aros.api.application.usecases.order.MarkOrderAsCompletedUseCase;
+import accrox.aros.api.application.usecases.order.UpdateOrderUseCase;
 import accrox.aros.api.domain.repository.DaymenuRepository;
 import accrox.aros.api.domain.repository.OrderRepository;
 import accrox.aros.api.domain.repository.ProductRepository;
 import accrox.aros.api.domain.repository.TableRepository;
+import accrox.aros.api.domain.repository.UserRepository;
 
 @Configuration
 public class OrderBeansConfig {
     @Bean
     public MarkOrderAsCompletedUseCase markOrderAsCompletedUseCase(
-        OrderRepository orderRepository
-    ) {
+            OrderRepository orderRepository) {
         return new MarkOrderAsCompletedUseCase(orderRepository);
     }
 
     @Bean
     public CreateOrderUseCase createOrderUseCase(
-        OrderRepository orderRepository,
-        ProductRepository productRepository,
-        DaymenuRepository daymenuRepository,
-        TableRepository tableRepository
-    ) {
+            OrderRepository orderRepository,
+            ProductRepository productRepository,
+            DaymenuRepository daymenuRepository,
+            TableRepository tableRepository) {
         return new CreateOrderUseCase(
-            orderRepository,
-            productRepository,
-            daymenuRepository,
-            tableRepository
-        );
+                orderRepository,
+                productRepository,
+                daymenuRepository,
+                tableRepository);
     }
-    
+
     @Bean
     public GetOrdersByResponsibleUseCase getOrdersByResponsibleUseCase(
-        OrderRepository orderRepository
-    ) {
+            OrderRepository orderRepository) {
         return new GetOrdersByResponsibleUseCase(orderRepository);
+    }
+
+    @Bean
+    public UpdateOrderUseCase updateOrderUseCase(
+            OrderRepository orderRepository,
+            TableRepository tableRepository,
+            UserRepository userRepository) {
+        return new UpdateOrderUseCase(
+                orderRepository,
+                tableRepository,
+                userRepository);
+    }
+
+    @Bean
+    public CancelOrderUseCase cancelOrderUseCase(
+            OrderRepository orderRepository) {
+        return new CancelOrderUseCase(orderRepository);
     }
 }
