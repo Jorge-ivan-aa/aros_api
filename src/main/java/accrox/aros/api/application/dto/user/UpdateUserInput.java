@@ -2,20 +2,18 @@ package accrox.aros.api.application.dto.user;
 
 import java.util.Collection;
 
-import accrox.aros.api.domain.model.Area;
-
 public record UpdateUserInput(
-    String document,
+        String document,
 
-    String name,
+        String name,
 
-    String email,
+        String email,
 
-    String password,
+        String password,
 
-    String address,
+        String address,
 
-    String phone,
+        String phone,
 
-    Collection<Long> areas
-) {}
+        Collection<Long> areas) {
+}

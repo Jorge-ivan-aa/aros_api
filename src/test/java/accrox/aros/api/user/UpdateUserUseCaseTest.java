@@ -6,7 +6,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,19 +33,17 @@ public class UpdateUserUseCaseTest {
         @InjectMocks
         private UpdateUserUseCase updateUserUseCase;
 
-
         @Test
         void whenUserExists_thenUpdateSuccessfully() {
 
                 UpdateUserInput dto = new UpdateUserInput(
-                        "1088824",
-                        "Jui",
-                        "j@example.com",
-                        "Password",
-                        "Calle Falsa 123",
-                        "00000000",
-                        List.of(1L)
-                );
+                                "1088824",
+                                "Jui",
+                                "j@example.com",
+                                "Password",
+                                "Calle Falsa 123",
+                                "00000000",
+                                List.of(1L));
 
                 User user = new User();
                 user.setDocument("1088824");
@@ -57,10 +54,10 @@ public class UpdateUserUseCaseTest {
                 user.setPhone("11111111");
 
                 when(userRepository.findByDocument(dto.document()))
-                        .thenReturn(Optional.of(user));
+                                .thenReturn(Optional.of(user));
 
                 when(passwordService.encode(dto.password()))
-                        .thenReturn("encodedPassword");
+                                .thenReturn("encodedPassword");
 
                 doNothing().when(userRepository).update(any(User.class));
 

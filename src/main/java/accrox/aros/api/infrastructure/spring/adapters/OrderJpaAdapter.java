@@ -17,6 +17,7 @@ import accrox.aros.api.infrastructure.spring.mappers.ClientOrderJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.OrderJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.ProductJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.TableJpaMapper;
+import accrox.aros.api.infrastructure.spring.mappers.UserJpaMapper;
 import jakarta.transaction.Transactional;
 
 @Repository
@@ -104,24 +105,24 @@ public class OrderJpaAdapter implements OrderRepository {
             List<ClientOrder> clientOrders = entity.getOrders() == null
                     ? Collections.emptyList()
                     : entity.getOrders().stream()
-                    .map(coEntity -> {
-                        // Mapeamos los detalles (productos) de cada ClientOrder
-                        List<Product> details = coEntity.getDetails() == null
-                                ? Collections.emptyList()
-                                : coEntity.getDetails().stream()
-                                .map(ClientOrderDetailJpaMapper::toDomain)
-                                .toList();
+                            .map(coEntity -> {
+                                // Mapeamos los detalles (productos) de cada ClientOrder
+                                List<Product> details = coEntity.getDetails() == null
+                                        ? Collections.emptyList()
+                                        : coEntity.getDetails().stream()
+                                                .map(ClientOrderDetailJpaMapper::toDomain)
+                                                .toList();
 
-                        return ClientOrderJpaMapper.toDomain(coEntity, details, null);
-                    })
-                    .toList();
+                                return ClientOrderJpaMapper.toDomain(coEntity, details, null);
+                            })
+                            .toList();
 
             // Mapeamos el responsable usando UserJpaMapper
             User responsible = UserJpaMapper.toDomain(
                     entity.getResponsible(),
-                    null,   // areas, si quieres podrías traerlas con un join fetch
-                    null,   // tokens
-                    null    // orders, no los necesitamos aquí
+                    null, // areas, si quieres podrías traerlas con un join fetch
+                    null, // tokens
+                    null // orders, no los necesitamos aquí
             );
 
             // Mapeamos la orden completa con sus relaciones
@@ -129,8 +130,7 @@ public class OrderJpaAdapter implements OrderRepository {
                     entity,
                     table,
                     clientOrders,
-                    responsible
-            );
+                    responsible);
 
             // Vinculamos las ClientOrders con su Order
             clientOrders.forEach(co -> co.setOrder(order));
@@ -140,8 +140,6 @@ public class OrderJpaAdapter implements OrderRepository {
 
         return orders;
     }
-
-
 
     @Override
     @Transactional

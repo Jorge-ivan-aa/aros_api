@@ -1,6 +1,9 @@
 package accrox.aros.api.infrastructure.spring.initializer;
 
 import java.sql.Connection;
+
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +31,14 @@ public class DatabaseInitializer implements CommandLineRunner {
                 ClassPathResource resource = new ClassPathResource(
                         "data/initial-data.sql");
 
-                try (
-                        Connection connection = jdbcTemplate
-                                .getDataSource()
-                                .getConnection()) {
-                    ScriptUtils.executeSqlScript(connection, resource);
+                DataSource dataSource = jdbcTemplate.getDataSource();
+                if (dataSource != null) {
+                    try (Connection connection = dataSource.getConnection()) {
+                        ScriptUtils.executeSqlScript(connection, resource);
+                    }
+                } else {
+                    logger.error("DataSource is null, cannot initialize database");
+                    return;
                 }
 
                 logger.info("Initial data loaded successfully.");
@@ -50,13 +56,13 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private boolean isDatabaseEmpty() {
         try {
-            int userCount = jdbcTemplate.queryForObject(
+            Integer userCount = jdbcTemplate.queryForObject(
                     "SELECT COUNT(*) FROM users",
                     Integer.class);
-            int areaCount = jdbcTemplate.queryForObject(
+            Integer areaCount = jdbcTemplate.queryForObject(
                     "SELECT COUNT(*) FROM areas",
                     Integer.class);
-            return userCount == 0 && areaCount == 0;
+            return (userCount == null || userCount == 0) && (areaCount == null || areaCount == 0);
         } catch (Exception e) {
             logger.warn("Error checking database status: {}", e.getMessage());
             return true; // Assume database is empty if we can't check
