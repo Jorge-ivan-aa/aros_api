@@ -1,13 +1,11 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
+import accrox.aros.api.application.dto.order.DetailOrderOutput;
 import accrox.aros.api.application.dto.order.OrdersOutput;
 import accrox.aros.api.application.exceptions.order.EmptyDayMenuSelectionException;
 import accrox.aros.api.application.exceptions.product.ProductNotFoundException;
 import accrox.aros.api.application.exceptions.table.TableNotFoundException;
-import accrox.aros.api.application.usecases.order.CreateOrderUseCase;
-import accrox.aros.api.application.usecases.order.GetOrdersByResponsibleUseCase;
-import accrox.aros.api.application.usecases.order.GetOrdersByStatusUseCase;
-import accrox.aros.api.application.usecases.order.MarkOrderAsCompletedUseCase;
+import accrox.aros.api.application.usecases.order.*;
 import accrox.aros.api.infrastructure.spring.dto.orders.CreateOrderRequest;
 import accrox.aros.api.infrastructure.spring.security.UserDetailsAdapter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +39,9 @@ public class OrderController {
     
     @Autowired
     private GetOrdersByResponsibleUseCase getOrdersByResponsibleUseCase;
+
+    @Autowired
+    private GetAllDetailOrderUseCase getAllDetailOrderUseCase;
 
     @Operation(
         tags = "Orders Management",
@@ -101,6 +102,29 @@ public class OrderController {
         logger.info("GET /api/orders/all - Retrieved {} orders", orders.size());
         return ResponseEntity.ok(orders);
     }
+
+
+    @Operation(
+            tags = "Orders Management",
+            summary = "Get all orders with details",
+            description = "Retrieves all orders along with their client orders and products."
+    )
+    @GetMapping("/details")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<DetailOrderOutput>> getAllDetailOrders() {
+        logger.info("GET /api/orders/details - Retrieving all orders with details");
+
+        List<DetailOrderOutput> orders = getAllDetailOrderUseCase.execute();
+
+        if (orders.isEmpty()) {
+            logger.info("GET /api/orders/details - No orders found");
+            return ResponseEntity.noContent().build();
+        }
+
+        logger.info("GET /api/orders/details - Retrieved {} detailed orders", orders.size());
+        return ResponseEntity.ok(orders);
+    }
+
 
     @Operation(
             tags = "Orders Management",

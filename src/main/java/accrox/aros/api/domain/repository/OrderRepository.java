@@ -1,6 +1,7 @@
 package accrox.aros.api.domain.repository;
 
 import accrox.aros.api.domain.model.Order;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -11,7 +12,10 @@ public interface OrderRepository {
     public void create(Order order);
 
     public List<Order> findAll();
-    
+
+    @Transactional
+    List<Order> findDetailAll();
+
     /**
      * find all the orders taken by a determinate user
      * 

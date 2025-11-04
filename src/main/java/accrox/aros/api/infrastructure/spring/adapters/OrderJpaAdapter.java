@@ -2,13 +2,11 @@ package accrox.aros.api.infrastructure.spring.adapters;
 
 import java.util.*;
 
-import accrox.aros.api.domain.model.Table;
+import accrox.aros.api.domain.model.*;
 import accrox.aros.api.infrastructure.spring.jpa.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import accrox.aros.api.domain.model.DayMenuSelection;
-import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.enums.OrderStatus;
 import accrox.aros.api.domain.repository.OrderRepository;
 import accrox.aros.api.infrastructure.spring.jpa.repository.OrderRepositoryJpa;
@@ -72,6 +70,61 @@ public class OrderJpaAdapter implements OrderRepository {
 
         return orders;
     }
+
+    @Transactional
+    @Override
+    public List<Order> findDetailAll() {
+        List<OrderEntity> entities = orderRepositoryJpa.findAllWithDetails();
+        List<Order> orders = new ArrayList<>();
+
+        for (OrderEntity entity : entities) {
+            // Mapeamos la mesa
+            Table table = entity.getTable() != null
+                    ? TableJpaMapper.toDomain(entity.getTable(), null)
+                    : null;
+
+            // Mapeamos las órdenes de cliente (ClientOrder)
+            List<ClientOrder> clientOrders = entity.getOrders() == null
+                    ? Collections.emptyList()
+                    : entity.getOrders().stream()
+                    .map(coEntity -> {
+                        // Mapeamos los detalles (productos) de cada ClientOrder
+                        List<Product> details = coEntity.getDetails() == null
+                                ? Collections.emptyList()
+                                : coEntity.getDetails().stream()
+                                .map(ClientOrderDetailJpaMapper::toDomain)
+                                .toList();
+
+                        return ClientOrderJpaMapper.toDomain(coEntity, details, null);
+                    })
+                    .toList();
+
+            // Mapeamos el responsable usando UserJpaMapper
+            User responsible = UserJpaMapper.toDomain(
+                    entity.getResponsible(),
+                    null,   // areas, si quieres podrías traerlas con un join fetch
+                    null,   // tokens
+                    null    // orders, no los necesitamos aquí
+            );
+
+            // Mapeamos la orden completa con sus relaciones
+            Order order = OrderJpaMapper.toDomain(
+                    entity,
+                    table,
+                    clientOrders,
+                    responsible
+            );
+
+            // Vinculamos las ClientOrders con su Order
+            clientOrders.forEach(co -> co.setOrder(order));
+
+            orders.add(order);
+        }
+
+        return orders;
+    }
+
+
 
     @Override
     @Transactional

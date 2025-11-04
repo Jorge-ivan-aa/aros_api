@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import accrox.aros.api.application.exceptions.category.CategoryNotFoundException;
 import accrox.aros.api.application.exceptions.product.ProductNotFoundException;
-import accrox.aros.api.infrastructure.spring.controllers.DayMenuController;
+//import accrox.aros.api.infrastructure.spring.controllers.DayMenuController;
 
-@RestControllerAdvice(assignableTypes = DayMenuController.class)
+//@RestControllerAdvice(assignableTypes = DayMenuController.class)
 public class DayMenuAdvice {
     @ExceptionHandler(exception = ProductNotFoundException.class)
     public ResponseEntity<?> handleProductNotFound(ProductNotFoundException ex) {
