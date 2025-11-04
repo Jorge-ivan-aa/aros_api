@@ -12,18 +12,25 @@ import accrox.aros.api.domain.model.Order;
 import accrox.aros.api.domain.model.enums.OrderStatus;
 import accrox.aros.api.domain.repository.OrderRepository;
 import accrox.aros.api.infrastructure.spring.jpa.repository.OrderRepositoryJpa;
+import accrox.aros.api.infrastructure.spring.jpa.repository.TableRepositoryJpa;
+import accrox.aros.api.infrastructure.spring.jpa.repository.UserRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.mappers.ClientOrderDetailJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.ClientOrderJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.OrderJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.ProductJpaMapper;
 import accrox.aros.api.infrastructure.spring.mappers.TableJpaMapper;
-import accrox.aros.api.infrastructure.spring.mappers.UserJpaMapper;
 import jakarta.transaction.Transactional;
 
 @Repository
 public class OrderJpaAdapter implements OrderRepository {
     @Autowired
     private OrderRepositoryJpa orderRepositoryJpa;
+
+    @Autowired
+    private UserRepositoryJpa userRepositoryJpa;
+
+    @Autowired
+    private TableRepositoryJpa tableRepositoryJpa;
 
     @Override
     public void MarkOrderAsCompleted(Long orderId) {
@@ -36,8 +43,18 @@ public class OrderJpaAdapter implements OrderRepository {
     @Transactional
     public void create(Order order) {
         OrderEntity entity = OrderJpaMapper.toEntity(order, null, new HashSet<>(), null);
-        entity.setTable(TableJpaMapper.toEntity(order.getTable(), null));
-        entity.setResponsible(UserJpaMapper.toEntity(order.getResponsible(), null, null, null));
+        // Use managed references to avoid unintended updates on related entities
+        if (order.getTable() != null && order.getTable().getId() != null) {
+            TableEntity tableRef = this.tableRepositoryJpa.findById(order.getTable().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Table not found"));
+            entity.setTable(tableRef);
+        }
+
+        if (order.getResponsible() != null && order.getResponsible().getId() != null) {
+            UserEntity userRef = this.userRepositoryJpa.findById(order.getResponsible().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            entity.setResponsible(userRef);
+        }
 
         order.getClientOrders().stream().forEach((co) -> {
             ClientOrderEntity coe = ClientOrderJpaMapper.toEntity(co, new LinkedList<>(), entity);
@@ -84,5 +101,49 @@ public class OrderJpaAdapter implements OrderRepository {
                     return OrderJpaMapper.toDomain(o, t, null, null);
                 })
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public Optional<Order> findById(Long id) {
+        return this.orderRepositoryJpa.findById(id)
+                .map(entity -> {
+                    Table table = TableJpaMapper.toDomain(entity.getTable(), null);
+                    return OrderJpaMapper.toDomain(entity, table, null, null);
+                });
+    }
+
+    @Override
+    @Transactional
+    public void update(Order order) {
+        OrderEntity entity = this.orderRepositoryJpa.findById(order.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
+        if (order.getStatus() != null) {
+            entity.setStatus(order.getStatus());
+        }
+
+        if (order.getTable() != null && order.getTable().getId() != null) {
+            TableEntity tableRef = this.tableRepositoryJpa.findById(order.getTable().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Table not found"));
+            entity.setTable(tableRef);
+        }
+
+        if (order.getResponsible() != null && order.getResponsible().getId() != null) {
+            UserEntity userRef = this.userRepositoryJpa.findById(order.getResponsible().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            entity.setResponsible(userRef);
+        }
+
+        this.orderRepositoryJpa.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        OrderEntity orderEntity = this.orderRepositoryJpa.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        orderEntity.setStatus(OrderStatus.CANCELLED);
+        this.orderRepositoryJpa.save(orderEntity);
     }
 }
