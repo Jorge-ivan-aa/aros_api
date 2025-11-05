@@ -1,6 +1,7 @@
 package accrox.aros.api.infrastructure.spring.config.beans;
 
 import accrox.aros.api.application.usecases.category.CreateCategoryUseCase;
+import accrox.aros.api.application.usecases.category.DeleteCategoryUseCase;
 import accrox.aros.api.application.usecases.category.GetAllCategoriesUseCase;
 import accrox.aros.api.domain.repository.CategoryRepository;
 import org.springframework.context.annotation.Bean;
@@ -21,5 +22,12 @@ public class CategoryBeansConfig {
         CategoryRepository repository
     ) {
         return new GetAllCategoriesUseCase(repository);
+    }
+
+    @Bean
+    public DeleteCategoryUseCase deleteCategoryUseCase(
+        CategoryRepository repository
+    ) {
+        return new DeleteCategoryUseCase(repository);
     }
 }

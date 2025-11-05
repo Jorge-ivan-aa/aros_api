@@ -4,6 +4,7 @@ import accrox.aros.api.domain.model.Area;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface AreaRepository {
 
@@ -19,4 +20,5 @@ public interface AreaRepository {
 
     boolean existsByName(String name);
 
+    boolean existsAll(Set<Long> id);
 }

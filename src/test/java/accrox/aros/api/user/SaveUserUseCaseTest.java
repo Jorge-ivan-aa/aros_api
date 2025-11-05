@@ -55,7 +55,7 @@ public class SaveUserUseCaseTest {
                 "StrongPassword1",
                 "Calle Falsa 123",
                 "5551234567",
-                 List.of(areaInput)
+                List.of(1L)
         );
 
         when(userRepository.findByDocument(dto.document())).thenReturn(Optional.empty());

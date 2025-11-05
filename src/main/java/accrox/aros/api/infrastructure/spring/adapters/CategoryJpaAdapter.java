@@ -61,4 +61,14 @@ public class CategoryJpaAdapter implements CategoryRepository {
 
         return categories;
     }
+
+    @Override
+    public void deleteById(Long id) {
+        this.categoryRepositoryJpa.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return this.categoryRepositoryJpa.existsById(id);
+    }
 }

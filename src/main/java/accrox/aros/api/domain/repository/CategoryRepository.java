@@ -34,7 +34,11 @@ public interface CategoryRepository {
      */
     public boolean existsByName(String name);
 
+    public boolean existsById(Long id);
+
     public Optional<Category> findByName(String name);
     
     public List<Category> findAll(); 
+
+    public void deleteById(Long id);
 }

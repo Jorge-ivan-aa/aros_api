@@ -12,6 +12,7 @@ import accrox.aros.api.infrastructure.spring.jpa.repository.AreaRepositoryJpa;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class AreaJpaAdapter implements AreaRepository {
@@ -52,5 +53,10 @@ public class AreaJpaAdapter implements AreaRepository {
     @Override
     public boolean existsByName(String name) {
         return areaRepositoryJpa.existsByName(name);
+    }
+
+    @Override
+    public boolean existsAll(Set<Long> ids) {
+        return areaRepositoryJpa.existsAllByIdIn(ids, ids.size());
     }
 }

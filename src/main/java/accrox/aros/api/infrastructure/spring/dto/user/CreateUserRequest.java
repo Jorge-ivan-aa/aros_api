@@ -23,17 +23,18 @@ public record CreateUserRequest(
 
         String phone,
 
-        @NotNull(message = "Areas are required") Collection<GetAreaInput> areas
+        @NotNull(message = "Areas are required") Collection<Long> areas
 
 ) {
     public CreateUserInput toInput() {
         return new CreateUserInput(
-                this.name,
-                this.document,
-                this.email,
-                this.password,
-                this.address,
-                this.phone,
-                this.areas);
+            this.name,
+            this.document,
+            this.email,
+            this.password,
+            this.address,
+            this.phone,
+            this.areas
+        );
     }
 }

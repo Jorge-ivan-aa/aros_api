@@ -1,7 +1,9 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
 import accrox.aros.api.application.exceptions.category.CategoryAlreadyExistsException;
+import accrox.aros.api.application.exceptions.category.CategoryNotFoundException;
 import accrox.aros.api.application.usecases.category.CreateCategoryUseCase;
+import accrox.aros.api.application.usecases.category.DeleteCategoryUseCase;
 import accrox.aros.api.application.usecases.category.GetAllCategoriesUseCase;
 import accrox.aros.api.domain.model.Category;
 import accrox.aros.api.infrastructure.spring.dto.category.CreateCategoryRequest;
@@ -14,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +36,9 @@ public class CategoryController {
 
     @Autowired
     private GetAllCategoriesUseCase getAllCategoriesUseCase;
+
+    @Autowired
+    private DeleteCategoryUseCase deleteCategoryUseCase;
 
     @Operation(tags = "Categories Management", summary = "Get all categories", description = "Retrieves a list of all available categories in the system.")
     @GetMapping
@@ -59,5 +66,14 @@ public class CategoryController {
                 request.getName());
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(
+        @PathVariable Long id
+    ) throws CategoryNotFoundException {
+        this.deleteCategoryUseCase.execute(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
