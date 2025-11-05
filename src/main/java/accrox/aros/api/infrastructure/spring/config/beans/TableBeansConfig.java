@@ -2,6 +2,7 @@ package accrox.aros.api.infrastructure.spring.config.beans;
 
 import accrox.aros.api.application.usecases.table.CreateTableUseCase;
 import accrox.aros.api.application.usecases.table.CreateTablesUseCase;
+import accrox.aros.api.application.usecases.table.GetTablesAmountUseCase;
 import accrox.aros.api.application.usecases.table.GetTablesStatusUseCase;
 import accrox.aros.api.application.usecases.table.UpdateTablesCountUseCase;
 import accrox.aros.api.domain.repository.TableRepository;
@@ -13,33 +14,34 @@ public class TableBeansConfig {
 
     @Bean
     public CreateTableUseCase createTableUseCase(
-        TableRepository tableRepository
-    ) {
+            TableRepository tableRepository) {
         return new CreateTableUseCase(tableRepository);
     }
 
     @Bean
     public CreateTablesUseCase createTablesUseCase(
-        CreateTableUseCase createTableUseCase
-    ) {
+            CreateTableUseCase createTableUseCase) {
         return new CreateTablesUseCase(createTableUseCase);
     }
 
     @Bean
     public UpdateTablesCountUseCase updateTablesCountUseCase(
-        TableRepository tableRepository,
-        CreateTableUseCase createTableUseCase
-    ) {
+            TableRepository tableRepository,
+            CreateTableUseCase createTableUseCase) {
         return new UpdateTablesCountUseCase(
-            tableRepository,
-            createTableUseCase
-        );
+                tableRepository,
+                createTableUseCase);
     }
 
     @Bean
     public GetTablesStatusUseCase getTablesStatusUseCase(
-        TableRepository tableRepository
-    ) {
+            TableRepository tableRepository) {
         return new GetTablesStatusUseCase(tableRepository);
+    }
+
+    @Bean
+    public GetTablesAmountUseCase getTablesAmountUseCase(
+            TableRepository tableRepository) {
+        return new GetTablesAmountUseCase(tableRepository);
     }
 }
