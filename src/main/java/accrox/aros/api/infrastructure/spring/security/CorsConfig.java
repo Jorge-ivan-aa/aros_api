@@ -2,6 +2,7 @@ package accrox.aros.api.infrastructure.spring.security;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class CorsConfig {
+        @Value("${security.origins}")
+        private String[] origins;
 
         @Bean
         public WebMvcConfigurer corsConfigurer() {
@@ -21,10 +24,7 @@ public class CorsConfig {
                         public void addCorsMappings(@NonNull CorsRegistry registry) {
                                 registry
                                                 .addMapping("/**")
-                                                .allowedOrigins(
-                                                                "http://localhost:4200",
-                                                                "https://localhost:4200",
-                                                                "http://127.0.0.1:4200")
+                                                .allowedOrigins(origins)
                                                 .allowedMethods(
                                                                 "GET",
                                                                 "POST",
@@ -37,7 +37,7 @@ public class CorsConfig {
                                                 .exposedHeaders(
                                                                 "Authorization",
                                                                 "Content-Type",
-                                                                "X-Requested-With") // ✅ Headers expuestos
+                                                                "X-Requested-With")
                                                 .allowCredentials(true)
                                                 .maxAge(3600);
                         }
@@ -48,10 +48,7 @@ public class CorsConfig {
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
                 configuration.setAllowedOrigins(
-                                Arrays.asList(
-                                                "http://localhost:4200",
-                                                "https://localhost:4200",
-                                                "http://127.0.0.1:4200"));
+                                Arrays.asList(origins));
                 configuration.setAllowedMethods(
                                 Arrays.asList(
                                                 "GET",

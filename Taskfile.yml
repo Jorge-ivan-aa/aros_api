@@ -31,9 +31,10 @@ tasks:
       - "{{.MVN}} clean package"
       - cp target/*.jar build/
       - task down
+      - docker rmi buhoaullador/aros-api:latest --force
       - docker build -t buhoaullador/aros-api:latest build/
       - docker compose -f build/compose.yml up
-
+      - docker compose -f build/compose.yml down
 
   clean:
     desc: Clean build artifacts

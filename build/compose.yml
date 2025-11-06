@@ -1,7 +1,7 @@
 services:
   db_deploy:
     image: mariadb:11.2
-    container_name: aros_db_deploy
+    container_name: aros_db_test_deploy
     environment:
       - 'MARIADB_DATABASE=${DB_NAME}'
       - 'MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}'
@@ -16,7 +16,7 @@ services:
 
   api_deploy:
     image: buhoaullador/aros-api:latest
-    container_name: aros_api_deploy
+    container_name: aros_api_test_deploy
     environment:
       - 'DB_NAME=${DB_NAME}'
       - 'DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}'
@@ -26,6 +26,7 @@ services:
       - 'TOKEN_SECRET=${TOKEN_SECRET}'
       - 'ADMIN_DOCUMENT=${ADMIN_DOCUMENT}'
       - 'ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH}'
+      - 'ALLOWED_ORIGINS=${ALLOWED_ORIGINS}'
     ports:
       - "8080:8080"
     depends_on:
