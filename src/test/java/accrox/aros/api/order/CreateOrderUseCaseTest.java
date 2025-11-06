@@ -57,13 +57,13 @@ public class CreateOrderUseCaseTest {
     @Test
     public void shouldFailIfExistsDaymenuWithoutSelection() {
         Mockito.when(productRepository.findAllByIdSimple(Mockito.anySet())).thenReturn(
-            List.of(new Product(1L, null, null, null, null))
-        );
+                List.of(new Product(1L, null, null, null, null)));
 
         Mockito.when(tableRepository.existsById(Mockito.anyLong())).thenReturn(true);
-        /* 
+        /*
          * this only work if the order input has un detail for product with id 1L
-         * and a {@code null} collection of subproducts */
+         * and a {@code null} collection of subproducts
+         */
         Mockito.when(daymenuRepository.findIdsIn(Mockito.anyCollection())).thenReturn(List.of(1L));
 
         CreateOrderInput input = this.makeOrderInput();
@@ -87,8 +87,7 @@ public class CreateOrderUseCaseTest {
     @Test
     public void shouldWorkCorrectly() {
         Mockito.when(productRepository.findAllByIdSimple(Mockito.anySet())).thenReturn(
-            List.of(new Product(1L, null, null, 1200.0F, 2))
-        );
+                List.of(new Product(1L, null, null, 1200.0F, 2)));
 
         Mockito.when(tableRepository.existsById(Mockito.anyLong())).thenReturn(true);
         Mockito.when(daymenuRepository.findIdsIn(Mockito.anyCollection())).thenReturn(List.of());
@@ -105,15 +104,13 @@ public class CreateOrderUseCaseTest {
 
     private CreateOrderInput makeOrderInput() {
         CreateClientOrderInput oi1 = new CreateClientOrderInput(
-            List.of(
-                new CreateOrderDetailInput(1L, 2, null, null)
-            )
-        );
+                List.of(
+                        new CreateOrderDetailInput(1L, 2, null, null)));
 
         CreateOrderInput input = new CreateOrderInput(
-            1L,
-            List.of(oi1)
-        );
+                1L,
+                "1001", // responsibleDocument
+                List.of(oi1));
 
         return input;
     }

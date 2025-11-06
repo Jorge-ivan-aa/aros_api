@@ -49,10 +49,22 @@ public class OrderJpaAdapter implements OrderRepository {
             entity.setTable(tableRef);
         }
 
-        if (order.getResponsible() != null && order.getResponsible().getId() != null) {
-            UserEntity userRef = this.userRepositoryJpa.findById(order.getResponsible().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
-            entity.setResponsible(userRef);
+        // Resolve responsible user either by ID (preferred) or by document
+        if (order.getResponsible() != null) {
+            if (order.getResponsible().getId() != null) {
+                UserEntity userRef = this.userRepositoryJpa
+                        .findById(order.getResponsible().getId())
+                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                entity.setResponsible(userRef);
+            } else if (order.getResponsible().getDocument() != null
+                    && !order.getResponsible().getDocument().isBlank()) {
+                UserEntity userRef = this.userRepositoryJpa
+                        .findByDocument(order.getResponsible().getDocument())
+                        .orElseThrow(() -> new IllegalArgumentException("User not found by document"));
+                entity.setResponsible(userRef);
+            } else {
+                throw new IllegalArgumentException("Responsible user is required");
+            }
         }
 
         order.getClientOrders().stream().forEach((co) -> {

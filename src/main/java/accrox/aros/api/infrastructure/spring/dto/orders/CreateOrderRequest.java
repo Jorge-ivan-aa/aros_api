@@ -9,11 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.util.Collection;
 
-@Schema(
-    description = "Request to create a new order with multiple client orders",
-    example = """
+@Schema(description = "Request to create a new order with multiple client orders", example = """
     {
       "table": 1,
+      "responsible": "1001",
       "clientOrders": [
         {
           "details": [
@@ -43,33 +42,19 @@ import java.util.Collection;
         }
       ]
     }
-    """
-)
+    """)
 public record CreateOrderRequest(
-    @Schema(
-        description = "ID of the table where the order is placed",
-        example = "1"
-    )
-    @NotNull
-    @Positive
-    Long table,
+    @Schema(description = "ID of the table where the order is placed", example = "1") @NotNull @Positive Long table,
 
-    @ArraySchema(
-        schema = @Schema(
-            description = "List of client orders, each representing an individual client's order",
-            implementation = CreateClientOrderRequest.class
-        )
-    )
-    @Valid
-    @NotEmpty
-    Collection<CreateClientOrderRequest> clientOrders
-) {
-    public CreateOrderInput toInput() {
-        return new CreateOrderInput(
-            this.table,
-            this.clientOrders.stream()
-                .map(co -> co.toInput())
-                .toList()
-        );
-    }
+    @Schema(description = "Document ID of the responsible user (employee) for this order", example = "1001") @NotNull String responsible,
+
+    @ArraySchema(schema = @Schema(description = "List of client orders, each representing an individual client's order", implementation = CreateClientOrderRequest.class)) @Valid @NotEmpty Collection<CreateClientOrderRequest> clientOrders) {
+  public CreateOrderInput toInput() {
+    return new CreateOrderInput(
+        this.table,
+        this.responsible,
+        this.clientOrders.stream()
+            .map(co -> co.toInput())
+            .toList());
+  }
 }

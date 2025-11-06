@@ -1,7 +1,6 @@
 package accrox.aros.api.application.usecases.user;
 
 import accrox.aros.api.application.dto.user.CreateUserInput;
-import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.repository.AreaRepository;
 import accrox.aros.api.domain.repository.UserRepository;
@@ -16,7 +15,8 @@ public class SaveUserUseCase {
 
     private final PasswordService passwordService;
 
-    public SaveUserUseCase(UserRepository userRepository,AreaRepository areaRepository ,PasswordService passwordService) {
+    public SaveUserUseCase(UserRepository userRepository, AreaRepository areaRepository,
+            PasswordService passwordService) {
         this.userRepository = userRepository;
         this.areaRepository = areaRepository;
         this.passwordService = passwordService;
@@ -40,15 +40,15 @@ public class SaveUserUseCase {
         user.setAddress(dto.address());
         user.setPhone(dto.phone());
 
-        // var areas = dto.areas().stream()
-        //         .map(areaInput -> areaRepository.getAreaByName(areaInput.name())
-        //                 .orElseThrow(() -> new ValidationException("Area not found: " + areaInput.name())))
-        //         .toList();
+        // Resolve areas by their IDs to keep full information (including name)
+        var areas = dto
+                .areas()
+                .stream()
+                .map(id -> areaRepository
+                        .getAreaById(id)
+                        .orElseThrow(() -> new ValidationException("Area not found: " + id)))
+                .toList();
 
-        var areas = dto.areas().stream().map(a -> {
-            return new Area(a, null, null);
-        }).toList();
-        
         user.setAreas(areas);
 
         userRepository.save(user);

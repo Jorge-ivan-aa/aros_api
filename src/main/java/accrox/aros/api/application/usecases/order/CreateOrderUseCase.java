@@ -64,7 +64,11 @@ public class CreateOrderUseCase {
 
         products.forEach(p -> this.products.put(p.getId(), p));
         Order order = this.transformInputIntoOrder(input);
-        order.setResponsible(responsible);
+
+        // Use responsible from input if provided, otherwise use authenticated user
+        User responsibleUser = new User();
+        responsibleUser.setDocument(input.responsibleDocument());
+        order.setResponsible(responsibleUser);
 
         this.repository.create(order);
     }

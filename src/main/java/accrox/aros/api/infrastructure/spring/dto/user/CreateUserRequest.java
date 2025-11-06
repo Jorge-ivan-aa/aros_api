@@ -1,6 +1,5 @@
 package accrox.aros.api.infrastructure.spring.dto.user;
 
-import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.application.dto.user.CreateUserInput;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,13 +27,12 @@ public record CreateUserRequest(
 ) {
     public CreateUserInput toInput() {
         return new CreateUserInput(
-            this.name,
-            this.document,
-            this.email,
-            this.password,
-            this.address,
-            this.phone,
-            this.areas
-        );
+                this.name,
+                this.document,
+                this.email,
+                this.password,
+                this.address,
+                this.phone,
+                this.areas);
     }
 }

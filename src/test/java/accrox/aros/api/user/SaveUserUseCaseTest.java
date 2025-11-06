@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 
-import accrox.aros.api.application.dto.area.GetAreaInput;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.repository.AreaRepository;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,6 @@ public class SaveUserUseCaseTest {
     @Test
     void whenValidDTO_thenSavesUserSuccessfully() {
 
-        GetAreaInput areaInput = new GetAreaInput("Bebidas");
         Area areaEntity = new Area();
         areaEntity.setId(1L);
         areaEntity.setName("Bebidas");
@@ -55,13 +53,11 @@ public class SaveUserUseCaseTest {
                 "StrongPassword1",
                 "Calle Falsa 123",
                 "5551234567",
-                List.of(1L)
-        );
+                List.of(1L));
 
         when(userRepository.findByDocument(dto.document())).thenReturn(Optional.empty());
         when(passwordService.encode(dto.password())).thenReturn("encodedPassword123");
-        when(areaRepository.getAreaByName("Bebidas")).thenReturn(Optional.of(areaEntity));
-
+        when(areaRepository.getAreaById(1L)).thenReturn(Optional.of(areaEntity));
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 
