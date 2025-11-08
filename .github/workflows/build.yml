@@ -1,8 +1,8 @@
-name: Build API image
-on: 
+name: Build API image and Notify
+on:
   workflow_dispatch:
   push:
-    branches: [ dev ]
+    branches: [main]
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -20,13 +20,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Generate image version
+        run: echo "IMAGE_VERSION=$(date +%Y%m%d)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Set up Java 21
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: "temurin"
+          java-version: "21"
 
       - name: Start services with docker-compose
         run: docker compose up -d
@@ -40,8 +43,12 @@ jobs:
       - name: Stop services
         run: docker compose down
 
-      - name: Build Docker image with docker-compose
-        run: docker build -t buhoaullador/aros-api:latest build/
+      - name: Build Docker images
+        run: |
+          docker build \
+            -t buhoaullador/aros-api:${{ env.IMAGE_VERSION }} \
+            -t buhoaullador/aros-api:latest \
+            build/
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -49,5 +56,30 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Push Docker image
-        run: docker push buhoaullador/aros-api:latest
+      - name: Push Docker images
+        run: |
+          docker push buhoaullador/aros-api:${{ env.IMAGE_VERSION }}
+          docker push buhoaullador/aros-api:latest
+
+      - name: Send notification on success
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAIL_SERVER_ADDRESS }}
+          server_port: ${{ secrets.MAIL_SERVER_PORT }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "Deployment Required: New AROS API image ${{ env.IMAGE_VERSION }} available"
+          to: ${{ secrets.MAIL_RECIPIENT }}
+          from: GitHub Actions <noreply@github.com>
+          body: |
+            A new version of the aros-api has been successfully built and pushed to Docker Hub.
+
+            The new Docker image 'buhoaullador/aros-api:${{ env.IMAGE_VERSION }}' is ready for manual deployment.
+            The 'latest' tag has also been updated for convenience.
+
+            Triggered by commit: ${{ github.sha }}
+            Commit message: ${{ github.event.head_commit.message }}
+            See commit details: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+
+            Please connect to the infrastructure environment and run the deployment script using the new version tag.
