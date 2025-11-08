@@ -8,17 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      DB_NAME: ${{vars.DB_NAME}}
-      DB_ROOT_PASSWORD: ${{secrets.DB_ROOT_PASSWORD}}
-      DB_PORT: ${{vars.DB_PORT}}
-      DB_HOST: ${{vars.DB_HOST}}
-      ADMIN_DOCUMENT: ${{vars.ADMIN_DOCUMENT}}
-      ADMIN_PASSWORD_HASH: ${{secrets.ADMIN_PASSWORD_HASH}}
-      TOKEN_SECRET: ${{secrets.TOKEN_SECRET}}
-      LOGGING_LEVEL_APP: ${{vars.LOGGING_LEVEL_APP}}
-      ALLOWED_ORIGINS: ${{vars.ALLOWED_ORIGINS}}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -36,50 +25,51 @@ jobs:
           STATUS=$(gcloud compute instances describe ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }} --format='get(status)')
           if [ "$STATUS" = "TERMINATED" ]; then
             echo "VM is stopped. Starting it now..."
-            gcloud compute instances start ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }}
+            gcloud compute instances start ${{ secrets.GGCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }}
             echo "Waiting 30 seconds for the VM to boot..."
             sleep 30
           else
             echo "VM is already running (Status: $STATUS)."
           fi
 
-      - name: Connect to VM and deploy
+      - name: Create .env file for deployment
+        run: |
+          echo "Creating .env file with production values..."
+          cat > .env << EOF
+          DB_NAME=${{vars.DB_NAME}}
+          DB_ROOT_PASSWORD=${{secrets.DB_ROOT_PASSWORD}}
+          DB_PORT=${{vars.DB_PORT}}
+          DB_HOST=db_deploy
+          ADMIN_DOCUMENT=${{vars.ADMIN_DOCUMENT}}
+          ADMIN_PASSWORD_HASH=${{secrets.ADMIN_PASSWORD_HASH}}
+          TOKEN_SECRET=${{secrets.TOKEN_SECRET}}
+          LOGGING_LEVEL_APP=${{vars.LOGGING_LEVEL_APP}}
+          ALLOWED_ORIGINS=${{vars.ALLOWED_ORIGINS}}
+          EOF
+
+      - name: Copy configuration to VM
+        run: |
+          echo "Copying compose.yml and .env to the VM's home directory..."
+          gcloud compute scp build/compose.yml .env ${{ secrets.GCP_VM_NAME }}:~/ --zone=${{ secrets.GCP_ZONE }}
+
+      - name: Deploy on VM
         run: |
           gcloud compute ssh ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }} --command='
-            # Create backup of current compose file
-            if [ -f compose.yml ]; then
-              cp compose.yml compose.yml.backup
-            fi
+            # Rename copied compose file to the default name
+            mv ~/compose.yml ~/docker-compose.yml
 
-            # Create .env file with environment variables
-            cat > .env << EOF
-            DB_NAME=${{vars.DB_NAME}}
-            DB_ROOT_PASSWORD=${{secrets.DB_ROOT_PASSWORD}}
-            DB_PORT=${{vars.DB_PORT}}
-            DB_HOST=${{vars.DB_HOST}}
-            ADMIN_DOCUMENT=${{vars.ADMIN_DOCUMENT}}
-            ADMIN_PASSWORD_HASH=${{secrets.ADMIN_PASSWORD_HASH}}
-            TOKEN_SECRET=${{secrets.TOKEN_SECRET}}
-            LOGGING_LEVEL_APP=${{vars.LOGGING_LEVEL_APP}}
-            ALLOWED_ORIGINS=${{vars.ALLOWED_ORIGINS}}
-            EOF
-          '
-
-          # Copy the complete compose.yml to VM
-          gcloud compute scp build/compose.yml ${{ secrets.GCP_VM_NAME }}:compose.yml --zone=${{ secrets.GCP_ZONE }}
-
-          gcloud compute ssh ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }} --command='
-            # Stop and remove current containers
+            # Stop current services
             docker compose down
 
-            # Pull latest API image
-            docker pull buhoaullador/aros-api:latest
+            # Pull the latest versions of all images defined in the compose file
+            docker compose pull
 
-            # Start new containers
+            # Start new services in detached mode
             docker compose up -d
 
-            # Clean up old images
-            docker image prune -f
+            # Aggressively prune all unused images to save disk space
+            echo "Cleaning up all unused Docker images..."
+            docker image prune -a -f
 
             # Verify services are running
             echo "Deployment completed. Checking running containers:"
