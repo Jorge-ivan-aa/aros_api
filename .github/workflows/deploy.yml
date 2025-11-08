@@ -1,0 +1,87 @@
+name: Deploy to Google Cloud
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      DB_NAME: ${{vars.DB_NAME}}
+      DB_ROOT_PASSWORD: ${{secrets.DB_ROOT_PASSWORD}}
+      DB_PORT: ${{vars.DB_PORT}}
+      DB_HOST: ${{vars.DB_HOST}}
+      ADMIN_DOCUMENT: ${{vars.ADMIN_DOCUMENT}}
+      ADMIN_PASSWORD_HASH: ${{secrets.ADMIN_PASSWORD_HASH}}
+      TOKEN_SECRET: ${{secrets.TOKEN_SECRET}}
+      LOGGING_LEVEL_APP: ${{vars.LOGGING_LEVEL_APP}}
+      ALLOWED_ORIGINS: ${{vars.ALLOWED_ORIGINS}}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Google Cloud Auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Start VM if it is stopped
+        run: |
+          STATUS=$(gcloud compute instances describe ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }} --format='get(status)')
+          if [ "$STATUS" = "TERMINATED" ]; then
+            echo "VM is stopped. Starting it now..."
+            gcloud compute instances start ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }}
+            echo "Waiting 30 seconds for the VM to boot..."
+            sleep 30
+          else
+            echo "VM is already running (Status: $STATUS)."
+          fi
+
+      - name: Connect to VM and deploy
+        run: |
+          gcloud compute ssh ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }} --command='
+            # Create backup of current compose file
+            if [ -f compose.yml ]; then
+              cp compose.yml compose.yml.backup
+            fi
+
+            # Create .env file with environment variables
+            cat > .env << EOF
+            DB_NAME=${{vars.DB_NAME}}
+            DB_ROOT_PASSWORD=${{secrets.DB_ROOT_PASSWORD}}
+            DB_PORT=${{vars.DB_PORT}}
+            DB_HOST=${{vars.DB_HOST}}
+            ADMIN_DOCUMENT=${{vars.ADMIN_DOCUMENT}}
+            ADMIN_PASSWORD_HASH=${{secrets.ADMIN_PASSWORD_HASH}}
+            TOKEN_SECRET=${{secrets.TOKEN_SECRET}}
+            LOGGING_LEVEL_APP=${{vars.LOGGING_LEVEL_APP}}
+            ALLOWED_ORIGINS=${{vars.ALLOWED_ORIGINS}}
+            EOF
+          '
+
+          # Copy the complete compose.yml to VM
+          gcloud compute scp build/compose.yml ${{ secrets.GCP_VM_NAME }}:compose.yml --zone=${{ secrets.GCP_ZONE }}
+
+          gcloud compute ssh ${{ secrets.GCP_VM_NAME }} --zone=${{ secrets.GCP_ZONE }} --command='
+            # Stop and remove current containers
+            docker compose down
+
+            # Pull latest API image
+            docker pull buhoaullador/aros-api:latest
+
+            # Start new containers
+            docker compose up -d
+
+            # Clean up old images
+            docker image prune -f
+
+            # Verify services are running
+            echo "Deployment completed. Checking running containers:"
+            docker ps
+          '
