@@ -12,6 +12,8 @@ public interface DaymenuRepositoryJpa
     extends CrudRepository<DaymenuEntity, Long> {
     public boolean existsByName(String name);
 
+    public boolean existsByCreation(LocalDate creation);
+
     @Query("SELECT d.id FROM DaymenuEntity d WHERE d.id IN :ids")
     public Collection<Long> findIdsIn(Collection<Long> ids);
 

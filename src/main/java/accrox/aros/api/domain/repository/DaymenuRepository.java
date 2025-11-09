@@ -16,4 +16,6 @@ public interface DaymenuRepository {
     public List<Daymenu> findAll();
 
     public Optional<Daymenu> findCurrentDaymenu(LocalDate date);
+
+    public boolean existsByDate(LocalDate date);
 }

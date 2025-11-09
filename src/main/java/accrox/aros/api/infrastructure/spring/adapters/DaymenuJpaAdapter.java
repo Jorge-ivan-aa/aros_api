@@ -70,6 +70,11 @@ public class DaymenuJpaAdapter implements DaymenuRepository {
     }
 
     @Override
+    public boolean existsByDate(LocalDate date) {
+        return this.daymenuRepositoryJpa.existsByCreation(date);
+    }
+
+    @Override
     public Collection<Long> findIdsIn(Collection<Long> ids) {
         return this.daymenuRepositoryJpa.findIdsIn(ids);
     }

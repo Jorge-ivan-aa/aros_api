@@ -1,8 +1,10 @@
 package accrox.aros.api.infrastructure.spring.controllers;
 
 import accrox.aros.api.application.dto.daymenu.DaymenuOutput;
+import accrox.aros.api.application.usecases.daymenu.CreateDayMenuUseCase;
 import accrox.aros.api.application.usecases.daymenu.GetCurrentDaymenuUseCase;
 import accrox.aros.api.application.usecases.daymenu.GetDaymenuByDateUseCase;
+import accrox.aros.api.infrastructure.spring.dto.daymenu.CreateDayMenuRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/daymenu")
@@ -20,6 +23,9 @@ public class DaymenuController {
 
     private static final Logger logger = LoggerFactory.getLogger(
             DaymenuController.class);
+
+    @Autowired
+    private CreateDayMenuUseCase createDayMenuUseCase;
 
     @Autowired
     private GetCurrentDaymenuUseCase getCurrentDaymenuUseCase;
@@ -58,6 +64,22 @@ public class DaymenuController {
             return new ResponseEntity<>(
                     "Invalid date format. Use YYYY-MM-DD",
                     HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(tags = "Day Menu Management", summary = "Create a new day menu", description = "This endpoint creates a new day menu with organized categories and products. The creation date is automatically set to the current day.")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createDayMenu(@Valid @RequestBody CreateDayMenuRequest request) {
+        logger.info("POST /api/daymenu - Creating day menu: {}", request.name());
+
+        try {
+            this.createDayMenuUseCase.execute(request.toInput());
+            logger.info("POST /api/daymenu - Day menu created successfully: {}", request.name());
+            return new ResponseEntity<>("Day menu created successfully", HttpStatus.CREATED);
+        } catch (Exception e) {
+            logger.error("POST /api/daymenu - Error creating day menu: {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
