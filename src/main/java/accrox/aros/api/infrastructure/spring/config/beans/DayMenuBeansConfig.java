@@ -1,7 +1,8 @@
 package accrox.aros.api.infrastructure.spring.config.beans;
 
-import accrox.aros.api.application.usecases.daymenu.GetAllDayMenusUseCase;
-import accrox.aros.api.application.usecases.product.CreateDayMenuUseCase;
+import accrox.aros.api.application.usecases.daymenu.CreateDayMenuUseCase;
+import accrox.aros.api.application.usecases.daymenu.GetCurrentDaymenuUseCase;
+import accrox.aros.api.application.usecases.daymenu.GetDaymenuByDateUseCase;
 import accrox.aros.api.domain.repository.CategoryRepository;
 import accrox.aros.api.domain.repository.DaymenuRepository;
 import accrox.aros.api.domain.repository.ProductRepository;
@@ -13,21 +14,24 @@ public class DayMenuBeansConfig {
 
     @Bean
     public CreateDayMenuUseCase createDayMenuUseCase(
-        DaymenuRepository repository,
-        ProductRepository productRepository,
-        CategoryRepository categoryRepository
+        DaymenuRepository daymenuRepository,
+        CategoryRepository categoryRepository,
+        ProductRepository productRepository
     ) {
-        return new CreateDayMenuUseCase(
-            repository,
-            categoryRepository,
-            productRepository
-        );
+        return new CreateDayMenuUseCase(daymenuRepository, categoryRepository, productRepository);
     }
 
     @Bean
-    public GetAllDayMenusUseCase getAllDayMenusUseCase(
-        DaymenuRepository repository
+    public GetCurrentDaymenuUseCase getCurrentDaymenuUseCase(
+        DaymenuRepository daymenuRepository
     ) {
-        return new GetAllDayMenusUseCase(repository);
+        return new GetCurrentDaymenuUseCase(daymenuRepository);
+    }
+
+    @Bean
+    public GetDaymenuByDateUseCase getDaymenuByDateUseCase(
+        DaymenuRepository daymenuRepository
+    ) {
+        return new GetDaymenuByDateUseCase(daymenuRepository);
     }
 }
