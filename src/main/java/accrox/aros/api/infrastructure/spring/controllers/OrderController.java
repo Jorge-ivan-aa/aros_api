@@ -50,6 +50,9 @@ public class OrderController {
     @Autowired
     private CancelOrderUseCase cancelOrderUseCase;
 
+    @Autowired
+    private GetCurrentDayOrdersUseCase getCurrentDayOrdersUseCase;
+
     @Operation(tags = "Orders Management", summary = "Mark an order as completed", description = "This endpoint updates the status of an order by marking it as completed. You must provide the order ID in the path parameter.")
     @PatchMapping(path = "/{id}/mark-order-as-completed")
     @PreAuthorize("hasRole('USER')")
@@ -92,6 +95,17 @@ public class OrderController {
         logger.info("GET /api/orders/all - Retrieved {} orders", orders.size());
         return ResponseEntity.ok(orders);
     }
+
+    @Operation(tags = "Orders Management", summary = "Get current day orders", description = "Retrieves a list of current day orders in the system.")
+    @GetMapping("/current")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<OrdersOutput>> getCurrentDayOrders() {
+        logger.info("GET /api/orders/current - Retrieving current day orders");
+        List<OrdersOutput> orders = getCurrentDayOrdersUseCase.execute();
+        logger.info("GET /api/orders/current - Retrieved {} orders", orders.size());
+        return ResponseEntity.ok(orders);
+    }
+
 
     @Operation(tags = "Orders Management", summary = "Get all orders with details", description = "Retrieves all orders along with their client orders and products.")
     @GetMapping("/details")
