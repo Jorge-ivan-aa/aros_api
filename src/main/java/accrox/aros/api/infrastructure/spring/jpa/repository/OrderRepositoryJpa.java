@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import accrox.aros.api.domain.model.enums.OrderStatus;
 import accrox.aros.api.infrastructure.spring.jpa.entity.OrderEntity;
 
 public interface OrderRepositoryJpa extends CrudRepository<OrderEntity, Long> {
@@ -25,5 +26,15 @@ public interface OrderRepositoryJpa extends CrudRepository<OrderEntity, Long> {
                 LEFT JOIN FETCH d.product p
             """)
     List<OrderEntity> findAllWithDetails();
-
+    
+    @Query("""
+            SELECT d.product.id, SUM(d.quantity)
+            FROM OrderEntity o
+            JOIN o.orders co
+            JOIN co.details d
+            WHERE o.status = :status AND d.product.id IS NOT NULL
+            GROUP BY d.product.id
+            ORDER BY SUM(d.quantity) DESC
+        """)
+    List<Object[]> findSoldProductQuantities(OrderStatus status);
 }

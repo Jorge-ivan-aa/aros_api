@@ -31,6 +31,8 @@ import accrox.aros.api.application.usecases.product.GetProductsByCategoryUseCase
 import accrox.aros.api.application.usecases.product.UpdateAreaProductUseCase;
 import accrox.aros.api.application.usecases.product.UpdateProductCategoriesUseCase;
 import accrox.aros.api.application.usecases.product.UpdateProductUseCase;
+import accrox.aros.api.application.usecases.order.GetTopSellingProductsUseCase;
+import accrox.aros.api.application.dto.product.TopSellingProductOutput;
 import accrox.aros.api.infrastructure.spring.dto.product.CreateProductRequest;
 import accrox.aros.api.infrastructure.spring.dto.product.UpdateProductAreaRequest;
 import accrox.aros.api.infrastructure.spring.dto.product.UpdateProductCategorytRequest;
@@ -68,6 +70,9 @@ public class ProductController {
     
     @Autowired
     private GetNoDayMenuProducts getNoDayMenuProducts;
+    
+    @Autowired
+    private GetTopSellingProductsUseCase getTopSellingProductsUseCase;
 
     @Operation(tags = "Products Management", summary = "Get all products", description = "Retrieves a list of all available products in the system.")
     @GetMapping
@@ -171,5 +176,20 @@ public class ProductController {
     @Operation(tags = "Products Management", summary = "Get all products whitout daymenus", description = "Retrieves a list of all available products in the system except those that are daymenus.")
     public ResponseEntity<List<ProductSimpleOutput>> findNoDayMenu() {
         return ResponseEntity.ok(this.getNoDayMenuProducts.execute());
+    }
+    
+    @GetMapping(path = "/top-selling")
+    @PreAuthorize("hasRole('USER')")
+    @Operation(
+        tags = "Products Management",
+        summary = "Get top selling products",
+        description = "Returns up to 10 dishes ordered by sold quantity (completed orders only). If fewer than 10 exist, only those are returned."
+    )
+    public ResponseEntity<List<TopSellingProductOutput>> getTopSellingProducts() {
+        List<TopSellingProductOutput> data = this.getTopSellingProductsUseCase.execute();
+        if (data.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(data);
     }
 }

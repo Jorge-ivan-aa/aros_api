@@ -7,6 +7,8 @@ import accrox.aros.api.application.usecases.product.GetProductByIdUseCase;
 import accrox.aros.api.application.usecases.product.GetProductsByCategoryUseCase;
 import accrox.aros.api.application.usecases.product.UpdateProductUseCase;
 import accrox.aros.api.domain.repository.ProductRepository;
+import accrox.aros.api.application.usecases.order.GetTopSellingProductsUseCase;
+import accrox.aros.api.domain.repository.OrderRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -53,5 +55,13 @@ public class ProductBeansConfig {
         ProductRepository repository
     ) {
         return new GetNoDayMenuProducts(repository);
+    }
+
+    @Bean
+    public GetTopSellingProductsUseCase getTopSellingProductsUseCase(
+        OrderRepository orderRepository,
+        ProductRepository productRepository
+    ) {
+        return new GetTopSellingProductsUseCase(orderRepository, productRepository);
     }
 }

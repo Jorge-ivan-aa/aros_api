@@ -47,9 +47,18 @@ public interface OrderRepository {
 
     /**
      * Cancel an order by setting its status to CANCELLED
-     * 
+     *
      * @param orderId the order's id
      * @throws IllegalArgumentException if order not found
      */
     public void cancelOrder(Long orderId);
+    
+    /**
+     * Returns all sold product quantities for completed orders.
+     *
+     * No limit is applied at repository level; the use case is responsible for sorting and limiting.
+     *
+     * @return a map of productId -> total sold quantity
+     */
+    public java.util.Map<Long, Long> findSoldProductQuantitiesFromCompletedOrders();
 }

@@ -209,4 +209,19 @@ public class OrderJpaAdapter implements OrderRepository {
         orderEntity.setStatus(OrderStatus.CANCELLED);
         this.orderRepositoryJpa.save(orderEntity);
     }
+    
+    @Override
+    @Transactional
+    public java.util.Map<Long, Long> findSoldProductQuantitiesFromCompletedOrders() {
+        java.util.List<Object[]> rows =
+            this.orderRepositoryJpa.findSoldProductQuantities(OrderStatus.COMPLETED);
+
+        java.util.Map<Long, Long> result = new java.util.LinkedHashMap<>();
+        for (Object[] r : rows) {
+            Long productId = (Long) r[0];
+            Long qty = (r[1] instanceof Long) ? (Long) r[1] : ((Number) r[1]).longValue();
+            result.put(productId, qty);
+        }
+        return result;
+    }
 }
