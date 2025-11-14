@@ -1,14 +1,33 @@
 package accrox.aros.api.infrastructure.spring.adapters;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import accrox.aros.api.domain.model.*;
-import accrox.aros.api.infrastructure.spring.jpa.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import accrox.aros.api.domain.model.ClientOrder;
+import accrox.aros.api.domain.model.DayMenuSelection;
+import accrox.aros.api.domain.model.Order;
+import accrox.aros.api.domain.model.Product;
+import accrox.aros.api.domain.model.Table;
+import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.model.enums.OrderStatus;
 import accrox.aros.api.domain.repository.OrderRepository;
+import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderDetailEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.ClientOrderEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.OrderEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.ProductEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.TableEntity;
+import accrox.aros.api.infrastructure.spring.jpa.entity.UserEntity;
 import accrox.aros.api.infrastructure.spring.jpa.repository.OrderRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.jpa.repository.TableRepositoryJpa;
 import accrox.aros.api.infrastructure.spring.jpa.repository.UserRepositoryJpa;
@@ -209,12 +228,11 @@ public class OrderJpaAdapter implements OrderRepository {
         orderEntity.setStatus(OrderStatus.CANCELLED);
         this.orderRepositoryJpa.save(orderEntity);
     }
-    
+
     @Override
     @Transactional
     public java.util.Map<Long, Long> findSoldProductQuantitiesFromCompletedOrders() {
-        java.util.List<Object[]> rows =
-            this.orderRepositoryJpa.findSoldProductQuantities(OrderStatus.COMPLETED);
+        java.util.List<Object[]> rows = this.orderRepositoryJpa.findSoldProductQuantities(OrderStatus.COMPLETED);
 
         java.util.Map<Long, Long> result = new java.util.LinkedHashMap<>();
         for (Object[] r : rows) {
@@ -223,5 +241,56 @@ public class OrderJpaAdapter implements OrderRepository {
             result.put(productId, qty);
         }
         return result;
+    }
+
+    @Override
+    public List<Order> findUncompletedOrdersBefore(LocalDateTime today) {
+        List<OrderEntity> entities = this.orderRepositoryJpa.findUncompletedEntitiesBefore(today);
+        List<Order> domains = new ArrayList<>();
+
+        for (OrderEntity entity : entities) {
+            domains.add(OrderJpaMapper.toDomain(entity));
+        }
+
+        return domains;
+    }
+
+    // TODO: Check GPT code
+
+    @Override
+    public void saveAll(List<Order> ordersToSave) {
+        if (ordersToSave == null || ordersToSave.isEmpty()) {
+            return;
+        }
+
+        // 1. Obtenemos los IDs de los objetos de dominio que queremos guardar
+        // (Debes tener un getter para el ID en tu objeto de dominio Order)
+        List<Long> ids = ordersToSave.stream()
+                .map(Order::getId) // O como se llame tu getter de ID
+                .collect(Collectors.toList());
+
+        // 2. [FETCH] Buscamos las entidades ORIGINALES y COMPLETAS de la BBDD
+        // Estas entidades SÍ tienen el `id_user` y el `id_table` correctos.
+        Iterable<OrderEntity> existingEntities = this.orderRepositoryJpa.findAllById(ids);
+
+        // 3. Creamos un mapa para hacer la fusión más eficiente
+        Map<Long, Order> domainMap = ordersToSave.stream()
+                .collect(Collectors.toMap(Order::getId, order -> order));
+
+        // 4. [MERGE] Actualizamos las entidades existentes con los cambios del dominio
+        for (OrderEntity entity : existingEntities) {
+            Order domainOrder = domainMap.get(entity.getId());
+
+            if (domainOrder != null) {
+                // Actualizamos SOLO los campos que maneja el dominio
+                // Asumiendo que tu dominio Order tiene getStatus() y es un Enum
+                entity.setStatus(domainOrder.getStatus());
+            }
+        }
+
+        // 5. [SAVE] Guardamos las entidades originales, completas y ahora modificadas.
+        // Hibernate verá que `id_user` y `id_table` no son nulos y la
+        // actualización funcionará.
+        this.orderRepositoryJpa.saveAll(existingEntities);
     }
 }

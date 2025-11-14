@@ -1,18 +1,17 @@
 package accrox.aros.api.application.usecases.order;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import accrox.aros.api.application.dto.product.TopSellingProductOutput;
 import accrox.aros.api.domain.model.Category;
 import accrox.aros.api.domain.model.Product;
 import accrox.aros.api.domain.repository.OrderRepository;
 import accrox.aros.api.domain.repository.ProductRepository;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Use case to obtain the top-N selling products from completed orders.
@@ -24,9 +23,8 @@ public class GetTopSellingProductsUseCase {
     private final ProductRepository productRepository;
 
     public GetTopSellingProductsUseCase(
-        OrderRepository orderRepository,
-        ProductRepository productRepository
-    ) {
+            OrderRepository orderRepository,
+            ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
     }
@@ -34,7 +32,8 @@ public class GetTopSellingProductsUseCase {
     /**
      * Returns the top "limit" selling products from completed orders.
      * 
-     * @return list ordered by sold quantity desc; each item has product name, its category names and sold quantity
+     * @return list ordered by sold quantity desc; each item has product name, its
+     *         category names and sold quantity
      */
     public List<TopSellingProductOutput> execute() {
         final int TOP_N = 10;
@@ -50,14 +49,14 @@ public class GetTopSellingProductsUseCase {
         // Load products with categories; then filter by ids.
         List<Product> allWithRelations = this.productRepository.findAllWithRelations();
         Map<Long, Product> byId = allWithRelations.stream()
-            .filter(p -> ids.contains(p.getId()))
-            .collect(Collectors.toMap(Product::getId, p -> p));
+                .filter(p -> ids.contains(p.getId()))
+                .collect(Collectors.toMap(Product::getId, p -> p));
 
         // Sort by quantity desc and limit to TOP_N if necessary
         List<Map.Entry<Long, Long>> sorted = soldQuantities.entrySet()
-            .stream()
-            .sorted((a, b) -> Long.compare(b.getValue(), a.getValue()))
-            .toList();
+                .stream()
+                .sorted((a, b) -> Long.compare(b.getValue(), a.getValue()))
+                .toList();
 
         List<Map.Entry<Long, Long>> top = sorted.size() > TOP_N ? sorted.subList(0, TOP_N) : sorted;
 
@@ -74,17 +73,16 @@ public class GetTopSellingProductsUseCase {
 
             Collection<Category> categories = p.getCategories();
             List<String> categoryNames = categories == null
-                ? List.of()
-                : categories.stream()
-                    .map(Category::getName)
-                    .filter(n -> n != null && !n.isBlank())
-                    .toList();
+                    ? List.of()
+                    : categories.stream()
+                            .map(Category::getName)
+                            .filter(n -> n != null && !n.isBlank())
+                            .toList();
 
             output.add(new TopSellingProductOutput(
-                p.getName(),
-                categoryNames,
-                qty
-            ));
+                    p.getName(),
+                    categoryNames,
+                    qty));
         }
 
         return output;
