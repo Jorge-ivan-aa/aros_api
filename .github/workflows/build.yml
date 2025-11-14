@@ -65,13 +65,13 @@ jobs:
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: ${{ secrets.MAIL_SERVER_ADDRESS }}
-          server_port: ${{ secrets.MAIL_SERVER_PORT }}
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "Deployment Required: New AROS API image ${{ env.IMAGE_VERSION }} available"
+          server_address: smtp.resend.com
+          server_port: 587
+          username: username
+          password: ${{ secrets.RESEND_API_KEY }}
+          subject: "Deployment Required: New AROS Client image ${{ env.IMAGE_VERSION }} available"
           to: ${{ secrets.MAIL_RECIPIENT }}
-          from: GitHub Actions <noreply@github.com>
+          from: "AROS Deploy <${{ secrets.MAIL_USERNAME }}>"
           body: |
             A new version of the aros-api has been successfully built and pushed to Docker Hub.
 
