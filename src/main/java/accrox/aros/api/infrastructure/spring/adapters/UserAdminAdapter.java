@@ -3,7 +3,8 @@ package accrox.aros.api.infrastructure.spring.adapters;
 import accrox.aros.api.domain.model.Area;
 import accrox.aros.api.domain.model.User;
 import accrox.aros.api.domain.service.AdminAuthService;
-import accrox.aros.api.infrastructure.spring.config.beans.AdminBeanConfig;
+import accrox.aros.api.infrastructure.spring.security.admin.Administrator;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class UserAdminAdapter implements AdminAuthService {
 
     @Autowired
-    private AdminBeanConfig adminProperties;
+    private Administrator adminProperties;
 
     private static final Logger logger = LoggerFactory.getLogger(
         UserAdminAdapter.class
